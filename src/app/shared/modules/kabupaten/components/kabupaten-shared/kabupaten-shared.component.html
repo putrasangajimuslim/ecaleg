@@ -1,0 +1,109 @@
+<p-toast key="tst"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="container-flex mbc-4">
+                <div class="container-one">
+                    <i
+                        class="pi pi-arrow-left cursor-pointer mr-4"
+                        style="font-size: 24px"
+                        (click)="onClickBackButton()"
+                    ></i>
+                    <p class="title-first">{{ title }}</p>
+                </div>
+
+                <div class="container-two">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        label="Batal"
+                        (click)="onClickBackButton()"
+                        class="p-button-outlined mr-2 wc-180"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="btnTitle"
+                        class="p-button-success wc-180"
+                        (click)="onSubmit()"
+                        [disabled]="!formGroup.valid"
+                    ></button>
+                </div>
+            </div>
+
+            <form [formGroup]="formGroup">
+                <div class="p-fluid p-formgrid grid" formGroupName="kabupatens">
+                    <div class="field col-12">
+                        <label htmlFor="kodekab"
+                            >Kode Kabupaten <span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="kodekab"
+                            type="text"
+                            formControlName="kodekab"
+                        />
+
+                        <div
+                            *ngIf="
+                                formGroup.get('kabupatens').get('kodekab')
+                                    .invalid &&
+                                formGroup.get('kabupatens').get('kodekab')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Kode Kabupaten required
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="kab"
+                            >Kabupaten <span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="kab"
+                            type="text"
+                            formControlName="kab"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('kabupatens').get('kab')
+                                    .invalid &&
+                                formGroup.get('kabupatens').get('kab').touched
+                            "
+                            class="error-form"
+                        >
+                            Kabupaten required
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="jmldpt"
+                            >Jumlah DPT <span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="jmldpt"
+                            type="text"
+                            formControlName="jmldpt"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('kabupatens').get('jmldpt')
+                                    .invalid &&
+                                formGroup.get('kabupatens').get('jmldpt')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Jumlah DPT required
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

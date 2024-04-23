@@ -1,0 +1,131 @@
+<p-toast key="tst"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="container-flex mbc-4">
+                <div class="container-one">
+                    <i
+                        class="pi pi-arrow-left cursor-pointer mr-4"
+                        style="font-size: 24px"
+                        (click)="onClickBackButton()"
+                    ></i>
+                    <p class="title-first">{{ title }}</p>
+                </div>
+
+                <div class="container-two">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        label="Batal"
+                        (click)="onClickBackButton()"
+                        class="p-button-outlined mr-2 wc-180"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="btnTitle"
+                        class="p-button-success wc-180"
+                        (click)="onSubmit()"
+                        [disabled]="!formGroup.valid"
+                    ></button>
+                </div>
+            </div>
+
+            <form [formGroup]="formGroup">
+                <div class="p-fluid p-formgrid grid" formGroupName="kecamatans">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="kodekec"
+                            >Kabupaten <span class="sp-req">*</span></label
+                        >
+                        <!-- <p-dropdown formControlName="kodekab" [options]="dropdownItems" optionLabel="name" formControlName="kodekab"></p-dropdown> -->
+
+                        <select formControlName="kodekab" class="form-control">
+                            <option *ngFor="let option of dropdownItems" [value]="option.code">{{ option.name }}</option>
+                        </select>
+                        <div
+                            *ngIf="
+                                formGroup.get('kecamatans').get('kodekab')
+                                    .invalid &&
+                                formGroup.get('kecamatans').get('kodekab')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Kabupaten required
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="kodekec"
+                            >Kode Kecamatan <span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="kodekec"
+                            type="text"
+                            formControlName="kodekec"
+                        />
+
+                        <div
+                            *ngIf="
+                                formGroup.get('kecamatans').get('kodekec')
+                                    .invalid &&
+                                formGroup.get('kecamatans').get('kodekec')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Kode Kecamatan required
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="kec"
+                            >Kecamatan <span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="kec"
+                            type="text"
+                            formControlName="kec"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('kecamatans').get('kec')
+                                    .invalid &&
+                                formGroup.get('kecamatans').get('kec').touched
+                            "
+                            class="error-form"
+                        >
+                            Kecamatan required
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="jmldpt"
+                            >Jumlah DPT <span class="sp-req">*</span></label
+                        >
+
+                        <input
+                            pInputText
+                            id="jmldpt"
+                            type="text"
+                            formControlName="jmldpt"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('kecamatans').get('jmldpt')
+                                    .invalid &&
+                                formGroup.get('kecamatans').get('jmldpt')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Jumlah DPT required
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

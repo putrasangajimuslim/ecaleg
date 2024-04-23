@@ -1,4 +1,3 @@
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
@@ -30,7 +29,6 @@ bootstrapApplication(AppComponent, {
         provideRouter(routes, inMemoryScrollingFeature, withComponentInputBinding()),
         provideAnimations(),
         provideHttpClient(withInterceptorsFromDi()),
-        { provide: LocationStrategy, useClass: HashLocationStrategy }, 
         MessageService, ConfirmationService
     ]
 })
