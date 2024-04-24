@@ -1,17 +1,20 @@
-export interface AddKecamatanResp {
+export interface KecamatanResp extends KabupatenRelationResp {
     id: string;
-    id_kabupaten?: string;
-    nama_kab?: string;
-    kode_kecamatan?: string;
     kecamatan?: string;
-    jumlahdpt?: number;
-  }  
+    kode_kecamatan?: string;
+    jumlah_dpt?: number;
+}
 
-  export interface newKecamatanResp {
+export interface KabupatenRelationResp {
+    id_kabupaten?: string;
+    nama_kabupaten?: string;
+}
+
+export interface DropdownItems {
     name?: string;
     code?: string;
-  }  
+}
 
 export interface KecamatanList {
-  kecamatan: Array<AddKecamatanResp>;
+    kecamatan: Array<KecamatanResp>;
 }

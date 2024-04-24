@@ -12,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
-import { AddKelurahanResp } from '../../models/kelurahan-resp.model';
+import { KelurahanResp } from '../../models/kelurahan-resp.model';
 import { KelurahanService } from '../../services/kelurahan.service';
 
 @Component({
@@ -44,7 +44,7 @@ export class KelurahanListComponent {
     private _imagePath = __webpack_public_path__;
     emptyImg = `${this._imagePath}assets/images/empty.svg`;
 
-    dataSource1: AddKelurahanResp[] = [];
+    dataSource1: KelurahanResp[] = [];
 
     breadcrumbItems: MenuItem[] = [
         {
@@ -84,7 +84,7 @@ export class KelurahanListComponent {
         this.router.navigate(['master', 'kelurahan', 'add']);
     }
 
-    onClickEditKelurahan(data: AddKelurahanResp) {
+    onClickEditKelurahan(data: KelurahanResp) {
         this.kelId = data.id;
         this.reviewDataService.saveReview(this.kelId, data, this.menuKeys);
         this.router.navigate(['master', 'kelurahan', 'edit', this.kelId]);
@@ -97,7 +97,7 @@ export class KelurahanListComponent {
     }
 
     confirmationDel() {
-        const newFormData: AddKelurahanResp = {
+        const newFormData: KelurahanResp = {
           id: this.kelId,
       };
 

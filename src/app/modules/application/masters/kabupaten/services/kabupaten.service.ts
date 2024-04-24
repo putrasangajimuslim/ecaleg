@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
-import { AddKabupatenResp, KabupatenList } from '../models/kabupaten-resp.model';
+import { KabupatenList, KabupatenResp } from '../models/kabupaten-resp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +18,15 @@ export class KabupatenService {
       .pipe(map((res) => res.data));
   }
 
-  addKabupaten(data: AddKabupatenResp) {
-    return this.httpClient.post<AddKabupatenResp>(this.apiKabupatenURL+ 'kabupaten/add', data);
+  addKabupaten(data: KabupatenResp) {
+    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/add', data);
   }
 
-  editKecamatan(data: AddKabupatenResp) {
-    return this.httpClient.post<AddKabupatenResp>(this.apiKabupatenURL+ 'kabupaten/update', data);
+  editKecamatan(data: KabupatenResp) {
+    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/update', data);
   }
 
-  delKecamatan(data: AddKabupatenResp) {
-    return this.httpClient.post<AddKabupatenResp>(this.apiKabupatenURL+ 'kabupaten/delete', data);
+  delKecamatan(data: KabupatenResp) {
+    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/delete', data);
   }
 }

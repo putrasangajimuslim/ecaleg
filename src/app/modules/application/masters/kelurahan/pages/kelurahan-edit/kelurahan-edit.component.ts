@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { KelurahanSharedComponent } from 'src/app/shared/modules/kelurahan/components/kelurahan-shared/kelurahan-shared.component';
-import { AddKelurahanResp } from '../../models/kelurahan-resp.model';
+import { KelurahanResp } from '../../models/kelurahan-resp.model';
 
 @Component({
   selector: 'app-kelurahan-edit',
@@ -19,7 +19,7 @@ export class KelurahanEditComponent {
   menuKey: string = Constant.menuKeys.kelurahan;
   kelId = '';
 
-  dataParse?: AddKelurahanResp;
+  dataParse?: KelurahanResp;
 
   onDestroy: Subject<void> = new Subject<void>();
 

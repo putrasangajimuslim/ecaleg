@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
 import {
-    AddKecamatanResp,
-    newKecamatanResp,
+    KecamatanResp,
 } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
-import { AddKelurahanResp } from 'src/app/modules/application/masters/kelurahan/models/kelurahan-resp.model';
+import { DropdownItems, KelurahanResp } from 'src/app/modules/application/masters/kelurahan/models/kelurahan-resp.model';
 import { KelurahanService } from 'src/app/modules/application/masters/kelurahan/services/kelurahan.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -22,7 +26,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 })
 export class KelurahanSharedComponent {
     @Input() actionKey: string;
-    @Input() dataPars?: AddKelurahanResp;
+    @Input() dataPars?: KelurahanResp;
 
     title: string;
     btnTitle: string;
@@ -33,8 +37,8 @@ export class KelurahanSharedComponent {
 
     menuKeys = Constant.menuKeys.kelurahan;
 
-    KecamatanList?: AddKecamatanResp[] = [];
-    dropdownItems?: newKecamatanResp[] = [];
+    KecamatanList?: KecamatanResp[] = [];
+    dropdownItems?: DropdownItems[] = [];
 
     formGroup: FormGroup = this.initFormGroup();
 
@@ -47,11 +51,48 @@ export class KelurahanSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.generateFormResult();
         this.getKodeKecamatan();
     }
 
-    generateFormResult() {
+    onClickBackButton() {
+        this.reviewDataService.deleteSavedReview(this.kelId, this.menuKeys);
+        this.router.navigate(['master', 'kelurahan']);
+    }
+
+    initFormGroup(): FormGroup {
+        return new FormGroup({
+            id_kecamatan: new FormControl('', Validators.required),
+            kelurahan: new FormControl('', Validators.required),
+        });
+    }
+
+    getKodeKecamatan() {
+        this.kelurahanService.getKodeKecamatan().subscribe({
+            next: (resp) => {
+                this.KecamatanList = resp?.kecamatan ?? [];
+
+                this.KecamatanList.forEach((element) => {
+                    this.dropdownItems.push({
+                        name: element.kecamatan,
+                        code: element.id.toString(),
+                    });
+                });        
+
+                this.fillForm();
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Menyimpan Data',
+                });
+                console.log(err);
+            },
+        });
+    }
+
+    fillForm() {
         if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.addKelurahan?.toLocaleLowerCase()
@@ -69,60 +110,22 @@ export class KelurahanSharedComponent {
             this.kodekec = this.dataPars['data'].id_kecamatan ?? '';
             this.kel = this.dataPars['data'].kelurahan ?? '';
 
-            this.formGroup.get('kelurahan.kel')?.setValue(this.kel);
-            this.formGroup.get('kelurahan.kodekec')?.setValue(this.kodekec);
+            const selectedKabupaten = this.dropdownItems.find(item => item.code === this.kodekec) || null;  
+            
+            this.formGroup.patchValue({
+                id_kecamatan: selectedKabupaten,
+                kelurahan: this.kel,
+            });
         }
     }
-
-    onClickBackButton() {
-        this.reviewDataService.deleteSavedReview(this.kelId, this.menuKeys);
-        this.router.navigate(['master', 'kelurahan']);
-    }
-
-    initFormGroup(): FormGroup {
-        return this.formBuilder.group({
-            kelurahan: this.formBuilder.group({
-                kodekec: ['', Validators.required],
-                kel: ['', Validators.required],
-            }),
-        });
-    }
-
-    getKodeKecamatan() {
-      this.kelurahanService.getKodeKecamatan().subscribe({
-          next: (resp) => {
-              this.KecamatanList = resp?.kecamatan ?? [];
-
-              this.KecamatanList.forEach((element) => {
-
-                this.dropdownItems?.push(
-                    {
-                        code: element.id.toString(),
-                        name: element.kecamatan,
-                    }
-                );
-            });
-              
-          },
-          error: (err) => {
-              this.serviceToast.add({
-                  key: 'tst',
-                  severity: 'error',
-                  summary: 'Maaf',
-                  detail: 'Gagal Menyimpan Data',
-              });
-              console.log(err);
-          },
-      });
-  }
 
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            const newFormData: AddKelurahanResp = {
+            const newFormData: KelurahanResp = {
                 id: this.kelId,
-                id_kecamatan: formData.kelurahan.kodekec,
-                kelurahan: formData.kelurahan.kel,
+                id_kecamatan: formData.id_kecamatan.code,
+                kelurahan: formData.kelurahan,
             };
 
             if (

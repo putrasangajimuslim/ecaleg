@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { KecamatanSharedComponent } from 'src/app/shared/modules/kecamatan/components/kecamatan-shared/kecamatan-shared.component';
-import { AddKecamatanResp } from '../../models/kecamatan-resp.model';
+import { KecamatanResp } from '../../models/kecamatan-resp.model';
 
 @Component({
   selector: 'app-kecamatan-edit',
@@ -18,7 +18,7 @@ export class KecamatanEditComponent {
   menuKey: string = Constant.menuKeys.kecamatan;
   kecamatanId = '';
 
-  dataParse?: AddKecamatanResp;
+  dataParse?: KecamatanResp;
 
   onDestroy: Subject<void> = new Subject<void>();
 

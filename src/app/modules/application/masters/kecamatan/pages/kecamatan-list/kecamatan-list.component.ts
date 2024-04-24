@@ -12,7 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
-import { AddKecamatanResp } from '../../models/kecamatan-resp.model';
+import { KecamatanResp } from '../../models/kecamatan-resp.model';
 import { KecamatanService } from '../../services/kecamatan.service';
 
 @Component({
@@ -43,7 +43,7 @@ export class KecamatanListComponent {
     private _imagePath = __webpack_public_path__;
     emptyImg = `${this._imagePath}assets/images/empty.svg`;
 
-    dataSource1: AddKecamatanResp[] = [];
+    dataSource1: KecamatanResp[] = [];
 
     breadcrumbItems: MenuItem[] = [
         {
@@ -84,7 +84,7 @@ export class KecamatanListComponent {
         this.router.navigate(['master', 'kecamatan', 'add']);
     }
 
-    onClickEditKecamatan(data: AddKecamatanResp) {
+    onClickEditKecamatan(data: KecamatanResp) {
         this.kecamatanId = data.id;
         this.reviewDataService.saveReview(
             this.kecamatanId, 
@@ -101,7 +101,7 @@ export class KecamatanListComponent {
     }
 
     confirmationDel() {
-          const newFormData: AddKecamatanResp = {
+          const newFormData: KecamatanResp = {
             id: this.kecamatanId,
         };
 

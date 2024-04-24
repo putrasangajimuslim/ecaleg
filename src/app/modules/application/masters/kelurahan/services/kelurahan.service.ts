@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
 import { KecamatanList } from '../../kecamatan/models/kecamatan-resp.model';
-import { AddKelurahanResp, KelurahanList } from '../models/kelurahan-resp.model';
+import { KelurahanList, KelurahanResp } from '../models/kelurahan-resp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,15 +26,15 @@ export class KelurahanService {
       .pipe(map((res) => res.data));
   }
 
-  addKelurahan(data: AddKelurahanResp) {
-    return this.httpClient.post<AddKelurahanResp>(this.apiKecamatanURL+ 'kelurahan/add', data);
+  addKelurahan(data: KelurahanResp) {
+    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/add', data);
   }
 
-  editKelurahan(data: AddKelurahanResp) {
-    return this.httpClient.post<AddKelurahanResp>(this.apiKecamatanURL+ 'kelurahan/update', data);
+  editKelurahan(data: KelurahanResp) {
+    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/update', data);
   }
 
-  delKelurahan(data: AddKelurahanResp) {
-    return this.httpClient.post<AddKelurahanResp>(this.apiKecamatanURL+ 'kelurahan/delete', data);
+  delKelurahan(data: KelurahanResp) {
+    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/delete', data);
   }
 }

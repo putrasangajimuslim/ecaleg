@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { KabupatenSharedComponent } from 'src/app/shared/modules/kabupaten/components/kabupaten-shared/kabupaten-shared.component';
-import { AddKabupatenResp } from '../../models/kabupaten-resp.model';
+import { KabupatenResp } from '../../models/kabupaten-resp.model';
 
 @Component({
   selector: 'app-kabupaten-edit',
@@ -19,7 +19,7 @@ export class KabupatenEditComponent implements OnInit, OnDestroy{
   menuKey: string = Constant.menuKeys.kabupaten;
   kabId = '';
 
-  dataParse?: AddKabupatenResp;
+  dataParse?: KabupatenResp;
 
   onDestroy: Subject<void> = new Subject<void>();
 

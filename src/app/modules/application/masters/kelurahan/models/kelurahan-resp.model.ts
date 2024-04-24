@@ -1,10 +1,14 @@
-export interface AddKelurahanResp {
+export interface KelurahanResp {
     id: string;
     id_kecamatan?: string;
-    nama_kec?: string;
+    nama_kecamatan?: string;
     kelurahan?: string;
-  }  
+}
 
+export interface DropdownItems {
+    name?: string;
+    code?: string;
+}
 export interface KelurahanList {
-  kelurahan: Array<AddKelurahanResp>;
+    kelurahan: Array<KelurahanResp>;
 }

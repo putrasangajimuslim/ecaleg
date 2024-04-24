@@ -35,23 +35,23 @@
             </div>
 
             <form [formGroup]="formGroup">
-                <div class="p-fluid p-formgrid grid" formGroupName="kabupatens">
+                <div class="p-fluid p-formgrid grid">
                     <div class="field col-12">
-                        <label htmlFor="kodekab"
+                        <label htmlFor="kd_kabupaten"
                             >Kode Kabupaten <span class="sp-req">*</span></label
                         >
                         <input
                             pInputText
-                            id="kodekab"
+                            id="kd_kabupaten"
                             type="text"
-                            formControlName="kodekab"
+                            formControlName="kd_kabupaten"
                         />
 
                         <div
                             *ngIf="
-                                formGroup.get('kabupatens').get('kodekab')
+                                formGroup.get('kd_kabupaten')
                                     .invalid &&
-                                formGroup.get('kabupatens').get('kodekab')
+                                formGroup.get('kd_kabupaten')
                                     .touched
                             "
                             class="error-form"
@@ -60,20 +60,20 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="kab"
+                        <label htmlFor="kabupaten"
                             >Kabupaten <span class="sp-req">*</span></label
                         >
                         <input
                             pInputText
-                            id="kab"
+                            id="kabupaten"
                             type="text"
-                            formControlName="kab"
+                            formControlName="kabupaten"
                         />
                         <div
                             *ngIf="
-                                formGroup.get('kabupatens').get('kab')
+                                formGroup.get('kabupaten')
                                     .invalid &&
-                                formGroup.get('kabupatens').get('kab').touched
+                                formGroup.get('kabupaten').touched
                             "
                             class="error-form"
                         >
@@ -81,20 +81,20 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="jmldpt"
+                        <label htmlFor="jml_kursi"
                             >Jumlah DPT <span class="sp-req">*</span></label
                         >
                         <input
                             pInputText
-                            id="jmldpt"
+                            id="jml_kursi"
                             type="text"
-                            formControlName="jmldpt"
+                            formControlName="jml_kursi"
                         />
                         <div
                             *ngIf="
-                                formGroup.get('kabupatens').get('jmldpt')
+                                formGroup.get('jml_kursi')
                                     .invalid &&
-                                formGroup.get('kabupatens').get('jmldpt')
+                                formGroup.get('jml_kursi')
                                     .touched
                             "
                             class="error-form"

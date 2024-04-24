@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
 import { KabupatenList } from '../../kabupaten/models/kabupaten-resp.model';
-import { AddKecamatanResp, KecamatanList } from '../models/kecamatan-resp.model';
+import { KecamatanList, KecamatanResp } from '../models/kecamatan-resp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +26,16 @@ export class KecamatanService {
       .pipe(map((res) => res.data));
   }
 
-  addKecamatan(data: AddKecamatanResp) {
-    return this.httpClient.post<AddKecamatanResp>(this.apiKecamatanURL+ 'kecamatan/add', data);
+  addKecamatan(data: KecamatanResp) {
+    return this.httpClient.post<KecamatanResp>(this.apiKecamatanURL+ 'kecamatan/add', data);
   }
 
-  editKecamatan(data: AddKecamatanResp) {
-    return this.httpClient.post<AddKecamatanResp>(this.apiKecamatanURL+ 'kecamatan/update', data);
+  editKecamatan(data: KecamatanResp) {
+    return this.httpClient.post<KecamatanResp>(this.apiKecamatanURL+ 'kecamatan/update', data);
   }
 
-  delKecamatan(data: AddKecamatanResp) {
-    return this.httpClient.post<AddKecamatanResp>(this.apiKecamatanURL+ 'kecamatan/delete', data);
+  delKecamatan(data: KecamatanResp) {
+    return this.httpClient.post<KecamatanResp>(this.apiKecamatanURL+ 'kecamatan/delete', data);
   }
   
 }

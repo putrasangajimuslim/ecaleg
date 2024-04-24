@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
 import {
-    AddKabupatenResp,
-    newKabupatenResp,
+    KabupatenResp,
 } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
-import { AddKecamatanResp } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
+import { DropdownItems, KecamatanResp } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
 import { KecamatanService } from 'src/app/modules/application/masters/kecamatan/services/kecamatan.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -22,24 +21,25 @@ import { SharedModule } from 'src/app/shared/shared.module';
 })
 export class KecamatanSharedComponent {
     @Input() actionKey: string;
-    @Input() dataPars?: AddKecamatanResp;
+    @Input() dataPars?: KecamatanResp;
 
-    kodekab: string = '';
+    selected: string = '';
+
     kecamatanId: string = '';
     kodekec: string = '';
     kec: string = '';
     jmldpt: string = '';
-
     menuKeys = Constant.menuKeys.kecamatan;
 
-    KabupatenList?: AddKabupatenResp[] = [];
-    dropdownItems?: newKabupatenResp[] = [];
+    KabupatenList: KabupatenResp[] = [];
+    dropdownItems: DropdownItems[] = []
+
     dataCount: number = 0;
 
     title: string;
     btnTitle: string;
 
-    formGroup: FormGroup = this.initFormGroup();
+    formGroup: FormGroup = this.initFormGroup()
 
     constructor(
         private formBuilder: FormBuilder,
@@ -50,8 +50,16 @@ export class KecamatanSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.buildForm();
-        this.getKodeKabupaten();
+        this.getKodeKabupaten();        
+    }
+
+    initFormGroup(): FormGroup {
+        return new FormGroup({
+            id_kabupaten: new FormControl('', Validators.required),
+            kode_kecamatan: new FormControl('', Validators.required),
+            kecamatan: new FormControl('', Validators.required),
+            jml_dpt: new FormControl('', Validators.required),
+        });
     }
 
     onClickBackButton() {
@@ -62,55 +70,18 @@ export class KecamatanSharedComponent {
         this.router.navigate(['master', 'kecamatan']);
     }
 
-    buildForm() {
-        if (
-            this.actionKey?.toLocaleLowerCase() ===
-            Constant.actionKeys.addKecamatan?.toLocaleLowerCase()
-        ) {
-            this.title = Constant.kecamatanShared.addTitle;
-            this.btnTitle = Constant.kecamatanShared.btnTitleAdd;
-        } else if (
-            this.actionKey?.toLocaleLowerCase() ===
-            Constant.actionKeys.editKecamatan?.toLocaleLowerCase()
-        ) {
-            this.title = Constant.kecamatanShared.editTitle;
-            this.btnTitle = Constant.kecamatanShared.btnTitleEdit;
-
-            this.kodekab = this.dataPars['data'].id_kabupaten;
-            this.kecamatanId = this.dataPars['data'].id;
-            this.kodekec = this.dataPars['data'].kode_kecamatan;
-            this.kec = this.dataPars['data'].kecamatan;
-            this.jmldpt = this.dataPars['data'].jumlah_dpt;
-
-            this.formGroup.get('kecamatans.kodekab')?.setValue(this.kodekab);
-            this.formGroup.get('kecamatans.kodekec')?.setValue(this.kodekec);
-            this.formGroup.get('kecamatans.kec')?.setValue(this.kec);
-            this.formGroup.get('kecamatans.jmldpt')?.setValue(this.jmldpt);
-        }
-    }
-
-    initFormGroup(): FormGroup {
-        return this.formBuilder.group({
-            kecamatans: this.formBuilder.group({
-                kodekab: ['', Validators.required],
-                kodekec: ['', Validators.required],
-                kec: ['', Validators.required],
-                jmldpt: ['', Validators.required],
-            }),
-        });
-    }
-
     getKodeKabupaten() {
         this.kecamatanService.getKodeKabupaten().subscribe({
             next: (resp) => {
                 this.KabupatenList = resp?.kabupaten ?? [];
-
                 this.KabupatenList.forEach((element) => {
-                    this.dropdownItems?.push({
-                        code: element.id.toString(),
+                    this.dropdownItems.push({
                         name: element.kabupaten,
+                        code: element.id.toString(),
                     });
-                });
+                });         
+                
+                this.fillForm();
             },
             error: (err) => {
                 this.serviceToast.add({
@@ -124,15 +95,47 @@ export class KecamatanSharedComponent {
         });
     }
 
+    fillForm() {
+        if (
+            this.actionKey?.toLocaleLowerCase() ===
+            Constant.actionKeys.addKecamatan?.toLocaleLowerCase()
+        ) {
+            this.title = Constant.kecamatanShared.addTitle;
+            this.btnTitle = Constant.kecamatanShared.btnTitleAdd;
+        } else if (
+            this.actionKey?.toLocaleLowerCase() ===
+            Constant.actionKeys.editKecamatan?.toLocaleLowerCase()
+        ) {
+            this.title = Constant.kecamatanShared.editTitle;
+            this.btnTitle = Constant.kecamatanShared.btnTitleEdit;
+
+            this.selected = this.dataPars['data'].id_kabupaten;
+            this.kecamatanId = this.dataPars['data'].id;
+            this.kodekec = this.dataPars['data'].kode_kecamatan;
+            this.kec = this.dataPars['data'].kecamatan;
+            this.jmldpt = this.dataPars['data'].jumlah_dpt;     
+
+            const selectedKabupaten = this.dropdownItems.find(item => item.code === this.selected) || null;  
+            
+            this.formGroup.patchValue({
+                id_kabupaten: selectedKabupaten,
+                kode_kecamatan: this.kodekec,
+                kecamatan: this.kec,
+                jml_dpt: this.jmldpt
+            });
+        }
+    }
+
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            const newFormData: AddKecamatanResp = {
+            
+            const newFormData: KecamatanResp = {
                 id: this.kecamatanId,
-                id_kabupaten: formData.kecamatans.kodekab,
-                kode_kecamatan: formData.kecamatans.kodekec,
-                kecamatan: formData.kecamatans.kec,
-                jumlahdpt: formData.kecamatans.jmldpt,
+                id_kabupaten: formData.id_kabupaten.code,
+                kode_kecamatan: formData.kode_kecamatan,
+                kecamatan: formData.kecamatan,
+                jumlah_dpt: formData.jml_dpt,
             };
 
             if (

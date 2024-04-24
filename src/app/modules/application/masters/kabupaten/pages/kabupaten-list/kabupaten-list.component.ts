@@ -13,7 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
-import { AddKabupatenResp } from '../../models/kabupaten-resp.model';
+import { KabupatenResp } from '../../models/kabupaten-resp.model';
 import { KabupatenService } from '../../services/kabupaten.service';
 
 @Component({
@@ -38,7 +38,7 @@ export class KabupatenListComponent implements OnInit {
     loading: boolean = true;
     deleteDialog: boolean = false;
     kabId = '';
-    dataSource1: AddKabupatenResp[] = [];
+    dataSource1: KabupatenResp[] = [];
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.kabupaten
 
@@ -84,7 +84,7 @@ export class KabupatenListComponent implements OnInit {
         this.router.navigate(['master', 'kabupaten', 'add']);
     }
 
-    onClickEditKabupaten(data: AddKabupatenResp) {
+    onClickEditKabupaten(data: KabupatenResp) {
         this.kabId = data.id;
         this.reviewDataService.saveReview(
             this.kabId, 
@@ -101,7 +101,7 @@ export class KabupatenListComponent implements OnInit {
     }
 
     confirmationDel() {
-        const newFormData: AddKabupatenResp = {
+        const newFormData: KabupatenResp = {
           id: this.kabId,
       };
 

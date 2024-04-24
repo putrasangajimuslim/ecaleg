@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
-import { AddKabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
+import { KabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
 import { KabupatenService } from 'src/app/modules/application/masters/kabupaten/services/kabupaten.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -18,7 +18,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 })
 export class KabupatenSharedComponent implements OnInit {
     @Input() actionKey: string;
-    @Input() dataPars?: AddKabupatenResp;
+    @Input() dataPars?: KabupatenResp;
     title: string;
     btnTitle: string;
 
@@ -58,13 +58,13 @@ export class KabupatenSharedComponent implements OnInit {
             this.btnTitle = Constant.kabupatenShared.btnTitleEdit;
 
             this.kabId = this.dataPars['data'].id;
-            this.kodekab = this.dataPars['data'].kodekab;
+            this.kodekab = this.dataPars['data'].kd_kabupaten;
             this.kab = this.dataPars['data'].kabupaten;
-            this.jmldpt = this.dataPars['data'].jumlahdpt;
+            this.jmldpt = this.dataPars['data'].jumlah_kursi;
 
-            this.formGroup.get('kabupatens.kodekab')?.setValue(this.kodekab);
-            this.formGroup.get('kabupatens.kab')?.setValue(this.kab);
-            this.formGroup.get('kabupatens.jmldpt')?.setValue(this.jmldpt);
+            this.formGroup.get('kd_kabupaten')?.setValue(this.kodekab);
+            this.formGroup.get('kabupaten')?.setValue(this.kab);
+            this.formGroup.get('jml_kursi')?.setValue(this.jmldpt);
         }
     }
 
@@ -74,12 +74,10 @@ export class KabupatenSharedComponent implements OnInit {
     }
 
     initFormGroup(): FormGroup {
-        return this.formBuilder.group({
-            kabupatens: this.formBuilder.group({
-                kodekab: ['', Validators.required],
-                kab: ['', Validators.required],
-                jmldpt: ['', Validators.required],
-            }),
+        return new FormGroup({
+            kd_kabupaten: new FormControl('', Validators.required),
+            kabupaten: new FormControl('', Validators.required),
+            jml_kursi: new FormControl('', Validators.required),
         });
     }
 
@@ -87,11 +85,11 @@ export class KabupatenSharedComponent implements OnInit {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
-            const newFormData: AddKabupatenResp = {
+            const newFormData: KabupatenResp = {
                 id: this.kabId,
-                kodekab: formData.kabupatens.kodekab,
-                kabupaten: formData.kabupatens.kab,
-                jumlahdpt: formData.kabupatens.jmldpt,
+                kd_kabupaten: formData.kd_kabupaten,
+                kabupaten: formData.kabupaten,
+                jumlah_kursi: formData.jml_kursi,
             };
 
             if (

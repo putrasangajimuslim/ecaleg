@@ -35,21 +35,17 @@
             </div>
 
             <form [formGroup]="formGroup">
-                <div class="p-fluid p-formgrid grid" formGroupName="kelurahan">
+                <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="kodekec"
+                        <label htmlFor="id_kecamatan"
                             >Kecamatan <span class="sp-req">*</span></label
                         >
-                        <!-- <p-dropdown formControlName="kodekab" [options]="dropdownItems" optionLabel="name" formControlName="kodekab"></p-dropdown> -->
-
-                        <select formControlName="kodekec" class="form-control">
-                            <option *ngFor="let option of dropdownItems" [value]="option.code">{{ option.name }}</option>
-                        </select>
+                        <p-dropdown formControlName="id_kecamatan" [options]="dropdownItems" optionLabel="name"></p-dropdown>
                         <div
                             *ngIf="
-                                formGroup.get('kelurahan').get('kodekec')
+                                formGroup.get('id_kecamatan')
                                     .invalid &&
-                                formGroup.get('kelurahan').get('kodekec')
+                                formGroup.get('id_kecamatan')
                                     .touched
                             "
                             class="error-form"
@@ -58,20 +54,20 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="kel"
+                        <label htmlFor="kelurahan"
                             >Kelurahan <span class="sp-req">*</span></label
                         >
                         <input
                             pInputText
                             id="kec"
                             type="text"
-                            formControlName="kel"
+                            formControlName="kelurahan"
                         />
                         <div
                             *ngIf="
-                                formGroup.get('kelurahan').get('kel')
+                                formGroup.get('kelurahan')
                                     .invalid &&
-                                formGroup.get('kelurahan').get('kel').touched
+                                formGroup.get('kelurahan').touched
                             "
                             class="error-form"
                         >
