@@ -21,6 +21,7 @@ export const Constant = {
         kabupaten: 'KABUPATEN',
         kecamatan: 'KECAMATAN',
         kelurahan: 'KELURAHAN',
+        partai: 'PARTAI',
       },
     kabupatenShared: {
         addTitle: 'Tambah Kabupaten',
@@ -42,6 +43,13 @@ export const Constant = {
         btnTitleAdd: 'Tambah',
         btnTitleEdit: 'Update',
     },
+
+    partaiShared: {
+        addTitle: 'Tambah Partai',
+        editTitle: 'Edit Partai',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
     actionKeys: {
         addKabupaten: 'ADD',
         editKabupaten: 'EDIT',
@@ -49,5 +57,7 @@ export const Constant = {
         editKecamatan: 'EDIT',
         addKelurahan: 'ADD',
         editKelurahan: 'EDIT',
+        addPartai: 'ADD',
+        editPartai: 'EDIT',
     }
 }

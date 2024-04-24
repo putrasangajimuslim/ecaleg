@@ -6,7 +6,10 @@ import { MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 
 
@@ -23,6 +26,9 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     AutoCompleteModule,
     DropdownModule,
+    RippleModule,
+    FileUploadModule,
+    InputTextareaModule,
   ],
   exports: [
     ButtonModule,
@@ -33,6 +39,9 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     AutoCompleteModule,
     DropdownModule,
+    RippleModule,
+    FileUploadModule,
+    InputTextareaModule,
   ],
   providers: [
     MessageService

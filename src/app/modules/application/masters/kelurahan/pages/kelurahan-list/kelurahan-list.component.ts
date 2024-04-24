@@ -92,39 +92,39 @@ export class KelurahanListComponent {
 
     onClickDeleteKelurahan(id: string) {
         this.kelId = id;
-        
+
         this.deleteDialog = true;
     }
 
     confirmationDel() {
         const newFormData: KelurahanResp = {
-          id: this.kelId,
-      };
+            id: this.kelId,
+        };
 
-      this.kelurahanService.delKelurahan(newFormData).subscribe({
-          next: (resp) => {
-              this.deleteDialog = false;
-              
-              this.serviceToast.add({
-                  key: 'tst',
-                  severity: 'success',
-                  summary: 'Selamat',
-                  detail: 'Berhasil Menghapus Data',
-              });
+        this.kelurahanService.delKelurahan(newFormData).subscribe({
+            next: (resp) => {
+                this.deleteDialog = false;
 
-              setTimeout(() => {
-                  this.fetchDataKelurahan();
-              }, 800);
-          },
-          error: (err) => {
-              this.serviceToast.add({
-                  key: 'tst',
-                  severity: 'error',
-                  summary: 'Maaf',
-                  detail: 'Gagal Menghapus Data',
-              });
-              console.log(err);
-          },
-      });
-  }
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'success',
+                    summary: 'Selamat',
+                    detail: 'Berhasil Menghapus Data',
+                });
+
+                setTimeout(() => {
+                    this.fetchDataKelurahan();
+                }, 800);
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Menghapus Data',
+                });
+                console.log(err);
+            },
+        });
+    }
 }
