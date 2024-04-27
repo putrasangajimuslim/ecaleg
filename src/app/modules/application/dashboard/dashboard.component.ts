@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ChartModule } from 'primeng/chart';
 import { Label } from 'src/app/config/label';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ChartModule],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
@@ -15,6 +16,10 @@ export class DashboardComponent {
   chartData: any;
 
   chartOptions: any;
+
+  pieData: any;
+
+  pieOptions: any;
 
   constructor(public layoutService: LayoutService) {
     }
@@ -76,6 +81,35 @@ export class DashboardComponent {
                     grid: {
                         color: surfaceBorder,
                         drawBorder: false
+                    }
+                }
+            }
+        };
+
+        this.pieData = {
+            labels: ['A', 'B', 'C'],
+            datasets: [
+                {
+                    data: [540, 325, 702],
+                    backgroundColor: [
+                        documentStyle.getPropertyValue('--indigo-500'),
+                        documentStyle.getPropertyValue('--purple-500'),
+                        documentStyle.getPropertyValue('--teal-500')
+                    ],
+                    hoverBackgroundColor: [
+                        documentStyle.getPropertyValue('--indigo-400'),
+                        documentStyle.getPropertyValue('--purple-400'),
+                        documentStyle.getPropertyValue('--teal-400')
+                    ]
+                }]
+        };
+
+        this.pieOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        color: textColor
                     }
                 }
             }

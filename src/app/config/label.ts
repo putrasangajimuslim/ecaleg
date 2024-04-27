@@ -1,7 +1,7 @@
 export const Label = {
 
     //login
-    login_welcoming: 'Welcome, User!',
+    login_welcoming: 'Welcome!',
     login_title: 'Sign in to continue',
 
     //dashboard
