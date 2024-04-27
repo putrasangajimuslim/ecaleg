@@ -9,10 +9,14 @@
                 <button pButton pRipple type="button" label="Delete" class="p-button-outlined p-button-danger"></button>
                 <button pButton pRipple type="button" label="Edit"  (click)="onClickEditKabupaten(1)" class="p-button-outlined p-button-danger"></button>
             </div> -->
-
-            <div class="mb-4">
-                <button pButton pRipple type="button" label="Tambah" class="p-button-outlined mr-2" (click)="onClickAddKabupaten()"></button>
-            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+				<button pButton pRipple label="Tambah" class="p-button-primary" icon="pi pi-plus" (click)="onClickAddKabupaten()"></button>
+                <div class="upload-btn">
+                    <input type="file" id="excel-file" accept=".xlsx,.xls" />
+                    <label for="excel-file"><i class="pi pi-cloud-upload" style="font-size: 1.5rem"></i> Import</label>
+                </div>
+				<button pButton pRipple label="Export" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()"></button>
+			</div>
             <p-table #dt2 [value]="dataSource1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="dataCount ? true : false" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
@@ -24,9 +28,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-dataSource>
                     <tr>
-                        <td>{{dataSource.kd_kabupaten}}</td>
-                        <td>{{dataSource.kabupaten}}</td>
-                        <td>{{dataSource.jumlah_kursi}}</td>
+                        <td>{{dataSource.kode_kabupaten}}</td>
+                        <td>{{dataSource.nama_kabupaten}}</td>
+                        <td>{{dataSource.jumlah_DPT}}</td>
                         <td>
                             <button
                                 pButton

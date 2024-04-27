@@ -1,5 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -10,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { Label } from 'src/app/config/label';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { Utils } from '../../utils/utils';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -26,6 +28,7 @@ import { Utils } from '../../utils/utils';
         `,
     ],
     imports: [
+        CommonModule,
         InputTextModule,
         PasswordModule,
         FormsModule,
@@ -33,51 +36,82 @@ import { Utils } from '../../utils/utils';
         ButtonModule,
         RouterLink,
         ToastModule,
+        ReactiveFormsModule,
     ],
 })
 export class LoginComponent {
     label = Label;
 
-    password!: string;
+    loading: boolean = false;
 
-    username!: string;
+    formGroup: FormGroup = this.initFormGroup();
 
     constructor(
-        public layoutService: LayoutService, 
-        private router: Router, private utils: Utils,
-        private serviceToast: MessageService
+        public layoutService: LayoutService,
+        private router: Router,
+        private utils: Utils,
+        private serviceToast: MessageService,
+        private authService: AuthService
     ) {
-      var isLogin = utils.getLocalStorage('isLogin');
+        var isLogin = utils.getLocalStorage('isLogin');
 
-      if(isLogin == 'true'){
-          router.navigate(['dashboard'],{});
-      }
+        if (isLogin == 'true') {
+            router.navigate(['dashboard'], {});
+        }
+    }
+
+    initFormGroup(): FormGroup {
+        return new FormGroup({
+            username: new FormControl('', Validators.required),
+            password: new FormControl('', Validators.required),
+        });
     }
 
     login() {
-      var username = 'admin';
-      var password = 'admin';
+        this.loading = true;
 
-      if(this.username === username && this.password === password) {
-          this.utils.setLocalStorage('isLogin', 'true');
+        if (this.formGroup.valid) {
+            const formData = this.formGroup.value;
+            const formnewData = {
+                email: formData.username,
+                password: formData.password,
+            };
+    
+            this.authService.login(formnewData).subscribe({
+                next: (resp) => {
+                    const token =  resp['data'].token;
+                    if (token) {
+                        this.utils.setLocalStorage('isLogin', 'true');
+                        this.utils.setLocalStorage('token', token);
+    
+                        setTimeout(() => {
+                            this.loading = false;
+                            this.serviceToast.add({
+                                key: 'tst',
+                                severity: 'success',
+                                summary: 'Selamat',
+                                detail: 'Berhasil Login',
+                            });
+                            
+                            window.location.reload();
+                        }, 800);
+                    }
+                    
+                },
+                error: (err) => {
+                    this.serviceToast.add({
+                        key: 'tst',
+                        severity: 'error',
+                        summary: 'Maaf',
+                        detail: 'Gagal Login, Username atau Password Salah',
+                    });
 
-            this.serviceToast.add({
-                key: 'tst',
-                severity: 'success',
-                summary: 'Selamat',
-                detail: 'Berhasil Login',
+                    setTimeout(() => {
+                        this.loading = false;
+                        window.location.reload();
+                    }, 800);
+                },
             });
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 800);
-      } else {
-            this.serviceToast.add({
-                key: 'tst',
-                severity: 'error',
-                summary: 'Maaf',
-                detail: 'Gagal Login, Username atau Password Salah',
-            });
-      }
+        }
     }
 }

@@ -41,8 +41,8 @@ export class KelurahanListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.kelurahan;
 
-    private _imagePath = __webpack_public_path__;
-    emptyImg = `${this._imagePath}assets/images/empty.svg`;
+    private _publicPath = __webpack_public_path__;
+    emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
     dataSource1: KelurahanResp[] = [];
 
@@ -67,8 +67,8 @@ export class KelurahanListComponent {
         this.loading = true;
         this.kelurahanService.getKelurahan().subscribe({
             next: (resp) => {
-                this.dataSource1 = resp?.kelurahan ?? [];
-                this.dataCount = resp?.kelurahan.length;
+                this.dataSource1 = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
 
                 setTimeout(() => {
                     this.loading = false;
@@ -97,11 +97,7 @@ export class KelurahanListComponent {
     }
 
     confirmationDel() {
-        const newFormData: KelurahanResp = {
-            id: this.kelId,
-        };
-
-        this.kelurahanService.delKelurahan(newFormData).subscribe({
+        this.kelurahanService.delKelurahan(this.kelId).subscribe({
             next: (resp) => {
                 this.deleteDialog = false;
 
@@ -126,5 +122,10 @@ export class KelurahanListComponent {
                 console.log(err);
             },
         });
+    }
+
+    downloadFile() {
+        const urlile = `${this._publicPath}assets/upload/Data Kelurahan.xlsx`;
+        window.open(urlile, '_blank');
     }
 }

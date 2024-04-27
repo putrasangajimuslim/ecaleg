@@ -5,9 +5,14 @@
         <div class="card px-6 py-6">
             <h5>Data Kecamatan</h5>
             
-            <div class="mb-4">
-                <button pButton pRipple type="button" label="Tambah" class="p-button-outlined mr-2" (click)="onClickAddKecamatan()"></button>
-            </div>
+            <div class="flex flex-wrap gap-2 mb-4">
+				<button pButton pRipple label="Tambah" class="p-button-primary" icon="pi pi-plus" (click)="onClickAddKecamatan()"></button>
+                <div class="upload-btn">
+                    <input type="file" id="excel-file" accept=".xlsx,.xls" />
+                    <label for="excel-file"><i class="pi pi-cloud-upload" style="font-size: 1.5rem"></i> Import</label>
+                </div>
+				<button pButton pRipple label="Export" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()"></button>
+			</div>
             <p-table #dt1 [value]="dataSource1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="dataCount ? true : false" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
@@ -20,10 +25,10 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-dataSource>
                     <tr>
-                        <td>{{dataSource.nama_kabupaten}}</td>
+                        <td>{{dataSource.kabupaten.nama_kabupaten}}</td>
                         <td>{{dataSource.kode_kecamatan}}</td>
-                        <td>{{dataSource.kecamatan}}</td>
-                        <td>{{dataSource.jumlah_dpt}}</td>
+                        <td>{{dataSource.nama_kecamatan}}</td>
+                        <td>{{dataSource.jumlah_DPT}}</td>
                         <td>
                             <button
                                 pButton

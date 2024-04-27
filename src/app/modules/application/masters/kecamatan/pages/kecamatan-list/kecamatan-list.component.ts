@@ -40,8 +40,8 @@ export class KecamatanListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.kecamatan
 
-    private _imagePath = __webpack_public_path__;
-    emptyImg = `${this._imagePath}assets/images/empty.svg`;
+    private _publicPath = __webpack_public_path__;
+    emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
     dataSource1: KecamatanResp[] = [];
 
@@ -67,8 +67,8 @@ export class KecamatanListComponent {
         this.kecamatanService.getKecamatan()
         .subscribe({
             next: (resp) => {
-                this.dataSource1 = resp?.kecamatan ?? [];
-                this.dataCount = resp?.kecamatan.length;
+                this.dataSource1 = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
 
                 setTimeout(() => {
                     this.loading = false;
@@ -101,11 +101,7 @@ export class KecamatanListComponent {
     }
 
     confirmationDel() {
-          const newFormData: KecamatanResp = {
-            id: this.kecamatanId,
-        };
-
-        this.kecamatanService.delKecamatan(newFormData).subscribe({
+        this.kecamatanService.delKecamatan(this.kecamatanId).subscribe({
             next: (resp) => {
                 this.deleteDialog = false;
                 
@@ -130,5 +126,10 @@ export class KecamatanListComponent {
                 console.log(err);
             },
         });
+    }
+
+    downloadFile() {
+        const urlile = `${this._publicPath}assets/upload/Data Kecamatan.xlsx`;
+        window.open(urlile, '_blank');
     }
 }

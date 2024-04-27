@@ -41,8 +41,8 @@ export class PartaiListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.partai;
 
-    private _imagePath = __webpack_public_path__;
-    emptyImg = `${this._imagePath}assets/images/empty.svg`;
+    private _publicPath = __webpack_public_path__;
+    emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
     dataSource1: PartaiResp[] = [];
 
@@ -80,11 +80,7 @@ export class PartaiListComponent {
     }
 
     confirmationDel() {
-        const newFormData: PartaiResp = {
-            id: this.partaiId,
-        };
-
-        this.partaiService.delPartai(newFormData).subscribe({
+        this.partaiService.delPartai(this.partaiId).subscribe({
             next: (resp) => {
                 this.deleteDialog = false;
 
@@ -115,8 +111,8 @@ export class PartaiListComponent {
         this.loading = true;
         this.partaiService.getPartai().subscribe({
             next: (resp) => {
-                this.dataSource1 = resp?.partai ?? [];
-                this.dataCount = resp?.partai.length;
+                this.dataSource1 = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
 
                 setTimeout(() => {
                     this.loading = false;
@@ -126,5 +122,8 @@ export class PartaiListComponent {
                 this.loading = false;
             },
         });
+    }
+
+    downloadFile() {
     }
 }

@@ -22,6 +22,12 @@ export const Constant = {
         kecamatan: 'KECAMATAN',
         kelurahan: 'KELURAHAN',
         partai: 'PARTAI',
+        users: 'USERS',
+        tps: 'TPS',
+        calon: "CALOM",
+        timPemengangan: "TIMPEMENANGAN",
+        saksi: "SAKSI",
+        jadwal: "JADWAL",
       },
     kabupatenShared: {
         addTitle: 'Tambah Kabupaten',
@@ -50,6 +56,32 @@ export const Constant = {
         btnTitleAdd: 'Tambah',
         btnTitleEdit: 'Update',
     },
+
+    usersShared: {
+        addTitle: 'Tambah Users',
+        editTitle: 'Edit Users',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
+    calonShared: {
+        addTitle: 'Tambah Calon',
+        editTitle: 'Edit Calon',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
+    TPSShared: {
+        addTitle: 'Tambah TPS',
+        editTitle: 'Edit TPS',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
+
+    Jadwalhared: {
+        addTitle: 'Tambah Jadwal',
+        editTitle: 'Edit Jadwal',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
     actionKeys: {
         addKabupaten: 'ADD',
         editKabupaten: 'EDIT',
@@ -59,5 +91,13 @@ export const Constant = {
         editKelurahan: 'EDIT',
         addPartai: 'ADD',
         editPartai: 'EDIT',
+        addUser: 'ADD',
+        editUser: 'EDIT',
+        addCalon: 'ADD',
+        editCalon: 'EDIT',
+        addTPS: 'ADD',
+        editTPS: 'EDIT',
+        addJadwal: 'ADD',
+        editJadwal: 'EDIT',
     }
 }

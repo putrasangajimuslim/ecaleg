@@ -1,8 +1,8 @@
 export interface PartaiResp {
     id: string;
-    partai?: string;
-    logo?: string;
-    keterangan?: string;
+    nama_partai: string;
+    logo: File;
+    keterangan: string;
 }
 
 export interface DropdownItems {
@@ -10,5 +10,5 @@ export interface DropdownItems {
     code?: string;
 }
 export interface PartaiList {
-    partai: Array<PartaiResp>;
+    data: Array<PartaiResp>;
 }

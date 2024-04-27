@@ -7,6 +7,7 @@ import { Constant } from 'src/app/config/constant';
 import {
     KabupatenResp,
 } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
+import { KecamatanReq } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-req.model';
 import { DropdownItems, KecamatanResp } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
 import { KecamatanService } from 'src/app/modules/application/masters/kecamatan/services/kecamatan.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
@@ -32,7 +33,7 @@ export class KecamatanSharedComponent {
     menuKeys = Constant.menuKeys.kecamatan;
 
     KabupatenList: KabupatenResp[] = [];
-    dropdownItems: DropdownItems[] = []
+    dropdownItems: DropdownItems[] = [];
 
     dataCount: number = 0;
 
@@ -73,10 +74,10 @@ export class KecamatanSharedComponent {
     getKodeKabupaten() {
         this.kecamatanService.getKodeKabupaten().subscribe({
             next: (resp) => {
-                this.KabupatenList = resp?.kabupaten ?? [];
+                this.KabupatenList = resp?.data ?? [];
                 this.KabupatenList.forEach((element) => {
                     this.dropdownItems.push({
-                        name: element.kabupaten,
+                        name: element.nama_kabupaten,
                         code: element.id.toString(),
                     });
                 });         
@@ -88,9 +89,9 @@ export class KecamatanSharedComponent {
                     key: 'tst',
                     severity: 'error',
                     summary: 'Maaf',
-                    detail: 'Gagal Menyimpan Data',
+                    detail: 'Gagal Memuat Data',
                 });
-                console.log(err);
+                this.fillForm();
             },
         });
     }
@@ -109,12 +110,12 @@ export class KecamatanSharedComponent {
             this.title = Constant.kecamatanShared.editTitle;
             this.btnTitle = Constant.kecamatanShared.btnTitleEdit;
 
-            this.selected = this.dataPars['data'].id_kabupaten;
-            this.kecamatanId = this.dataPars['data'].id;
-            this.kodekec = this.dataPars['data'].kode_kecamatan;
-            this.kec = this.dataPars['data'].kecamatan;
-            this.jmldpt = this.dataPars['data'].jumlah_dpt;     
-
+            this.selected = this.dataPars['data'].kabupatenId ?? '';
+            this.kecamatanId = this.dataPars['data'].id ?? '';
+            this.kodekec = this.dataPars['data'].kode_kecamatan ?? '';
+            this.kec = this.dataPars['data'].nama_kecamatan ?? '';
+            this.jmldpt = this.dataPars['data'].jumlah_DPT ?? '';
+            
             const selectedKabupaten = this.dropdownItems.find(item => item.code === this.selected) || null;  
             
             this.formGroup.patchValue({
@@ -130,18 +131,18 @@ export class KecamatanSharedComponent {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
             
-            const newFormData: KecamatanResp = {
-                id: this.kecamatanId,
-                id_kabupaten: formData.id_kabupaten.code,
+            const newFormData: KecamatanReq = {
+                kabupatenId: formData.id_kabupaten.code,
                 kode_kecamatan: formData.kode_kecamatan,
-                kecamatan: formData.kecamatan,
-                jumlah_dpt: formData.jml_dpt,
+                nama_kecamatan: formData.kecamatan,
+                jumlah_DPT: formData.jml_dpt,
             };
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.addKecamatan?.toLocaleLowerCase()
             ) {
+
                 this.kecamatanService.addKecamatan(newFormData).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
@@ -169,7 +170,7 @@ export class KecamatanSharedComponent {
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editKecamatan?.toLocaleLowerCase()
             ) {
-                this.kecamatanService.editKecamatan(newFormData).subscribe({
+                this.kecamatanService.editKecamatan(this.kecamatanId, newFormData).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',

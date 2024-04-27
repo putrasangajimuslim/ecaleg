@@ -1,0 +1,79 @@
+.title-first {
+    font-size: 24px;
+}
+
+.mbc-4 {
+    margin-bottom: 40px;
+}
+
+.container-one {
+    display: flex;
+    align-items: center;
+}
+
+.container-two {
+    display: flex;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.container-flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wc-200 {
+    width: 200px;
+}
+
+.wc-180 {
+    width: 180px;
+}
+
+.sp-req {
+    color: red;
+}
+
+.error-form {
+    margin-top: 10px;
+    color: red;
+}
+
+/* Style select */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .30rem;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.9;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    width: 100%;
+  }
+  
+  /* Style select arrow */
+  select::-ms-expand {
+    display: none;
+  }
+  
+  /* Style select options */
+  select option {
+    padding: 10rem;
+  }
+  
+  /* Hover effect for select options */
+  select option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  /* Focus style for select */
+  select:focus {
+    border-color: #6366F1;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 104, 214, 0.25);
+  }

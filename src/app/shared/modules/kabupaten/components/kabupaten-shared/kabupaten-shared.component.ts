@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
+import { KabupatenReq } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-req.model';
 import { KabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
 import { KabupatenService } from 'src/app/modules/application/masters/kabupaten/services/kabupaten.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
@@ -57,10 +58,10 @@ export class KabupatenSharedComponent implements OnInit {
             this.title = Constant.kabupatenShared.editTitle;
             this.btnTitle = Constant.kabupatenShared.btnTitleEdit;
 
-            this.kabId = this.dataPars['data'].id;
-            this.kodekab = this.dataPars['data'].kd_kabupaten;
-            this.kab = this.dataPars['data'].kabupaten;
-            this.jmldpt = this.dataPars['data'].jumlah_kursi;
+            this.kabId = this.dataPars['data'].id ?? '';
+            this.kodekab = this.dataPars['data'].kode_kabupaten ?? '';
+            this.kab = this.dataPars['data'].nama_kabupaten ?? '';
+            this.jmldpt = this.dataPars['data'].jumlah_DPT ?? '';
 
             this.formGroup.get('kd_kabupaten')?.setValue(this.kodekab);
             this.formGroup.get('kabupaten')?.setValue(this.kab);
@@ -85,11 +86,10 @@ export class KabupatenSharedComponent implements OnInit {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
-            const newFormData: KabupatenResp = {
-                id: this.kabId,
-                kd_kabupaten: formData.kd_kabupaten,
-                kabupaten: formData.kabupaten,
-                jumlah_kursi: formData.jml_kursi,
+            const newFormData: KabupatenReq = {
+                kode_kabupaten: formData.kd_kabupaten,
+                nama_kabupaten: formData.kabupaten,
+                jumlah_DPT: formData.jml_kursi,
             };
 
             if (
@@ -123,7 +123,7 @@ export class KabupatenSharedComponent implements OnInit {
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editKabupaten?.toLocaleLowerCase()
             ) {
-                this.kabupatenService.editKecamatan(newFormData).subscribe({
+                this.kabupatenService.editKabupaten(this.kabId, newFormData).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',

@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Utils } from '../modules/utils/utils';
 import { AppMenuitemComponent } from './app.menuitem.component';
 import { LayoutService } from './service/app.layout.service';
@@ -14,7 +15,7 @@ export class AppMenuComponent implements OnInit {
 
     model: any[] = [];
 
-    constructor(public layoutService: LayoutService, private utils: Utils) { }
+    constructor(public layoutService: LayoutService, private utils: Utils, private router: Router,) { }
 
     ngOnInit() {
         this.model = [
@@ -52,19 +53,45 @@ export class AppMenuComponent implements OnInit {
                         ]
                     },
                     {
-                        label: 'Users',
-                        icon: 'pi pi-fw pi-users',
-                        routerLink: ['/pages/crud']
+                        label: 'Jadwal',
+                        icon: 'pi pi-fw pi-calendar',
+                        routerLink: ['jadwal']
+                    },
+                    {
+                        label: 'Tim',
+                        icon: 'pi pi-fw pi-bookmark',
+                        items: [
+                            {
+                                label: 'Tim Pemenangan',
+                                icon: 'pi pi-fw pi-users',
+                                routerLink: ['tim/tim-pemenangan']
+                            },
+                            // {
+                            //     label: 'Relawan',
+                            //     icon: 'pi pi-fw pi-users',
+                            //     routerLink: ['master/kecamatan']
+                            // },
+                            // {
+                            //     label: 'Pendukung',
+                            //     icon: 'pi pi-fw pi-users',
+                            //     routerLink: ['master/kelurahan']
+                            // },
+                            {
+                                label: 'Saksi',
+                                icon: 'pi pi-fw pi-users',
+                                routerLink: ['tim/saksi']
+                            }
+                        ]
                     },
                     {
                         label: 'Calon',
                         icon: 'pi pi-fw pi-users',
-                        routerLink: ['/pages/crud']
+                        routerLink: ['calon']
                     },
                     {
                         label: 'TPS',
                         icon: 'pi pi-fw pi-box',
-                        routerLink: ['/pages/timeline']
+                        routerLink: ['tps']
                     },
                     {
                         label: 'Suara',
@@ -84,6 +111,6 @@ export class AppMenuComponent implements OnInit {
 
     logout() {
         this.utils.clearAllLocalstorage();
-        window.location.reload();
+        this.router.navigate(['login']);
     }
 }

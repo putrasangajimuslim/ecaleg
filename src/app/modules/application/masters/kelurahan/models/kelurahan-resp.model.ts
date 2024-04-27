@@ -1,8 +1,9 @@
 export interface KelurahanResp {
+    forEach(arg0: (element: any) => void): unknown;
     id: string;
-    id_kecamatan?: string;
-    nama_kecamatan?: string;
-    kelurahan?: string;
+    kecamatanId: string;
+    nama_kecamatan: string;
+    nama_kelurahan: string;
 }
 
 export interface DropdownItems {
@@ -10,5 +11,5 @@ export interface DropdownItems {
     code?: string;
 }
 export interface KelurahanList {
-    kelurahan: Array<KelurahanResp>;
+    data: Array<KelurahanResp>;
 }

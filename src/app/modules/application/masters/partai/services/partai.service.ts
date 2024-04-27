@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
+import { environment } from 'src/environments/environment';
 import { PartaiList, PartaiResp } from '../models/partai-resp.model';
 
 @Injectable({
@@ -9,25 +9,28 @@ import { PartaiList, PartaiResp } from '../models/partai-resp.model';
 })
 export class PartaiService {
 
-  apiKecamatanURL = 'http://localhost:4000/api/';
+  apiPartaiURL = environment.apiUrl;
+  token = environment.token;
+  headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   
   constructor(private httpClient: HttpClient) { }
 
   getPartai() {
     return this.httpClient
-      .get<ApiWrapper<PartaiList>>(`${this.apiKecamatanURL}partai`)
-      .pipe(map((res) => res.data));
+      .get<PartaiList>(`${this.apiPartaiURL}partai`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  addPartai(data: PartaiResp) {
-    return this.httpClient.post<PartaiResp>(this.apiKecamatanURL+ 'partai/add', data);
+  addPartai(data: FormData) {
+    return this.httpClient.post<PartaiResp>(this.apiPartaiURL+ 'partai/add', data, { headers: this.headers });
   }
 
-  editPartai(data: PartaiResp) {
-    return this.httpClient.post<PartaiResp>(this.apiKecamatanURL+ 'partai/update', data);
+  editPartai(id: string, data: FormData) {
+    return this.httpClient.patch(`${this.apiPartaiURL}partai/${id}`, data, { headers: this.headers });
   }
 
-  delPartai(data: PartaiResp) {
-    return this.httpClient.post<PartaiResp>(this.apiKecamatanURL+ 'partai/delete', data);
+  delPartai(id: string) {
+    return this.httpClient.delete(`${this.apiPartaiURL}partai/${id}`, { headers: this.headers });
+
   }
 }

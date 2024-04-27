@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
+import { environment } from 'src/environments/environment';
 import { KecamatanList } from '../../kecamatan/models/kecamatan-resp.model';
+import { KelurahanReq } from '../models/kelurahan-req.model';
 import { KelurahanList, KelurahanResp } from '../models/kelurahan-resp.model';
 
 @Injectable({
@@ -10,31 +11,33 @@ import { KelurahanList, KelurahanResp } from '../models/kelurahan-resp.model';
 })
 export class KelurahanService {
 
-  apiKecamatanURL = 'http://localhost:4000/api/';
+  apiKelurahanURL =  environment.apiUrl;
+  token = environment.token;
+  headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   
   constructor(private httpClient: HttpClient) { }
 
   getKelurahan() {
     return this.httpClient
-      .get<ApiWrapper<KelurahanList>>(`${this.apiKecamatanURL}kelurahan`)
-      .pipe(map((res) => res.data));
+      .get<KelurahanList>(`${this.apiKelurahanURL}kelurahan`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
   getKodeKecamatan() {
     return this.httpClient
-      .get<ApiWrapper<KecamatanList>>(`${this.apiKecamatanURL}kecamatan`)
-      .pipe(map((res) => res.data));
+      .get<KecamatanList>(`${this.apiKelurahanURL}kecamatan`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  addKelurahan(data: KelurahanResp) {
-    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/add', data);
+  addKelurahan(data: KelurahanReq) {
+    return this.httpClient.post<KelurahanResp>(this.apiKelurahanURL+ 'kelurahan/add', data, { headers: this.headers });
   }
 
-  editKelurahan(data: KelurahanResp) {
-    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/update', data);
+  editKelurahan(id: string, data: KelurahanReq) {
+    return this.httpClient.patch(`${this.apiKelurahanURL}kelurahan/${id}`, data, { headers: this.headers });
   }
 
-  delKelurahan(data: KelurahanResp) {
-    return this.httpClient.post<KelurahanResp>(this.apiKecamatanURL+ 'kelurahan/delete', data);
+  delKelurahan(id: string) {
+    return this.httpClient.delete(`${this.apiKelurahanURL}kelurahan/${id}`, { headers: this.headers });
   }
 }

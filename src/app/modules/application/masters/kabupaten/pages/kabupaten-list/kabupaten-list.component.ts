@@ -21,13 +21,13 @@ import { KabupatenService } from '../../services/kabupaten.service';
     standalone: true,
     imports: [
         CommonModule,
-		DialogModule,
-		FormsModule,
-		TooltipModule,
-		InputTextModule,
-		ButtonModule,
-		TableModule,
-		RippleModule,
+        DialogModule,
+        FormsModule,
+        TooltipModule,
+        InputTextModule,
+        ButtonModule,
+        TableModule,
+        RippleModule,
         ToastModule,
     ],
     templateUrl: './kabupaten-list.component.html',
@@ -40,10 +40,10 @@ export class KabupatenListComponent implements OnInit {
     kabId = '';
     dataSource1: KabupatenResp[] = [];
     dataCount: number = 0;
-    menuKeys = Constant.menuKeys.kabupaten
+    menuKeys = Constant.menuKeys.kabupaten;
 
-    private _imagePath = __webpack_public_path__;
-    emptyImg = `${this._imagePath}assets/images/empty.svg`;
+    private _publicPath = __webpack_public_path__;
+    emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
     breadcrumbItems: MenuItem[] = [
         {
@@ -55,7 +55,7 @@ export class KabupatenListComponent implements OnInit {
         protected router: Router,
         private kabupatenService: KabupatenService,
         private reviewDataService: EcalegReviewDataService,
-        private serviceToast: MessageService,
+        private serviceToast: MessageService
     ) {}
 
     ngOnInit() {
@@ -64,11 +64,10 @@ export class KabupatenListComponent implements OnInit {
 
     fetchDataKabupaten() {
         this.loading = true;
-        this.kabupatenService.getKabupaten()
-        .subscribe({
+        this.kabupatenService.getKabupaten().subscribe({
             next: (resp) => {
-                this.dataSource1 = resp?.kabupaten ?? [];
-                this.dataCount = resp?.kabupaten.length;
+                this.dataSource1 = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
 
                 setTimeout(() => {
                     this.loading = false;
@@ -86,49 +85,46 @@ export class KabupatenListComponent implements OnInit {
 
     onClickEditKabupaten(data: KabupatenResp) {
         this.kabId = data.id;
-        this.reviewDataService.saveReview(
-            this.kabId, 
-            data,
-            this.menuKeys
-        );
+        this.reviewDataService.saveReview(this.kabId, data, this.menuKeys);
         this.router.navigate(['master', 'kabupaten', 'edit', this.kabId]);
     }
 
     onClickDeleteKabupaten(id: string) {
         this.kabId = id;
-        
+
         this.deleteDialog = true;
     }
 
     confirmationDel() {
-        const newFormData: KabupatenResp = {
-          id: this.kabId,
-      };
+        this.kabupatenService.delKabupaten(this.kabId).subscribe({
+            next: (resp) => {
+                this.deleteDialog = false;
 
-      this.kabupatenService.delKecamatan(newFormData).subscribe({
-          next: (resp) => {
-              this.deleteDialog = false;
-              
-              this.serviceToast.add({
-                  key: 'tst',
-                  severity: 'success',
-                  summary: 'Selamat',
-                  detail: 'Berhasil Menghapus Data',
-              });
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'success',
+                    summary: 'Selamat',
+                    detail: 'Berhasil Menghapus Data',
+                });
 
-              setTimeout(() => {
-                  this.fetchDataKabupaten();
-              }, 800);
-          },
-          error: (err) => {
-              this.serviceToast.add({
-                  key: 'tst',
-                  severity: 'error',
-                  summary: 'Maaf',
-                  detail: 'Gagal Menghapus Data',
-              });
-              console.log(err);
-          },
-      });
-  }
+                setTimeout(() => {
+                    this.fetchDataKabupaten();
+                }, 800);
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Menghapus Data',
+                });
+                console.log(err);
+            },
+        });
+    }
+
+    downloadFile() {
+        const urlile = `${this._publicPath}assets/upload/Data Kabupaten.xlsx`;
+        window.open(urlile, '_blank');
+    }
 }

@@ -9,7 +9,9 @@ import {
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
-import { PartaiResp } from 'src/app/modules/application/masters/partai/models/partai-resp.model';
+import {
+    PartaiResp
+} from 'src/app/modules/application/masters/partai/models/partai-resp.model';
 import { PartaiService } from 'src/app/modules/application/masters/partai/services/partai.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -56,6 +58,7 @@ export class PartaiSharedComponent {
 
     initFormGroup(): FormGroup {
         return new FormGroup({
+            logo: new FormControl('', Validators.required),
             partai: new FormControl('', Validators.required),
             keterangan: new FormControl('', Validators.required),
         });
@@ -76,7 +79,7 @@ export class PartaiSharedComponent {
             this.btnTitle = Constant.partaiShared.btnTitleEdit;
 
             this.partaiId = this.dataPars['data'].id ?? '';
-            this.partai = this.dataPars['data'].partai ?? '';
+            this.partai = this.dataPars['data'].nama_partai ?? '';
             this.logo = this.dataPars['data'].logo ?? '';
             this.keterangan = this.dataPars['data'].keterangan ?? '';
 
@@ -87,24 +90,39 @@ export class PartaiSharedComponent {
         }
     }
 
-    onUpload(event: any) {
-        console.log(event.files);
+    uploadFile(event) {
+        const reader = new FileReader();
+
+        if (event.target.files) {
+            const [file] = event.target.files;
+            reader.readAsDataURL(file);
+
+            reader.onload = () => {
+                this.formGroup.patchValue({
+                    logo: file,
+                });
+            };
+        }
     }
 
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            const newFormData: PartaiResp = {
-                id: this.partaiId,
-                partai: formData.partai,
-                keterangan: formData.keterangan,
-            };
+
+            const newForm = new FormData();
+
+            newForm.append('logo', this.formGroup.get('logo').value);
+            newForm.append('nama_partai', this.formGroup.get('partai').value);
+            newForm.append(
+                'keterangan',
+                this.formGroup.get('keterangan').value
+            );
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.addPartai?.toLocaleLowerCase()
             ) {
-                this.partaiService.addPartai(newFormData).subscribe({
+                this.partaiService.addPartai(newForm).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',
@@ -124,14 +142,13 @@ export class PartaiSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
                     },
                 });
             } else if (
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editPartai?.toLocaleLowerCase()
             ) {
-                this.partaiService.editPartai(newFormData).subscribe({
+                this.partaiService.editPartai(this.partaiId,  newForm).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',
@@ -139,7 +156,6 @@ export class PartaiSharedComponent {
                             summary: 'Selamat',
                             detail: 'Berhasil Merubah Data',
                         });
-
                         setTimeout(() => {
                             this.onClickBackButton();
                         }, 800);
@@ -151,7 +167,6 @@ export class PartaiSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
                     },
                 });
             }

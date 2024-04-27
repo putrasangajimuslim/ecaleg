@@ -1,8 +1,8 @@
 export interface KabupatenResp {
-    id: string;
-    kd_kabupaten?: string;
-    kabupaten?: string;
-    jumlah_kursi?: number;
+    id?: string;
+    kode_kabupaten: string;
+    nama_kabupaten: string;
+    jumlah_DPT: number;
   }  
 
   export interface DropdownItems {
@@ -11,5 +11,5 @@ export interface KabupatenResp {
   }  
 
   export interface KabupatenList {
-    kabupaten: Array<KabupatenResp>;
+    data: Array<KabupatenResp>;
   }

@@ -12,6 +12,7 @@ import { Constant } from 'src/app/config/constant';
 import {
     KecamatanResp,
 } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
+import { KelurahanReq } from 'src/app/modules/application/masters/kelurahan/models/kelurahan-req.model';
 import { DropdownItems, KelurahanResp } from 'src/app/modules/application/masters/kelurahan/models/kelurahan-resp.model';
 import { KelurahanService } from 'src/app/modules/application/masters/kelurahan/services/kelurahan.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
@@ -69,11 +70,11 @@ export class KelurahanSharedComponent {
     getKodeKecamatan() {
         this.kelurahanService.getKodeKecamatan().subscribe({
             next: (resp) => {
-                this.KecamatanList = resp?.kecamatan ?? [];
+                this.KecamatanList = resp?.data ?? [];
 
                 this.KecamatanList.forEach((element) => {
                     this.dropdownItems.push({
-                        name: element.kecamatan,
+                        name: element.nama_kecamatan,
                         code: element.id.toString(),
                     });
                 });        
@@ -87,7 +88,7 @@ export class KelurahanSharedComponent {
                     summary: 'Maaf',
                     detail: 'Gagal Menyimpan Data',
                 });
-                console.log(err);
+                this.fillForm();
             },
         });
     }
@@ -107,8 +108,8 @@ export class KelurahanSharedComponent {
             this.btnTitle = Constant.kelurahanShared.btnTitleEdit;
 
             this.kelId = this.dataPars['data'].id ?? '';
-            this.kodekec = this.dataPars['data'].id_kecamatan ?? '';
-            this.kel = this.dataPars['data'].kelurahan ?? '';
+            this.kodekec = this.dataPars['data'].kecamatanId ?? '';
+            this.kel = this.dataPars['data'].nama_kelurahan ?? '';
 
             const selectedKabupaten = this.dropdownItems.find(item => item.code === this.kodekec) || null;  
             
@@ -122,10 +123,9 @@ export class KelurahanSharedComponent {
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            const newFormData: KelurahanResp = {
-                id: this.kelId,
-                id_kecamatan: formData.id_kecamatan.code,
-                kelurahan: formData.kelurahan,
+            const newFormData: KelurahanReq = {
+                kecamatanId: formData.id_kecamatan.code,
+                nama_kelurahan: formData.kelurahan,
             };
 
             if (
@@ -159,7 +159,7 @@ export class KelurahanSharedComponent {
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editKelurahan?.toLocaleLowerCase()
             ) {
-                this.kelurahanService.editKelurahan(newFormData).subscribe({
+                this.kelurahanService.editKelurahan(this.kelId,newFormData).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',

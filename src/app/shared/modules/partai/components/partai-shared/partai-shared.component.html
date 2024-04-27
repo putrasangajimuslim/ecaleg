@@ -41,7 +41,22 @@
                         <label htmlFor="id_kecamatan"
                             >Logo</label
                         >
-                        <p-fileUpload mode="basic" name="logo[]" [auto]="true" chooseLabel="Browse"></p-fileUpload>
+                        <!-- <p-fileUpload mode="basic" name="logo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse"></p-fileUpload> -->
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" (change)="uploadFile($event)">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+
+                        <div
+                            *ngIf="
+                                formGroup.get('logo')
+                                    .invalid &&
+                                formGroup.get('logo').touched
+                            "
+                            class="error-form"
+                        >
+                            Logo required
+                        </div>
                     </div>
 
                     <div class="field col-12">

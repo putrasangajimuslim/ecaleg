@@ -1,32 +1,35 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
+import { environment } from 'src/environments/environment';
+import { KabupatenReq } from '../models/kabupaten-req.model';
 import { KabupatenList, KabupatenResp } from '../models/kabupaten-resp.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KabupatenService {
-  apiKabupatenURL = 'http://localhost:4000/api/';
+  apiKabupatenURL = environment.apiUrl;
+  token = environment.token;
+  headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   
   constructor(private httpClient: HttpClient) { }
 
   getKabupaten() {
     return this.httpClient
-      .get<ApiWrapper<KabupatenList>>(`${this.apiKabupatenURL}kabupaten`)
-      .pipe(map((res) => res.data));
+      .get<KabupatenList>(`${this.apiKabupatenURL}kabupaten`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  addKabupaten(data: KabupatenResp) {
-    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/add', data);
+  addKabupaten(data: KabupatenReq) {
+    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/add', data, { headers: this.headers });
   }
 
-  editKecamatan(data: KabupatenResp) {
-    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/update', data);
+  editKabupaten(id: string, data: KabupatenReq) {
+    return this.httpClient.patch(`${this.apiKabupatenURL}kabupaten/${id}`, data, { headers: this.headers });
   }
 
-  delKecamatan(data: KabupatenResp) {
-    return this.httpClient.post<KabupatenResp>(this.apiKabupatenURL+ 'kabupaten/delete', data);
+  delKabupaten(id: string) {
+    return this.httpClient.delete(`${this.apiKabupatenURL}kabupaten/${id}`, { headers: this.headers });
   }
 }
