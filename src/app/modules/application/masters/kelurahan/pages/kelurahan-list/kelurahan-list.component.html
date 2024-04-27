@@ -7,11 +7,11 @@
             
             <div class="flex flex-wrap gap-2 mb-4">
 				<button pButton pRipple label="Tambah" class="p-button-primary" icon="pi pi-plus" (click)="onClickAddKelurahan()"></button>
-                <div class="upload-btn">
+                <!-- <div class="upload-btn">
                     <input type="file" id="excel-file" accept=".xlsx,.xls" />
                     <label for="excel-file"><i class="pi pi-cloud-upload" style="font-size: 1.5rem"></i> Import</label>
                 </div>
-				<button pButton pRipple label="Export" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()"></button>
+				<button pButton pRipple label="Export" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()"></button> -->
 			</div>
             <p-table #dt1  [value]="dataSource1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="dataCount ? true : false" responsiveLayout="scroll">
                 <ng-template pTemplate="header">

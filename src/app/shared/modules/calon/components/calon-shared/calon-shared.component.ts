@@ -9,8 +9,11 @@ import {
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
+import { CalonReq } from 'src/app/modules/application/calon/models/calon-req.model';
 import { CalonResp, DropdownItems } from 'src/app/modules/application/calon/models/calon-resp.model';
 import { CalonService } from 'src/app/modules/application/calon/services/calon.service';
+import { KabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
+import { PartaiResp } from 'src/app/modules/application/masters/partai/models/partai-resp.model';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 
@@ -33,6 +36,9 @@ export class CalonSharedComponent {
     partai: string = '';
     kabupatenId: string = '';
 
+    KabupatenList: KabupatenResp[] = [];
+    PartaiList: PartaiResp[] = [];
+
     dropdownItemPartais: DropdownItems[] = [];
     dropdownItemKabupatens: DropdownItems[] = [];
 
@@ -49,7 +55,58 @@ export class CalonSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.buildForm();
+        this.getDataKabupaten();
+        this.getDataPartai();
+    }
+
+    getDataPartai() {
+        this.calonService.getPartai().subscribe({
+            next: (resp) => {
+                this.PartaiList = resp?.data ?? [];
+                this.PartaiList.forEach((element) => {
+                    this.dropdownItemPartais.push({
+                        name: element.nama_partai,
+                        code: element.id.toString(),
+                    });
+                });         
+                
+                this.buildForm();
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                });
+                this.buildForm();
+            },
+        });
+    }
+
+    getDataKabupaten() {
+        this.calonService.getKabupaten().subscribe({
+            next: (resp) => {
+                this.KabupatenList = resp?.data ?? [];
+                this.KabupatenList.forEach((element) => {
+                    this.dropdownItemKabupatens.push({
+                        name: element.nama_kabupaten,
+                        code: element.id.toString(),
+                    });
+                });         
+                
+                this.buildForm();
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                });
+                this.buildForm();
+            },
+        });
     }
 
     buildForm() {
@@ -117,6 +174,70 @@ export class CalonSharedComponent {
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
+
+            const newFormData: CalonReq = {
+                nama_calon: formData.calon,
+                foto: formData.foto,
+                partaiId: formData.partai.code,
+                kabupatenId: formData.kabupatenId.code,
+            };
+
+            if (
+                this.actionKey?.toLocaleLowerCase() ===
+                Constant.actionKeys.addCalon?.toLocaleLowerCase()
+            ) {
+
+                this.calonService.addCalon(newFormData).subscribe({
+                    next: (resp) => {
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'success',
+                            summary: 'Selamat',
+                            detail: 'Berhasil Menyimpan Data',
+                        });
+
+                        setTimeout(() => {
+                            this.router.navigate(['master', 'kecamatan']);
+                        }, 800);
+                    },
+                    error: (err) => {
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'error',
+                            summary: 'Maaf',
+                            detail: 'Gagal Menyimpan Data',
+                        });
+                        console.log(err);
+                    },
+                });
+            } else if (
+                this.actionKey?.toLocaleLowerCase() ===
+                Constant.actionKeys.editCalon?.toLocaleLowerCase()
+            ) {
+                this.calonService.editCalon(this.calonId, newFormData).subscribe({
+                    next: (resp) => {
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'success',
+                            summary: 'Selamat',
+                            detail: 'Berhasil Merubah Data',
+                        });
+
+                        setTimeout(() => {
+                            this.onClickBackButton();
+                        }, 800);
+                    },
+                    error: (err) => {
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'error',
+                            summary: 'Maaf',
+                            detail: 'Gagal Merubah Data',
+                        });
+                        console.log(err);
+                    },
+                });
+            }
         }
     }
 }

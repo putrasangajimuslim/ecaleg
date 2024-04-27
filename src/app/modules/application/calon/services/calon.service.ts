@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { KabupatenList } from '../../masters/kabupaten/models/kabupaten-resp.model';
 import { PartaiList } from '../../masters/partai/models/partai-resp.model';
 import { CalonReq } from '../models/calon-req.model';
 import { CalonList, CalonResp } from '../models/calon-resp.model';
@@ -23,9 +24,15 @@ export class CalonService {
       .pipe(map((res) => res));
   }
 
-  getKodePartai() {
+  getPartai() {
     return this.httpClient
       .get<PartaiList>(`${this.apiURL}partai`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  getKabupaten() {
+    return this.httpClient
+      .get<KabupatenList>(`${this.apiURL}kabupaten`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
