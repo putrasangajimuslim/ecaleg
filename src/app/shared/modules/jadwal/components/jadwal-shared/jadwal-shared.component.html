@@ -77,6 +77,23 @@
                             Status required
                         </div>
                     </div>
+
+                    <div class="field col-12">
+                        <label htmlFor="Keterangan"
+                            >Keterangan <span class="sp-req">*</span></label
+                        >
+                        <textarea rows="5" cols="30" pInputTextarea formControlName="keterangan"></textarea>
+                        <div
+                            *ngIf="
+                                formGroup.get('keterangan')
+                                    .invalid &&
+                                formGroup.get('keterangan').touched
+                            "
+                            class="error-form"
+                        >
+                            Keterangan required
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

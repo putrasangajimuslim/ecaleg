@@ -57,7 +57,26 @@ export class CalonListComponent {
         private serviceToast: MessageService
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.fetchData();
+    }
+
+    fetchData() {
+        this.loading = true;
+        this.calonService.getCalon().subscribe({
+            next: (resp) => {
+                this.dataSource1 = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
+
+                setTimeout(() => {
+                    this.loading = false;
+                }, 800);
+            },
+            error: (err) => {
+                this.loading = false;
+            },
+        });
+    }
 
     onClickAddCalon() {
         this.router.navigate(['calon', 'add']);
