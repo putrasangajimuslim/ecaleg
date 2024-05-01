@@ -60,7 +60,7 @@
 
                     <div class="field col-12">
                         <label htmlFor="kd_kabupaten"
-                            >Foto <span class="sp-req">*</span></label
+                            >Foto <span class="sp-req" *ngIf="isShowRequired">*</span></label
                         >
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="customFile" (change)="uploadFile($event)">

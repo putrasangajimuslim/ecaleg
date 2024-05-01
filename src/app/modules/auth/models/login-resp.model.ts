@@ -1,4 +1,8 @@
 export interface LoginResp {
-    email?: string;
-    password?: string;
+    id: string;
+    email: string;
+    password: string;
+    isActive: boolean;
+    role: string;
+    token: string;
 }

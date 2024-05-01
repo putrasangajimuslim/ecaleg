@@ -31,7 +31,7 @@
                         <td>{{dataSource.kode_kabupaten}}</td>
                         <td>{{dataSource.nama_kabupaten}}</td>
                         <td>{{dataSource.jumlah_DPT}}</td>
-                        <td>
+                        <!-- <td>
                             <button
                                 pButton
                                 id="button-edit"
@@ -48,6 +48,14 @@
                                 class="btn-action"
                                 (click)="onClickDeleteKabupaten(dataSource.id)"
                             >
+                                <i class="pi pi-trash"></i>
+                            </button>
+                        </td> -->
+                        <td>
+                            <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditKabupaten(dataSource)">
+                                <i class="pi pi-pencil"></i>
+                            </button>
+                            <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeleteKabupaten(dataSource.id)">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

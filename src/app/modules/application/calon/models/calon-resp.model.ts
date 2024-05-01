@@ -1,8 +1,10 @@
+import { KabupatenResp } from "../../masters/kabupaten/models/kabupaten-resp.model";
+
 export interface CalonResp {
     id: string;
     nama_calon: string;
     id_partai: string;
-    id_kabupaten: string;
+    kabupaten: Array<KabupatenResp>
     foto: File;
     id_jadwal: string;
 }

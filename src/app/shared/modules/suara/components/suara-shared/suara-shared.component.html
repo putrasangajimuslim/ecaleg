@@ -1,0 +1,92 @@
+<p-toast key="tst"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="container-flex mbc-4">
+                <div class="container-one">
+                    <i
+                        class="pi pi-arrow-left cursor-pointer mr-4"
+                        style="font-size: 24px"
+                        (click)="onClickBackButton()"
+                    ></i>
+                    <p class="title-first">{{ title }}</p>
+                </div>
+
+                <div class="container-two">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        label="Batal"
+                        (click)="onClickBackButton()"
+                        class="p-button-outlined mr-2 wc-180"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="btnTitle"
+                        class="p-button-success wc-180"
+                        (click)="onSubmit()"
+                        [disabled]="!formGroup.valid"
+                    >
+                    </button>
+                </div>
+            </div>
+
+            <form [formGroup]="formGroup">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="id_calon"
+                            >Calon/Partai <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_calon" [options]="dropdownItems" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_calon')
+                                    .invalid &&
+                                formGroup.get('id_calon')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Calon/Partai required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="suara_sah"
+                            >Suara Sah<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="suara_sah"
+                            type="text"
+                            formControlName="suara_sah"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('suara_sah')
+                                    .invalid &&
+                                formGroup.get('suara_sah').touched
+                            "
+                            class="error-form"
+                        >
+                            Suara Sah required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="id_kecamatan"
+                            >File C1</label
+                        >
+                        <!-- <p-fileUpload mode="basic" name="logo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse"></p-fileUpload> -->
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile" (change)="uploadFile($event)">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

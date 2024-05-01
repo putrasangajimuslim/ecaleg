@@ -30,22 +30,10 @@
                         <td>{{dataSource.nama_partai}}</td>
                         <td>{{dataSource.keterangan}}</td>
                         <td>
-                            <button
-                                pButton
-                                id="button-edit"
-                                type="button"
-                                class="btn-action mr-2"
-                                (click)="onClickEditPartai(dataSource)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditPartai(dataSource)">
                                 <i class="pi pi-pencil"></i>
                             </button>
-                            <button
-                                pButton
-                                id="button-delete"
-                                type="button"
-                                class="btn-action"
-                                (click)="onClickDeletePartai(dataSource.id)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeletePartai(dataSource.id)">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

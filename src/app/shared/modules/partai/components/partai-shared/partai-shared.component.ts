@@ -34,6 +34,7 @@ export class PartaiSharedComponent {
     partai: string = '';
     logo: string = '';
     keterangan: string = '';
+    isShowRequired: boolean = true;
 
     menuKeys = Constant.menuKeys.partai;
 
@@ -58,7 +59,7 @@ export class PartaiSharedComponent {
 
     initFormGroup(): FormGroup {
         return new FormGroup({
-            logo: new FormControl('', Validators.required),
+            logo: new FormControl(''),
             partai: new FormControl('', Validators.required),
             keterangan: new FormControl('', Validators.required),
         });
@@ -71,6 +72,11 @@ export class PartaiSharedComponent {
         ) {
             this.title = Constant.partaiShared.addTitle;
             this.btnTitle = Constant.partaiShared.btnTitleAdd;
+
+            this.formGroup.addControl(
+                'logo',
+                new FormControl('', Validators.required)
+            );
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editPartai?.toLocaleLowerCase()
@@ -80,9 +86,19 @@ export class PartaiSharedComponent {
 
             this.partaiId = this.dataPars['data'].id ?? '';
             this.partai = this.dataPars['data'].nama_partai ?? '';
-            this.logo = this.dataPars['data'].logo ?? '';
+            this.logo = this.dataPars['data'].url_logo ?? '';
             this.keterangan = this.dataPars['data'].keterangan ?? '';
+            this.isShowRequired = false;
 
+            const checkUpload = this.formGroup.get('logo').value;
+
+            if(!checkUpload) {
+                console.log('kosong');
+                this.formGroup.patchValue({
+                    logo: this.logo,
+                });
+            }
+            
             this.formGroup.patchValue({
                 partai: this.partai,
                 keterangan: this.keterangan,
@@ -108,7 +124,7 @@ export class PartaiSharedComponent {
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-
+            
             const newForm = new FormData();
 
             newForm.append('logo', this.formGroup.get('logo').value);

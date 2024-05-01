@@ -16,7 +16,7 @@ import { CalonResp } from '../../models/calon-resp.model';
 export class CalonEditComponent {
   actionKey: string = Constant.actionKeys.editCalon;
 
-  menuKey: string = Constant.menuKeys.partai;
+  menuKey: string = Constant.menuKeys.calon;
   calonId = '';
 
   dataParse?: CalonResp;
@@ -44,12 +44,12 @@ export class CalonEditComponent {
       .subscribe((params) => {
         this.calonId = params['id'];
         if (this.calonId) {
-          this.getPartaiDetailData();
+          this.getDetailData();
         }
       });
   }
 
-  getPartaiDetailData() {
+  getDetailData() {
     const currentReviewData = this.reviewDataService.getSavedReviewById(
       this.calonId,
       this.menuKey,

@@ -24,10 +24,11 @@ export const Constant = {
         partai: 'PARTAI',
         users: 'USERS',
         tps: 'TPS',
-        calon: "CALOM",
-        timPemengangan: "TIMPEMENANGAN",
-        saksi: "SAKSI",
+        calon: "CALON",
         jadwal: "JADWAL",
+        suara: "SUARA",
+        tim: "TIM",
+        absen: "ABSEN",
       },
     kabupatenShared: {
         addTitle: 'Tambah Kabupaten',
@@ -76,9 +77,21 @@ export const Constant = {
         btnTitleEdit: 'Update',
     },
 
-    Jadwalhared: {
+    JadwalShared: {
         addTitle: 'Tambah Jadwal',
         editTitle: 'Edit Jadwal',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
+    SuaraShared: {
+        addTitle: 'Tambah Suara',
+        editTitle: 'Edit Suara',
+        btnTitleAdd: 'Tambah',
+        btnTitleEdit: 'Update',
+    },
+    TimShared: {
+        addTitle: 'Tambah Panitia',
+        editTitle: 'Edit Panitia',
         btnTitleAdd: 'Tambah',
         btnTitleEdit: 'Update',
     },
@@ -99,5 +112,9 @@ export const Constant = {
         editTPS: 'EDIT',
         addJadwal: 'ADD',
         editJadwal: 'EDIT',
+        addSuara: 'ADD',
+        editSuara: 'EDIT',
+        addTim: 'ADD',
+        editTim: 'EDIT',
     }
 }

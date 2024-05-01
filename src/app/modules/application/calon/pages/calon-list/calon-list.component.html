@@ -25,27 +25,17 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-dataSource>
                     <tr>
-                        <td>x</td>
-                        <td>x</td>
-                        <td>x</td>
-                        <td>x</td>
                         <td>
-                            <button
-                                pButton
-                                id="button-edit"
-                                type="button"
-                                class="btn-action mr-2"
-                                (click)="onClickEditCalon(dataSource)"
-                            >
+                            <img src="{{ dataSource.url_foto}}" width="80px">
+                        </td>
+                        <td>{{dataSource.nama_calon}}</td>
+                        <td>{{dataSource.partai.nama_partai}}</td>
+                        <td>{{dataSource.kabupaten.nama_kabupaten}}</td>
+                        <td>
+                            <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditCalon(dataSource)">
                                 <i class="pi pi-pencil"></i>
                             </button>
-                            <button
-                                pButton
-                                id="button-delete"
-                                type="button"
-                                class="btn-action"
-                                (click)="onClickDeleteCalon(dataSource.id)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeleteCalon(dataSource.id)">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

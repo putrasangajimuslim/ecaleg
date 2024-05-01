@@ -1,0 +1,212 @@
+<p-toast key="tst"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div class="container-flex mbc-4">
+                <div class="container-one">
+                    <i
+                        class="pi pi-arrow-left cursor-pointer mr-4"
+                        style="font-size: 24px"
+                        (click)="onClickBackButton()"
+                    ></i>
+                    <p class="title-first">{{ title }}</p>
+                </div>
+
+                <div class="container-two">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        label="Batal"
+                        (click)="onClickBackButton()"
+                        class="p-button-outlined mr-2 wc-180"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="btnTitle"
+                        class="p-button-success wc-180"
+                        (click)="onSubmit()"
+                        [disabled]="!formGroup.valid"
+                    >
+                    </button>
+                </div>
+            </div>
+            <form [formGroup]="formGroup">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="name"
+                            >Name<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="name"
+                            type="text"
+                            formControlName="name"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('name')
+                                    .invalid &&
+                                formGroup.get('name').touched
+                            "
+                            class="error-form"
+                        >
+                            Name required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="email"
+                            >Email<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="email"
+                            type="text"
+                            formControlName="email"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('email')
+                                    .invalid &&
+                                formGroup.get('email').touched
+                            "
+                            class="error-form"
+                        >
+                            Email required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="nik"
+                            >NIK<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="nik"
+                            type="text"
+                            formControlName="nik"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('nik')
+                                    .invalid &&
+                                formGroup.get('nik').touched
+                            "
+                            class="error-form"
+                        >
+                            NIK required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="roles"
+                            >Role <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="roles" [options]="dropdownItemsRoles" optionLabel="name" (onChange)="checkRoleUser($event)"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('roles')
+                                    .invalid &&
+                                formGroup.get('roles')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Roles required
+                        </div>
+                    </div>
+                    <div class="field col-12" *ngIf="isAdmin || isUser">
+                        <label htmlFor="id_kabupaten"
+                            >Area Kabupaten <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kabupaten" [options]="dropdownItemsKabupaten" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kabupaten')
+                                    .invalid &&
+                                formGroup.get('id_kabupaten')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kabupaten required
+                        </div>
+                    </div>
+                    <div class="field col-12" *ngIf="!isAdmin && isUser">
+                        <label htmlFor="id_kecamatan"
+                            >Area Kecamatan <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kecamatan" [options]="dropdownItemsKecamatan" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kecamatan')
+                                    .invalid &&
+                                formGroup.get('id_kecamatan')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kecamatan required
+                        </div>
+                    </div>
+                    <div class="field col-12" *ngIf="!isAdmin && isUser">
+                        <label htmlFor="id_kelurahan"
+                            >Area Kelurahan <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kelurahan" [options]="dropdownItemsKelurahan" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kelurahan')
+                                    .invalid &&
+                                formGroup.get('id_kelurahan')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kelurahan required
+                        </div>
+                    </div>
+                    <div class="field col-12" *ngIf="!isAdmin && isUser">
+                        <label htmlFor="id_tps"
+                            >No TPS <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_tps" [options]="dropdownItemsTPS" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_tps')
+                                    .invalid &&
+                                formGroup.get('id_tps')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            No TPS required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="no_telp"
+                            >No Telp<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="no_telp"
+                            type="text"
+                            formControlName="no_telp"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('no_telp')
+                                    .invalid &&
+                                formGroup.get('no_telp').touched
+                            "
+                            class="error-form"
+                        >
+                            No Telp required
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -30,22 +30,10 @@
                         <td>{{dataSource.nama_kecamatan}}</td>
                         <td>{{dataSource.jumlah_DPT}}</td>
                         <td>
-                            <button
-                                pButton
-                                id="button-edit"
-                                type="button"
-                                class="btn-action mr-2"
-                                (click)="onClickEditKecamatan(dataSource)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditKecamatan(dataSource)">
                                 <i class="pi pi-pencil"></i>
                             </button>
-                            <button
-                                pButton
-                                id="button-delete"
-                                type="button"
-                                class="btn-action"
-                                (click)="onClickDeleteKecamatan(dataSource.id)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeleteKecamatan(dataSource.id)">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

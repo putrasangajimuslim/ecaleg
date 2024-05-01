@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { Label } from 'src/app/config/label';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { Utils } from '../../utils/utils';
+import { LoginRequest } from '../models/login-req.model';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -72,14 +73,15 @@ export class LoginComponent {
 
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            const formnewData = {
+            const formnewData: LoginRequest = {
                 email: formData.username,
                 password: formData.password,
+                isLogin: true,
             };
     
             this.authService.login(formnewData).subscribe({
                 next: (resp) => {
-                    const token =  resp['data'].token;
+                    const token =  resp.data.token;
                     if (token) {
                         this.utils.setLocalStorage('isLogin', 'true');
                         this.utils.setLocalStorage('token', token);
@@ -106,10 +108,10 @@ export class LoginComponent {
                         detail: 'Gagal Login, Username atau Password Salah',
                     });
 
-                    setTimeout(() => {
-                        this.loading = false;
-                        window.location.reload();
-                    }, 800);
+                    // setTimeout(() => {
+                    //     this.loading = false;
+                    //     window.location.reload();
+                    // }, 800);
                 },
             });
         }

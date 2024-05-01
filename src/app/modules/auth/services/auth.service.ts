@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiWrapper } from 'src/app/shared/models/api-wrapper.model';
+import { LoginRequest } from '../models/login-req.model';
 import { LoginResp } from '../models/login-resp.model';
 
 @Injectable({
@@ -10,8 +12,8 @@ export class AuthService {
   apiURL = 'http://103.127.99.172:3000/api/v1/account/auth/';
   constructor(private httpClient: HttpClient) { }
 
-  login(req: LoginResp) {
+  login(req: LoginRequest) {
     return this.httpClient
-          .post<LoginResp>(`${this.apiURL}login`, req);
+          .post<ApiWrapper<LoginResp>>(`${this.apiURL}login`, req);
   }
 }

@@ -91,11 +91,7 @@ export class DashboardComponent {
             datasets: [
                 {
                     data: [540, 325, 702],
-                    backgroundColor: [
-                        documentStyle.getPropertyValue('--indigo-500'),
-                        documentStyle.getPropertyValue('--purple-500'),
-                        documentStyle.getPropertyValue('--teal-500')
-                    ],
+                    backgroundColor: this.filterBackground(),
                     hoverBackgroundColor: [
                         documentStyle.getPropertyValue('--indigo-400'),
                         documentStyle.getPropertyValue('--purple-400'),
@@ -116,4 +112,16 @@ export class DashboardComponent {
         };
     }
 
+    filterBackground() {
+        
+        const documentStyle = getComputedStyle(document.documentElement);
+
+        const map = [
+            documentStyle.getPropertyValue('--indigo-500'),
+            documentStyle.getPropertyValue('--purple-500'),
+            documentStyle.getPropertyValue('--teal-500')
+        ];
+
+        return map;
+    }
 }

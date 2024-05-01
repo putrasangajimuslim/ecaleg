@@ -30,22 +30,10 @@
                         <td>{{ dataSource.kelurahan.nama_kelurahan }}</td>
                         <td>{{ dataSource.max_surat_suara }}</td>
                         <td>
-                            <button
-                                pButton
-                                id="button-edit"
-                                type="button"
-                                class="btn-action mr-2"
-                                (click)="onClickEditTps(dataSource)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditTps(dataSource)">
                                 <i class="pi pi-pencil"></i>
                             </button>
-                            <button
-                                pButton
-                                id="button-delete"
-                                type="button"
-                                class="btn-action"
-                                (click)="onClickDeleteTps(dataSource.id)"
-                            >
+                            <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeleteTps(dataSource.id)">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

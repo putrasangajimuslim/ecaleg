@@ -93,4 +93,32 @@ export class CalonListComponent {
 
         this.deleteDialog = true;
     }
+
+    confirmationDel() {
+        this.calonService.delCalon(this.calonId).subscribe({
+            next: (resp) => {
+                this.deleteDialog = false;
+
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'success',
+                    summary: 'Selamat',
+                    detail: 'Berhasil Menghapus Data',
+                });
+
+                setTimeout(() => {
+                    this.fetchData();
+                }, 800);
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Menghapus Data',
+                });
+                console.log(err);
+            },
+        });
+    }
 }

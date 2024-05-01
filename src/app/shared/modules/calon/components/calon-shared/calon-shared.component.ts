@@ -9,7 +9,6 @@ import {
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
-import { CalonReq } from 'src/app/modules/application/calon/models/calon-req.model';
 import { CalonResp, DropdownItems } from 'src/app/modules/application/calon/models/calon-resp.model';
 import { CalonService } from 'src/app/modules/application/calon/services/calon.service';
 import { KabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
@@ -35,6 +34,8 @@ export class CalonSharedComponent {
     calon: string = '';
     partai: string = '';
     kabupatenId: string = '';
+
+    isShowRequired: boolean = true;
 
     KabupatenList: KabupatenResp[] = [];
     PartaiList: PartaiResp[] = [];
@@ -116,6 +117,11 @@ export class CalonSharedComponent {
         ) {
             this.title = Constant.calonShared.addTitle;
             this.btnTitle = Constant.calonShared.btnTitleAdd;
+
+            this.formGroup.addControl(
+                'foto',
+                new FormControl('', Validators.required)
+            );
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editCalon?.toLocaleLowerCase()
@@ -124,17 +130,25 @@ export class CalonSharedComponent {
             this.btnTitle = Constant.calonShared.btnTitleEdit;
 
             this.calonId = this.dataPars['data'].id ?? '';
-            this.foto = this.dataPars['data'].foto ?? '';
+            this.foto = this.dataPars['data'].url_foto ?? '';
             this.calon = this.dataPars['data'].nama_calon ?? '';
-            this.partai = this.dataPars['data'].id_partai ?? '';
-            this.kabupatenId = this.dataPars['data'].id_kabupaten ?? '';
+            this.partai = this.dataPars['data'].partaiId ?? '';
+            this.kabupatenId = this.dataPars['data'].kabupatenId ?? '';
+            this.isShowRequired = false;
+
+            const checkUpload = this.formGroup.get('foto').value;
+            
+            if(!checkUpload) {
+                this.formGroup.patchValue({
+                    foto: this.foto,
+                });
+            }
 
             const selectedPartai = this.dropdownItemPartais.find(item => item.code === this.partai) || null;  
 
             const selectedKabupaten = this.dropdownItemKabupatens.find(item => item.code === this.kabupatenId) || null;  
 
             this.formGroup.patchValue({
-                foto: this.foto,
                 calon: this.calon,
                 partai: selectedPartai,
                 kabupatenId: selectedKabupaten,
@@ -149,7 +163,7 @@ export class CalonSharedComponent {
 
     initFormGroup(): FormGroup {
         return new FormGroup({
-            foto: new FormControl('', Validators.required),
+            foto: new FormControl(''),
             calon: new FormControl('', Validators.required),
             partai: new FormControl('', Validators.required),
             kabupatenId: new FormControl('', Validators.required),
@@ -174,20 +188,25 @@ export class CalonSharedComponent {
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
+            const newForm = new FormData();
 
-            const newFormData: CalonReq = {
-                nama_calon: formData.calon,
-                foto: formData.foto,
-                partaiId: formData.partai.code,
-                kabupatenId: formData.kabupatenId.code,
-            };
+            newForm.append('nama_calon', this.formGroup.get('calon').value);
+            newForm.append('foto', this.formGroup.get('foto').value);
+            newForm.append(
+                'partaiId',
+                formData.partai.code
+            );
+            newForm.append(
+                'kabupatenId',
+                formData.kabupatenId.code
+            );
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.addCalon?.toLocaleLowerCase()
             ) {
 
-                this.calonService.addCalon(newFormData).subscribe({
+                this.calonService.addCalon(newForm).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',
@@ -197,7 +216,7 @@ export class CalonSharedComponent {
                         });
 
                         setTimeout(() => {
-                            this.router.navigate(['master', 'kecamatan']);
+                            this.onClickBackButton();
                         }, 800);
                     },
                     error: (err) => {
@@ -214,7 +233,7 @@ export class CalonSharedComponent {
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editCalon?.toLocaleLowerCase()
             ) {
-                this.calonService.editCalon(this.calonId, newFormData).subscribe({
+                this.calonService.editCalon(this.calonId, newForm).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',

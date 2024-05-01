@@ -1,0 +1,77 @@
+<p-toast key="tst"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <h5>Data Panitia</h5>
+            <div class="flex flex-wrap gap-2 mb-4">
+				<button pButton pRipple label="Tambah" class="p-button-primary" icon="pi pi-plus" (click)="onClickAddTim()"></button>
+                <!-- <div class="upload-btn">
+                    <input type="file" id="excel-file" accept=".xlsx,.xls" />
+                    <label for="excel-file"><i class="pi pi-cloud-upload" style="font-size: 1.5rem"></i> Import</label>
+                </div>
+				<button pButton pRipple label="Export" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()"></button> -->
+			</div>
+            <div class="table-panitia">
+                <p-table #dt2 [value]="dataSource1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="dataCount ? true : false" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="">Nama Panitia</th>
+                            <th>Email</th>
+                            <th>NIK</th>
+                            <th>Area Kabupaten</th>
+                            <th>Area Kecamatan</th>
+                            <th>Area Kelurahan</th>
+                            <th>Kode TPS</th>
+                            <th>No Telp</th>
+                            <th>Roles</th>
+                            <th>Tindakan</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-dataSource>
+                        <tr>
+                            <td>{{ dataSource.panitia_profile.nama_panitia }}</td>
+                            <td>{{ dataSource.email }}</td>
+                            <td>{{ dataSource.panitia_profile.nik }}</td>
+                            <td>{{ dataSource.panitia_profile.kabupaten.nama_kabupaten }}</td>
+                            <td>{{ dataSource.panitia_profile.kecamatan.nama_kecamatan }}</td>
+                            <td>{{ dataSource.panitia_profile.kelurahan.nama_kelurahan }}</td>
+                            <td>{{ dataSource.panitia_profile.tp.nama_tps }}</td>
+                            <td>{{ dataSource.panitia_profile.no_telp }}</td>
+                            <td>{{ dataSource.panitia_profile.role }}</td>
+                            <td>
+                                <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickEditTim(dataSource)">
+                                    <i class="pi pi-pencil"></i>
+                                </button>
+                                <button pButton pRipple type="button" class="p-button-secondary" (click)="onClickDeleteTim(dataSource.id)">
+                                    <i class="pi pi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+            <!-- <div class="center-spinner">
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div> -->
+
+            <div class="no-data-column" *ngIf="!loading && !dataCount">
+                <div class="container-no-column">
+                    <img [src]="emptyImg" alt="" />
+                    <div class="paragraph-no-column">Data Kosong</div>
+                </div>
+            </div>
+
+            <p-dialog [(visible)]="deleteDialog" header="Konfirmasi" [modal]="true" [style]="{width:'350px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>Yakin Ingin Menghapus Data ini?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="No" (click)="deleteDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" label="Yes" class="p-button-outlined" (click)="confirmationDel()"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</div>

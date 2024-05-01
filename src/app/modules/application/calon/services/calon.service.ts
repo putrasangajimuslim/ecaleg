@@ -4,7 +4,6 @@ import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { KabupatenList } from '../../masters/kabupaten/models/kabupaten-resp.model';
 import { PartaiList } from '../../masters/partai/models/partai-resp.model';
-import { CalonReq } from '../models/calon-req.model';
 import { CalonList, CalonResp } from '../models/calon-resp.model';
 
 @Injectable({
@@ -36,11 +35,11 @@ export class CalonService {
       .pipe(map((res) => res));
   }
 
-  addCalon(data: CalonReq) {
+  addCalon(data: FormData) {
     return this.httpClient.post<CalonResp>(this.apiURL+ 'calon/add', data, { headers: this.headers });
   }
 
-  editCalon(id: string, data: CalonReq) {
+  editCalon(id: string, data: FormData) {
     return this.httpClient.patch(`${this.apiURL}calon/${id}`, data, { headers: this.headers });
   }
 

@@ -18,8 +18,8 @@ export const CALON_ROUTES: Routes = [
     {
         path: 'edit/:id',
         loadComponent: () =>
-            import('./pages/calon-list/calon-list.component').then(
-                (r) => r.CalonListComponent
+            import('./pages/calon-edit/calon-edit.component').then(
+                (r) => r.CalonEditComponent
             ),
     }
 ]

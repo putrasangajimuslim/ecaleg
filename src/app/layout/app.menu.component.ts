@@ -52,20 +52,20 @@ export class AppMenuComponent implements OnInit {
                             }
                         ]
                     },
-                    {
-                        label: 'Jadwal',
-                        icon: 'pi pi-fw pi-calendar',
-                        routerLink: ['jadwal']
-                    },
+                    // {
+                    //     label: 'Jadwal',
+                    //     icon: 'pi pi-fw pi-calendar',
+                    //     routerLink: ['jadwal']
+                    // },
                     {
                         label: 'Tim',
                         icon: 'pi pi-fw pi-bookmark',
                         items: [
-                            {
-                                label: 'Tim Pemenangan',
-                                icon: 'pi pi-fw pi-users',
-                                routerLink: ['tim/tim-pemenangan']
-                            },
+                            // {
+                            //     label: 'Tim Pemenangan',
+                            //     icon: 'pi pi-fw pi-users',
+                            //     routerLink: ['tim/tim-pemenangan']
+                            // },
                             // {
                             //     label: 'Relawan',
                             //     icon: 'pi pi-fw pi-users',
@@ -77,11 +77,16 @@ export class AppMenuComponent implements OnInit {
                             //     routerLink: ['master/kelurahan']
                             // },
                             {
-                                label: 'Saksi',
+                                label: 'Panitia',
                                 icon: 'pi pi-fw pi-users',
-                                routerLink: ['tim/saksi']
-                            }
+                                routerLink: ['tim/panitia']
+                            },
                         ]
+                    },
+                    {
+                        label: 'Absen',
+                        icon: 'pi pi-fw pi-calendar',
+                        routerLink: ['absen']
                     },
                     {
                         label: 'Calon',
@@ -96,7 +101,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Suara',
                         icon: 'pi pi-fw pi-volume-up',
-                        routerLink: ['/pages/empty']
+                        routerLink: ['suara']
                     },
                     {
                         label: 'Logout',
