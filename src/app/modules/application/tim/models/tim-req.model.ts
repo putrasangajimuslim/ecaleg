@@ -12,4 +12,5 @@ export interface TimReqData {
     tpsId?: string;
     no_telp: string;
     roles: string;
+    password: string;
 }

@@ -115,7 +115,25 @@ export class TimSharedComponent {
                 'id_kabupaten',
                 new FormControl('', Validators.required)
             );
-            
+            this.formGroup.addControl(
+                'id_kecamatan',
+                new FormControl('', Validators.required)
+            );
+
+            this.formGroup.addControl(
+                'id_kelurahan',
+                new FormControl('', Validators.required)
+            );
+
+            this.formGroup.addControl(
+                'id_tps',
+                new FormControl('', Validators.required)
+            );
+
+            this.formGroup.addControl(
+                'password',
+                new FormControl('', Validators.required)
+            );
         } else {
             this.isAdmin = false;
             this.isUser = true;
@@ -136,13 +154,19 @@ export class TimSharedComponent {
                 'id_tps',
                 new FormControl('', Validators.required)
             );
+
+            this.formGroup.addControl(
+                'password',
+                new FormControl('', Validators.required)
+            );
         }
 
         this.formGroup.patchValue({
-            id_kabupaten: '',
-            id_kecamatan: '',
-            id_kelurahan: '',
-            id_tps: '',
+            id_kabupaten: {name: '0', code: '0'},
+            id_kecamatan: {name: '0', code: '0'},
+            id_kelurahan: {name: '0', code: '0'},
+            id_tps: {name: '0', code: '0'},
+            password: "",
         });
     }
 
@@ -268,6 +292,7 @@ export class TimSharedComponent {
             nik: new FormControl('', Validators.required),
             no_telp: new FormControl('', Validators.required),
             roles: new FormControl('', Validators.required),
+            password: new FormControl('', Validators.required),
         });
     }
 
@@ -278,6 +303,14 @@ export class TimSharedComponent {
         ) {
             this.title = Constant.TimShared.addTitle;
             this.btnTitle = Constant.TimShared.btnTitleAdd;
+
+            this.formGroup.patchValue({
+                id_kabupaten: {name: '0', code: '0'},
+                id_kecamatan: {name: '0', code: '0'},
+                id_kelurahan: {name: '0', code: '0'},
+                id_tps: {name: '0', code: '0'},
+                password: "",
+            });
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editTim?.toLocaleLowerCase()
@@ -325,6 +358,7 @@ export class TimSharedComponent {
                         (item) => item.code === this.id_kelurahan
                     ) || null;
 
+            const zero = 0;
             const selectedTPS =
                     this.dropdownItemsTPS.find(
                         (item) => item.code === this.kode_tps
@@ -368,10 +402,10 @@ export class TimSharedComponent {
                 email: this.email,
                 nik: this.nik,
                 roles: selectedRoles ?? '',
-                id_kabupaten: selectedKabupaten ?? '',
-                id_kecamatan: selectedKecamatan ?? '',
-                id_kelurahan: selectedKelurahan ?? '',
-                id_tps: selectedTPS ?? '',
+                id_kabupaten: selectedKabupaten ?? zero,
+                id_kecamatan: selectedKecamatan ?? zero,
+                id_kelurahan: selectedKelurahan ?? zero,
+                id_tps: selectedTPS ?? zero,
                 no_telp: this.no_telp,
             });
         }
@@ -402,6 +436,7 @@ export class TimSharedComponent {
                 nik: formData.nik,
                 no_telp: formData.no_telp,
                 roles: formData.roles.code,
+                password: formData.password,
             };
             
             if (formData.id_kabupaten) {

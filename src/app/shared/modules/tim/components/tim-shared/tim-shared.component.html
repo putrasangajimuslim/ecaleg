@@ -205,6 +205,28 @@
                             No Telp required
                         </div>
                     </div>
+
+                    <div class="field col-12">
+                        <label htmlFor="name"
+                            >Password<span class="sp-req">*</span></label
+                        >
+                        <input
+                            pInputText
+                            id="name"
+                            type="text"
+                            formControlName="password"
+                        />
+                        <div
+                            *ngIf="
+                                formGroup.get('password')
+                                    .invalid &&
+                                formGroup.get('password').touched
+                            "
+                            class="error-form"
+                        >
+                            Name required
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
