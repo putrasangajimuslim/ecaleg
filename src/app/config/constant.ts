@@ -86,8 +86,12 @@ export const Constant = {
     SuaraShared: {
         addTitle: 'Tambah Suara',
         editTitle: 'Edit Suara',
+        viewTitle: 'View Suara',
         btnTitleAdd: 'Tambah',
         btnTitleEdit: 'Update',
+        btnCancel: 'Batal',
+        btnNotApproved: 'Tidak Disetujui',
+        btnApproved: 'Disetujui',
     },
     TimShared: {
         addTitle: 'Tambah Panitia',
@@ -114,6 +118,7 @@ export const Constant = {
         editJadwal: 'EDIT',
         addSuara: 'ADD',
         editSuara: 'EDIT',
+        viewSuara: 'VIEW',
         addTim: 'ADD',
         editTim: 'EDIT',
     }

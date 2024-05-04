@@ -9,9 +9,8 @@ import {
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Constant } from 'src/app/config/constant';
-import {
-    PartaiResp
-} from 'src/app/modules/application/masters/partai/models/partai-resp.model';
+import { CalonResp } from 'src/app/modules/application/calon/models/calon-resp.model';
+import { PartaiResp } from 'src/app/modules/application/masters/partai/models/partai-resp.model';
 import { NewCalonReqArr } from 'src/app/modules/application/suara/models/suara-req.model';
 import {
     DropdownItems,
@@ -19,6 +18,7 @@ import {
 } from 'src/app/modules/application/suara/models/suara-resp.model';
 import { SuaraService } from 'src/app/modules/application/suara/services/suara.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
+import { Utils } from 'src/app/modules/utils/utils';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
@@ -31,9 +31,11 @@ import { SharedModule } from 'src/app/shared/shared.module';
 export class SuaraSharedComponent {
     @Input() actionKey: string;
     @Input() dataPars?: SuaraResp;
+    @Input() isEditable: false;
 
     title: string;
     btnTitle: string;
+    moreBtn: string;
 
     suaraId: string = '';
     id_calon: string = '';
@@ -47,9 +49,17 @@ export class SuaraSharedComponent {
 
     menuKeys = Constant.menuKeys.suara;
 
+    addSuaraActionKey = Constant.actionKeys.addSuara;
+
+    idLogin: string = '';
+    nameLogin: string = '';
+
+    countPartai = 1;
+    dataCount: number = 0;
+
     partaiList: PartaiResp[] = [];
+    calonList: CalonResp[] = [];
     dropdownItems: DropdownItems[] = [];
-    newArrInput: NewCalonReqArr[] = []
 
     formGroup: FormGroup = this.initFormGroup();
 
@@ -58,16 +68,38 @@ export class SuaraSharedComponent {
         protected router: Router,
         private suaraService: SuaraService,
         private reviewDataService: EcalegReviewDataService,
-        private serviceToast: MessageService
+        private serviceToast: MessageService,
+        private utils: Utils
     ) {}
 
     ngOnInit(): void {
         this.getCalonPartai();
+        this.getAllCalon();
+        this.idLogin = this.utils.getLocalStorage('id');
+        this.nameLogin = this.utils.getLocalStorage('nama_panitia');
     }
 
     onClickBackButton() {
         this.reviewDataService.deleteSavedReview(this.suaraId, this.menuKeys);
+
         this.router.navigate(['suara']);
+    }
+
+    getAllCalon() {
+        this.suaraService.getAllCalon().subscribe({
+            next: (resp) => {
+                this.calonList = resp?.data ?? [];
+                this.dataCount = resp?.data.length;
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                });
+            },
+        });
     }
 
     getCalonPartai() {
@@ -76,7 +108,7 @@ export class SuaraSharedComponent {
                 this.partaiList = resp?.data ?? [];
                 this.partaiList.forEach((element) => {
                     this.dropdownItems.push({
-                        name: element.nama_partai,
+                        name: element.nama_calon,
                         code: element.id.toString(),
                     });
                 });
@@ -97,9 +129,7 @@ export class SuaraSharedComponent {
 
     initFormGroup(): FormGroup {
         return new FormGroup({
-            id_calon: new FormControl('', Validators.required),
-            suara_sah: new FormControl('', Validators.required),
-            user_input: new FormControl('', Validators.required),
+            foto: new FormControl('', Validators.required),
         });
     }
 
@@ -110,9 +140,10 @@ export class SuaraSharedComponent {
         ) {
             this.title = Constant.SuaraShared.addTitle;
             this.btnTitle = Constant.SuaraShared.btnTitleAdd;
+            this.moreBtn = Constant.SuaraShared.btnCancel;
 
             this.formGroup.patchValue({
-                user_input: 10,
+                user_input: this.idLogin,
             });
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
@@ -122,7 +153,28 @@ export class SuaraSharedComponent {
             this.btnTitle = Constant.SuaraShared.btnTitleEdit;
 
             this.suaraId = this.dataPars['data'].id ?? '';
-            
+            this.id_calon = this.dataPars['data'].suara_calons.calonId;
+
+            // const selectedRoles =
+            //     this.dropdownItems.find(
+            //         (item) => item.code === this.roles
+            //     ) || null;
+            // let selectedDropdownItem = {};
+
+            // this.dataPars['data']?.suara_calons.forEach((suara_calon, i) => {
+            //     this.formGroup.addControl(
+            //         `id_calon_${i}`,
+            //         new FormControl('', Validators.required)
+            //     );
+
+            //     selectedDropdownItem = this.dropdownItems.find(item => item.code === suara_calon.calonId);
+
+            //     this.formGroup.get(`id_calon_${i}`).patchValue(selectedDropdownItem ? selectedDropdownItem: '');
+            // });
+
+            // console.log(this.dropdownItems);
+            // console.log(this.formGroup);
+
             this.formGroup.patchValue({
                 id_calon: '',
                 suara_sah: '',
@@ -131,10 +183,23 @@ export class SuaraSharedComponent {
                 user_input: '',
                 file_c1: '',
             });
+        } else if (
+            this.actionKey?.toLocaleLowerCase() ===
+            Constant.actionKeys.viewSuara?.toLocaleLowerCase()
+        ) {
+            this.title = Constant.SuaraShared.viewTitle;
+            this.btnTitle = Constant.SuaraShared.btnApproved;
+            this.moreBtn = Constant.SuaraShared.btnNotApproved;
+
+            this.suaraId = this.dataPars['data'].id ?? '';
         }
     }
 
-    uploadFile(event) {
+    checkSelectOption(event: any, id: string) {
+        console.log(event.value.code);
+    }
+
+    uploadFile(event: any) {
         const reader = new FileReader();
 
         if (event.target.files) {
@@ -143,29 +208,46 @@ export class SuaraSharedComponent {
 
             this.file = file;
 
-            // reader.onload = () => {
-            //     this.formGroup.patchValue({
-            //         logo: file,
-            //     });
-            // };            
+            reader.onload = () => {
+                this.formGroup.patchValue({
+                    foto: file,
+                });
+            };
         }
     }
 
     onSubmit() {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
-            
-            const newForm = new FormData();
 
-            newForm.append('c1_photo', this.file);
-            newForm.append('suara_calon[0][total_suara]', formData.id_calon.code);
-            newForm.append('suara_calon[0][total_suara]', formData.suara_sah);
+            const data: NewCalonReqArr = {
+                c1_photo: formData.foto,
+                suara_calon: [
+                    {
+                        calonId: formData.id_calon.code,
+                        total_suara: formData.suara_sah,
+                    },
+                ],
+            };
+
+            const fd = new FormData();
+            fd.append('c1_photo', data.c1_photo);
+            fd.append('suara_calon[0][calonId]', data.suara_calon[0].calonId);
+            fd.append(
+                'suara_calon[0][total_suara]',
+                data.suara_calon[0].total_suara
+            );
+            // data.suara_calon.forEach((suara, index) => {
+            //     // fd.append(`suara_calon[${index}][calonId]`, suara.calonId);
+            //     // fd.append(`suara_calon[${index}][total_suara]`, suara.total_suara);
+
+            // });
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.addSuara?.toLocaleLowerCase()
             ) {
-                this.suaraService.add(newForm).subscribe({
+                this.suaraService.add(fd).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',
@@ -185,31 +267,7 @@ export class SuaraSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                    },
-                });
-            } else if (
-                this.actionKey?.toLocaleLowerCase() ===
-                Constant.actionKeys.editSuara?.toLocaleLowerCase()
-            ) {
-                this.suaraService.edit(this.suaraId, newForm).subscribe({
-                    next: (resp) => {
-                        this.serviceToast.add({
-                            key: 'tst',
-                            severity: 'success',
-                            summary: 'Selamat',
-                            detail: 'Berhasil Merubah Data',
-                        });
-                        setTimeout(() => {
-                            this.onClickBackButton();
-                        }, 800);
-                    },
-                    error: (err) => {
-                        this.serviceToast.add({
-                            key: 'tst',
-                            severity: 'error',
-                            summary: 'Maaf',
-                            detail: 'Gagal Merubah Data',
-                        });
+                        console.log(err);
                     },
                 });
             }

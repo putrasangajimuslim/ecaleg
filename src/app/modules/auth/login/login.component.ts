@@ -81,10 +81,29 @@ export class LoginComponent {
     
             this.authService.login(formnewData).subscribe({
                 next: (resp) => {
-                    const token =  resp.data.token;
+                    const id = resp.akun.id;        
+                    const isActive = resp.akun.isActive;
+                    const role = resp.akun.profile.role;
+                    const nama_panitia = resp.akun.profile.nama_panitia;
+                    const nik = resp.akun.profile.nik;
+
+                    if (!isActive) {
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'error',
+                            summary: 'Maaf',
+                            detail: 'Gagal Login, Akun Ada Perlu Verikasi',
+                        });
+                    }
+                                
+                    const token =  resp.token;
                     if (token) {
                         this.utils.setLocalStorage('isLogin', 'true');
                         this.utils.setLocalStorage('token', token);
+                        this.utils.setLocalStorage('id', id);
+                        this.utils.setLocalStorage('role', role);
+                        this.utils.setLocalStorage('nama_panitia', nama_panitia);
+                        this.utils.setLocalStorage('isActive', isActive);
     
                         setTimeout(() => {
                             this.loading = false;

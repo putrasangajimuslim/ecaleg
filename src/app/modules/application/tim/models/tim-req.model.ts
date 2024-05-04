@@ -1,5 +1,5 @@
 export interface TimReq {
-    detail: Array<TimReqData>;
+    detail: TimReqData;
 }
 
 export interface TimReqData {

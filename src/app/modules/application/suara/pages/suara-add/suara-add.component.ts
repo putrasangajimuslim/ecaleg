@@ -11,4 +11,6 @@ import { SuaraSharedComponent } from 'src/app/shared/modules/suara/components/su
 })
 export class SuaraAddComponent {
   actionKey: string = Constant.actionKeys.addSuara;
+
+  isEditable = true;
 }

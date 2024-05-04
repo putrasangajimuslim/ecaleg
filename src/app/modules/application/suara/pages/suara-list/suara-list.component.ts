@@ -12,6 +12,7 @@ import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
+import { Utils } from 'src/app/modules/utils/utils';
 import { SuaraMapping } from '../../models/suara-mapping.model';
 import { SuaraResp } from '../../models/suara-resp.model';
 import { SuaraService } from '../../services/suara.service';
@@ -38,6 +39,7 @@ export class SuaraListComponent {
     loading: boolean = true;
     deleteDialog: boolean = false;
     suaraId = '';
+    nameLogin: string = '';
     dataSource1: SuaraResp[] = [];
     newDataSource1: SuaraMapping[] = [];
     dataCount: number = 0;
@@ -56,50 +58,66 @@ export class SuaraListComponent {
         protected router: Router,
         private suaraService: SuaraService,
         private reviewDataService: EcalegReviewDataService,
-        private serviceToast: MessageService
+        private serviceToast: MessageService,
+        private utils: Utils
     ) {}
 
     ngOnInit() {
         this.fetchData();
+        this.nameLogin = this.utils.getLocalStorage('nama_panitia');
     }
 
     fetchData() {
         this.loading = true;
         this.suaraService.getSuara().subscribe({
             next: (resp) => {
-                this.dataSource1 = resp?.data ?? [];
+                const data = resp?.data ?? [];
+                this.dataSource1 = data;
                 this.dataCount = resp?.data.length;
 
-                for (let index = 0; index < this.dataSource1.length; index++) {
-                    let suaraCalons = this.dataSource1[index].suara_calons;
-                
-                    let textCalons = '';
-                    let textTotalSuara = '';
-                    for (let i = 0; i < suaraCalons.length; i++) {
-                        const calon = suaraCalons[i].calon.nama_calon;
-                        const suara = suaraCalons[i].total_suara;
-                        textCalons += calon; // Tambahkan nama calon ke string
-                        if (i !== suaraCalons.length - 1) {
-                            textCalons += ', '; // Tambahkan koma jika bukan calon terakhir
-                        }   
-                        textTotalSuara += suara; // Tambahkan nama calon ke string
-                        if (i !== suaraCalons.length - 1) {
-                            textTotalSuara += ', '; // Tambahkan koma jika bukan calon terakhir
-                        }   
-                    }
-                    
-                    let data: SuaraMapping = {
-                        id: this.dataSource1[index].id,
-                        nama_calon: textCalons,
-                        suara_calons: textTotalSuara,
-                        url_c1: this.dataSource1[index].url_c1,
-                        input_by: this.dataSource1[index].input_by,
-                        createdAt: '',
-                        updatedAt: '',
-                    }
+                this.dataSource1 = data.map(item => ({
+                    id: item.id,
+                    suara_calons: item.suara_calons,
+                    url_c1: item.url_c1,
+                    input_by: this.nameLogin,
+                    name_kabupaten: item['suara_calons'][0].calon.kabupatenId,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt
+                }));
 
-                    this.newDataSource1.push(data);
-                }
+                // for (let index = 0; index < this.dataSource1.length; index++) {
+                //     let suaraCalons = this.dataSource1[index].suara_calons;
+                //     let createdAt = this.dataSource1[index].createdAt;
+                //     let updatedAt = this.dataSource1[index].updatedAt;
+                
+                //     let calons = [];
+                //     let totalSuara = [];
+                //     for (let i = 0; i < suaraCalons.length; i++) {
+                //         calons.push(suaraCalons[i].calon.nama_calon);
+                //         totalSuara.push(suaraCalons[i].total_suara);
+                        
+                //         // textCalons += calon; // Tambahkan nama calon ke string
+                //         // if (i !== suaraCalons.length - 1) {
+                //         //     textCalons += ', '; // Tambahkan koma jika bukan calon terakhir
+                //         // }   
+                //         // textTotalSuara += suara; // Tambahkan nama calon ke string
+                //         // if (i !== suaraCalons.length - 1) {
+                //         //     textTotalSuara += ', '; // Tambahkan koma jika bukan calon terakhir
+                //         // }   
+                //     }
+
+                //     let data: SuaraMapping = {
+                //         id: this.dataSource1[index].id,
+                //         nama_calon: calons,
+                //         suara_calons: totalSuara,
+                //         url_c1: this.dataSource1[index].url_c1,
+                //         input_by: this.dataSource1[index].input_by,
+                //         createdAt: createdAt,
+                //         updatedAt: updatedAt,
+                //     }
+
+                //     this.newDataSource1.push(data);
+                // }
                 
                 setTimeout(() => {
                     this.loading = false;

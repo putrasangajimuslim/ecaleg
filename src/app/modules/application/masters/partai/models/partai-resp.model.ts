@@ -3,6 +3,7 @@ export interface PartaiResp {
     nama_partai: string;
     logo: File;
     keterangan: string;
+    nama_calon: string;
 }
 
 export interface DropdownItems {

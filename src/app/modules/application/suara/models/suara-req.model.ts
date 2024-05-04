@@ -6,7 +6,7 @@ export interface CalonReq {
 }
 
 export interface NewCalonReqArr {
-    photo_c1: File,
+    c1_photo: File,
     suara_calon: Array<NewArray>
 }
 

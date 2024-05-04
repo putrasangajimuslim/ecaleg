@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CalonList } from '../../calon/models/calon-resp.model';
+import { KabupatenResp } from '../../masters/kabupaten/models/kabupaten-resp.model';
 import { PartaiList } from '../../masters/partai/models/partai-resp.model';
 import { SuaraList, SuaraResp } from '../models/suara-resp.model';
 
@@ -28,9 +30,22 @@ export class SuaraService {
       .pipe(map((res) => res));
   }
 
+  getKabupaten(id: string) {
+    return this.httpClient
+      .get<KabupatenResp>(`${this.apiURL}kabupaten/${id}`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
   getPartai() {
     return this.httpClient
-      .get<PartaiList>(`${this.apiURL}partai`, { headers: this.headers })
+      .get<PartaiList>(`${this.apiURL}calon`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+
+  getAllCalon() {
+    return this.httpClient
+      .get<CalonList>(`${this.apiURL}calon/question/all`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

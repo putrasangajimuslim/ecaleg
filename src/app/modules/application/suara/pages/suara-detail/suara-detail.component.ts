@@ -4,13 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
-import { SuaraMapping } from '../../models/suara-mapping.model';
+import { SuaraSharedComponent } from 'src/app/shared/modules/suara/components/suara-shared/suara-shared.component';
+import { SuaraList } from '../../models/suara-resp.model';
 
 @Component({
     selector: 'app-suara-detail',
     standalone: true,
     imports: [
-        CommonModule
+        CommonModule,
+        SuaraSharedComponent
     ],
     templateUrl: './suara-detail.component.html',
     styleUrl: './suara-detail.component.scss',
@@ -18,11 +20,12 @@ import { SuaraMapping } from '../../models/suara-mapping.model';
 export class SuaraDetailComponent {
     suaraId = '';
 
-    newDataSource1?: SuaraMapping;
-    spritNamaCalons: string[] = [];
-    spritTotalSuara: string[] = [];
+    dataSource1?: SuaraList;
+    isEditable = false;
     
     menuKey: string = Constant.menuKeys.suara;
+    actionKey: string = Constant.actionKeys.viewSuara;
+    
     onDestroy: Subject<void> = new Subject<void>();
 
     private _publicPath = __webpack_public_path__;
@@ -66,13 +69,7 @@ export class SuaraDetailComponent {
           this.suaraId,
           this.menuKey,
         );
-    
-        this.newDataSource1 = currentReviewData.data;
 
-        let str1 = this.newDataSource1.nama_calon;
-        let str2 = this.newDataSource1.suara_calons;
-        this.spritNamaCalons = str1.split(', ');
-        this.spritTotalSuara = str2.split(', ');
-        
+        this.dataSource1 = currentReviewData
       }
 }

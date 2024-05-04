@@ -116,7 +116,75 @@
                             Roles required
                         </div>
                     </div>
-                    <div class="field col-12" *ngIf="isAdmin || isUser">
+                    <div class="field col-12">
+                        <label htmlFor="id_kabupaten"
+                            >Area Kabupaten <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kabupaten" [options]="dropdownItemsKabupaten" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kabupaten')
+                                    .invalid &&
+                                formGroup.get('id_kabupaten')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kabupaten required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="id_kecamatan"
+                            >Area Kecamatan <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kecamatan" [options]="dropdownItemsKecamatan" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kecamatan')
+                                    .invalid &&
+                                formGroup.get('id_kecamatan')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kecamatan required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="id_kelurahan"
+                            >Area Kelurahan <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_kelurahan" [options]="dropdownItemsKelurahan" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_kelurahan')
+                                    .invalid &&
+                                formGroup.get('id_kelurahan')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            Area Kelurahan required
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <label htmlFor="id_tps"
+                            >No TPS <span class="sp-req">*</span></label
+                        >
+                        <p-dropdown formControlName="id_tps" [options]="dropdownItemsTPS" optionLabel="name"></p-dropdown>
+                        <div
+                            *ngIf="
+                                formGroup.get('id_tps')
+                                    .invalid &&
+                                formGroup.get('id_tps')
+                                    .touched
+                            "
+                            class="error-form"
+                        >
+                            No TPS required
+                        </div>
+                    </div>
+                    <!-- <div class="field col-12" *ngIf="isAdmin || isUser">
                         <label htmlFor="id_kabupaten"
                             >Area Kabupaten <span class="sp-req">*</span></label
                         >
@@ -183,7 +251,7 @@
                         >
                             No TPS required
                         </div>
-                    </div>
+                    </div> -->
                     <div class="field col-12">
                         <label htmlFor="no_telp"
                             >No Telp<span class="sp-req">*</span></label
@@ -208,12 +276,12 @@
 
                     <div class="field col-12">
                         <label htmlFor="name"
-                            >Password<span class="sp-req">*</span></label
+                            >Password<span class="sp-req" *ngIf="isShowRequired">*</span></label
                         >
                         <input
                             pInputText
                             id="name"
-                            type="text"
+                            type="password"
                             formControlName="password"
                         />
                         <div
@@ -224,7 +292,7 @@
                             "
                             class="error-form"
                         >
-                            Name required
+                            Password required
                         </div>
                     </div>
                 </div>

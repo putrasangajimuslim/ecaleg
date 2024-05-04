@@ -122,6 +122,9 @@ export class CalonSharedComponent {
                 'foto',
                 new FormControl('', Validators.required)
             );
+
+            console.log(this.formGroup);
+            
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editCalon?.toLocaleLowerCase()

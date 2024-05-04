@@ -12,7 +12,7 @@ import { Constant } from 'src/app/config/constant';
 import { KabupatenResp } from 'src/app/modules/application/masters/kabupaten/models/kabupaten-resp.model';
 import { KecamatanResp } from 'src/app/modules/application/masters/kecamatan/models/kecamatan-resp.model';
 import { KelurahanResp } from 'src/app/modules/application/masters/kelurahan/models/kelurahan-resp.model';
-import { TimReqData } from 'src/app/modules/application/tim/models/tim-req.model';
+import { TimReq, TimReqData } from 'src/app/modules/application/tim/models/tim-req.model';
 import {
     DropdownItems,
     TimResp,
@@ -46,10 +46,11 @@ export class TimSharedComponent {
     kode_tps: string = '';
     no_telp: string = '';
     roles: string = '';
+    password: string = '';
 
     isAdmin: boolean = false;
     isUser: boolean = false;
-    isShow: boolean;
+    isShowRequired: boolean = true;
 
     menuKeys = Constant.menuKeys.tim;
 
@@ -108,66 +109,66 @@ export class TimSharedComponent {
         // this.formGroup.removeControl('id_kelurahan');
         // this.formGroup.removeControl('id_tps');
         
-        if (this.roles === 'admin') {
-            this.isAdmin = true;
-            this.isUser = false;
-            this.formGroup.addControl(
-                'id_kabupaten',
-                new FormControl('', Validators.required)
-            );
-            this.formGroup.addControl(
-                'id_kecamatan',
-                new FormControl('', Validators.required)
-            );
+        // if (this.roles === 'admin') {
+        //     this.isAdmin = true;
+        //     this.isUser = false;
+        //     this.formGroup.addControl(
+        //         'id_kabupaten',
+        //         new FormControl('', Validators.required)
+        //     );
+        //     this.formGroup.addControl(
+        //         'id_kecamatan',
+        //         new FormControl('', Validators.required)
+        //     );
 
-            this.formGroup.addControl(
-                'id_kelurahan',
-                new FormControl('', Validators.required)
-            );
+        //     this.formGroup.addControl(
+        //         'id_kelurahan',
+        //         new FormControl('', Validators.required)
+        //     );
 
-            this.formGroup.addControl(
-                'id_tps',
-                new FormControl('', Validators.required)
-            );
+        //     this.formGroup.addControl(
+        //         'id_tps',
+        //         new FormControl('', Validators.required)
+        //     );
 
-            this.formGroup.addControl(
-                'password',
-                new FormControl('', Validators.required)
-            );
-        } else {
-            this.isAdmin = false;
-            this.isUser = true;
+        //     this.formGroup.addControl(
+        //         'password',
+        //         new FormControl('', Validators.required)
+        //     );
+        // } else {
+        //     this.isAdmin = false;
+        //     this.isUser = true;
 
-            this.formGroup.addControl(
-                'id_kabupaten',
-                new FormControl('', Validators.required)
-            );
-            this.formGroup.addControl(
-                'id_kecamatan',
-                new FormControl('', Validators.required)
-            );
-            this.formGroup.addControl(
-                'id_kelurahan',
-                new FormControl('', Validators.required)
-            );
-            this.formGroup.addControl(
-                'id_tps',
-                new FormControl('', Validators.required)
-            );
+        //     this.formGroup.addControl(
+        //         'id_kabupaten',
+        //         new FormControl('', Validators.required)
+        //     );
+        //     this.formGroup.addControl(
+        //         'id_kecamatan',
+        //         new FormControl('', Validators.required)
+        //     );
+        //     this.formGroup.addControl(
+        //         'id_kelurahan',
+        //         new FormControl('', Validators.required)
+        //     );
+        //     this.formGroup.addControl(
+        //         'id_tps',
+        //         new FormControl('', Validators.required)
+        //     );
 
-            this.formGroup.addControl(
-                'password',
-                new FormControl('', Validators.required)
-            );
-        }
+        //     this.formGroup.addControl(
+        //         'password',
+        //         new FormControl('', Validators.required)
+        //     );
+        // }
 
-        this.formGroup.patchValue({
-            id_kabupaten: {name: '0', code: '0'},
-            id_kecamatan: {name: '0', code: '0'},
-            id_kelurahan: {name: '0', code: '0'},
-            id_tps: {name: '0', code: '0'},
-            password: "",
-        });
+        // this.formGroup.patchValue({
+        //     id_kabupaten: {name: '0', code: '0'},
+        //     id_kecamatan: {name: '0', code: '0'},
+        //     id_kelurahan: {name: '0', code: '0'},
+        //     id_tps: {name: '0', code: '0'},
+        //     password: "",
+        // });
     }
 
     getTim() {
@@ -290,9 +291,13 @@ export class TimSharedComponent {
             name: new FormControl('', Validators.required),
             email: new FormControl('', [Validators.required, Validators.email]),
             nik: new FormControl('', Validators.required),
+            id_kabupaten: new FormControl('', Validators.required),
+            id_kecamatan: new FormControl('', Validators.required),
+            id_kelurahan: new FormControl('', Validators.required),
+            id_tps: new FormControl('', Validators.required),
             no_telp: new FormControl('', Validators.required),
             roles: new FormControl('', Validators.required),
-            password: new FormControl('', Validators.required),
+            password: new FormControl(''),
         });
     }
 
@@ -304,13 +309,18 @@ export class TimSharedComponent {
             this.title = Constant.TimShared.addTitle;
             this.btnTitle = Constant.TimShared.btnTitleAdd;
 
-            this.formGroup.patchValue({
-                id_kabupaten: {name: '0', code: '0'},
-                id_kecamatan: {name: '0', code: '0'},
-                id_kelurahan: {name: '0', code: '0'},
-                id_tps: {name: '0', code: '0'},
-                password: "",
-            });
+            this.formGroup.addControl(
+                'password',
+                new FormControl('', Validators.required)
+            );
+
+            // this.formGroup.patchValue({
+            //     id_kabupaten: {name: '0', code: '0'},
+            //     id_kecamatan: {name: '0', code: '0'},
+            //     id_kelurahan: {name: '0', code: '0'},
+            //     id_tps: {name: '0', code: '0'},
+            //     password: "",
+            // });
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editTim?.toLocaleLowerCase()
@@ -337,7 +347,17 @@ export class TimSharedComponent {
                 this.dataPars['data'].panitia_profile.tpsId ?? '';
             this.no_telp = this.dataPars['data'].panitia_profile.no_telp ?? '';
             this.roles = this.dataPars['data'].panitia_profile.role ?? '';
+            this.password = this.dataPars['data'].password ?? '';
+            this.isShowRequired = false;
 
+            // const checkChangePassword = this.formGroup.get('password').value;
+
+            // if(!checkChangePassword) {
+            //     this.formGroup.patchValue({
+            //         password: this.password,
+            //     });
+            // }
+            
             const selectedRoles =
                 this.dropdownItemsRoles.find(
                     (item) => item.code === this.roles
@@ -358,56 +378,59 @@ export class TimSharedComponent {
                         (item) => item.code === this.id_kelurahan
                     ) || null;
 
-            const zero = 0;
+            // const zero = 0;
             const selectedTPS =
                     this.dropdownItemsTPS.find(
                         (item) => item.code === this.kode_tps
                     ) || null;
 
-            if (this.roles === 'admin') {
-                this.isAdmin = true;
-                this.isUser = false;
+            // if (this.roles === 'admin') {
+            //     this.isAdmin = true;
+            //     this.isUser = false;
 
-                this.formGroup.addControl(
-                    'id_kabupaten',
-                    new FormControl('', Validators.required)
-                );
+            //     this.formGroup.addControl(
+            //         'id_kabupaten',
+            //         new FormControl('', Validators.required)
+            //     );
                 
-            } else {
-                this.isAdmin = false;
-                this.isUser = true;
+            // } else {
+            //     this.isAdmin = false;
+            //     this.isUser = true;
 
-                this.formGroup.addControl(
-                    'id_kabupaten',
-                    new FormControl('', Validators.required)
-                );
+            //     this.formGroup.addControl(
+            //         'id_kabupaten',
+            //         new FormControl('', Validators.required)
+            //     );
 
-                this.formGroup.addControl(
-                    'id_kecamatan',
-                    new FormControl('', Validators.required)
-                );
+            //     this.formGroup.addControl(
+            //         'id_kecamatan',
+            //         new FormControl('', Validators.required)
+            //     );
 
-                this.formGroup.addControl(
-                    'id_kelurahan',
-                    new FormControl('', Validators.required)
-                );
-                this.formGroup.addControl(
-                    'id_tps',
-                    new FormControl('', Validators.required)
-                );
-            }
+            //     this.formGroup.addControl(
+            //         'id_kelurahan',
+            //         new FormControl('', Validators.required)
+            //     );
+            //     this.formGroup.addControl(
+            //         'id_tps',
+            //         new FormControl('', Validators.required)
+            //     );
+            // }
 
             this.formGroup.patchValue({
                 name: this.name,
                 email: this.email,
                 nik: this.nik,
                 roles: selectedRoles ?? '',
-                id_kabupaten: selectedKabupaten ?? zero,
-                id_kecamatan: selectedKecamatan ?? zero,
-                id_kelurahan: selectedKelurahan ?? zero,
-                id_tps: selectedTPS ?? zero,
+                id_kabupaten: selectedKabupaten ?? '',
+                id_kecamatan: selectedKecamatan ?? '',
+                id_kelurahan: selectedKelurahan ?? '',
+                id_tps: selectedTPS ?? '',
                 no_telp: this.no_telp,
             });
+
+            console.log(this.formGroup);
+            
         }
     }
 
@@ -430,30 +453,36 @@ export class TimSharedComponent {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
+            let constCheckUpdatePass = formData.password;
+
             const newRequest: TimReqData = {
                 nama_panitia: formData.name,
                 email: formData.email,
                 nik: formData.nik,
+                kabupatenId: formData.id_kabupaten.code,
+                kecamatanId: formData.id_kecamatan.code,
+                kelurahanId: formData.id_kelurahan.code,
+                tpsId: formData.id_tps.code,
                 no_telp: formData.no_telp,
                 roles: formData.roles.code,
                 password: formData.password,
             };
             
-            if (formData.id_kabupaten) {
-                newRequest.kabupatenId = formData.id_kabupaten.code;
-            }
+            // if (formData.id_kabupaten) {
+            //     newRequest.kabupatenId = formData.id_kabupaten.code;
+            // }
 
-            if (formData.id_kecamatan) {
-                newRequest.kecamatanId = formData.id_kecamatan.code;
-            }
+            // if (formData.id_kecamatan) {
+            //     newRequest.kecamatanId = formData.id_kecamatan.code;
+            // }
 
-            if (formData.id_kelurahan) {
-                newRequest.kelurahanId = formData.id_kelurahan.code;
-            }
+            // if (formData.id_kelurahan) {
+            //     newRequest.kelurahanId = formData.id_kelurahan.code;
+            // }
 
-            if (formData.id_tps) {
-                newRequest.tpsId = formData.id_tps.code;
-            }
+            // if (formData.id_tps) {
+            //     newRequest.tpsId = formData.id_tps.code;
+            // }
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===
@@ -484,9 +513,9 @@ export class TimSharedComponent {
                 this.actionKey?.toLocaleLowerCase() ===
                 Constant.actionKeys.editTim?.toLocaleLowerCase()
             ) {
-                const newReqEdit = {
-                    detail: newRequest,
-                };
+                const newReqEdit: TimReq = {
+                    detail: newRequest
+                }
 
                 this.timService.edit(this.userId, newReqEdit).subscribe({
                     next: (resp) => {

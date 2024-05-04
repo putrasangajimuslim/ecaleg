@@ -5,6 +5,7 @@
             <div class="container-flex mbc-4">
                 <div class="container-one">
                     <i
+                        *ngIf="!isEditable"
                         class="pi pi-arrow-left cursor-pointer mr-4"
                         style="font-size: 24px"
                         (click)="onClickBackButton()"
@@ -17,7 +18,7 @@
                         pButton
                         pRipple
                         type="button"
-                        label="Batal"
+                        [label]="moreBtn"
                         (click)="onClickBackButton()"
                         class="p-button-outlined mr-2 wc-180"
                     ></button>
@@ -30,63 +31,84 @@
                         class="p-button-success wc-180"
                         (click)="onSubmit()"
                         [disabled]="!formGroup.valid"
-                    >
-                    </button>
+                    ></button>
                 </div>
             </div>
 
-            <form [formGroup]="formGroup">
-                <div class="p-fluid p-formgrid grid">
-                    <div class="field col-12">
-                        <label htmlFor="id_calon"
-                            >Calon/Partai <span class="sp-req">*</span></label
-                        >
-                        <p-dropdown formControlName="id_calon" [options]="dropdownItems" optionLabel="name"></p-dropdown>
-                        <div
+            <div *ngIf="!isEditable; else editSuara">
+                <img [src]="dataPars.data.url_c1" width="200px" />
+                <div
+                    style="margin-top: 40px"
+                    *ngFor="
+                        let suara_calon of dataPars['data']?.suara_calons;
+                        let i = index
+                    "
+                >
+                    <p>nama_paslon: {{ suara_calon.calon.nama_calon }}</p>
+                    <p>Total Suara: {{ suara_calon.total_suara }}</p>
+                </div>
+            </div>
+
+            <ng-template #editSuara>
+                <form [formGroup]="formGroup">
+                    <div class="p-fluid p-formgrid grid">
+                        <ng-container *ngFor="let calon of calonList; let i = index">
+                            <div class="field col-12 md:col-6">
+                                <label>Calon/Partai {{ i+1 }}<span class="sp-req">*</span></label>
+                                <p-dropdown [options]="dropdownItems" optionLabel="name"></p-dropdown>
+                            </div>
+                        </ng-container>
+                        <div class="field col-12">
+                            <label htmlFor="foto"
+                                >Foto <span class="sp-req">*</span></label
+                            >
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile" (change)="uploadFile($event)">
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+    
+                            <div
+                                *ngIf="
+                                    formGroup.get('foto')
+                                        .invalid &&
+                                    formGroup.get('foto')
+                                        .touched
+                                "
+                                class="error-form"
+                            >
+                                Foto required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="actionKey !== addSuaraActionKey">
+                        <ng-container *ngFor="let suara_calon of dataPars?.data?.suara_calons; let i = index">
+                            <div class="p-fluid p-formgrid grid">
+                              <div class="field col-12 md:col-6">
+                                <label [for]="'id_calon_' + i">Calon/Partai {{ i+1 }}<span class="sp-req">*</span></label>
+                                <p-dropdown [options]="dropdownItems" [optionLabel]="'id_calon_' + i" [id]="'id_calon_' + i" (onChange)="checkSelectOption($event, i)"></p-dropdown>
+
+                                <div
                             *ngIf="
-                                formGroup.get('id_calon')
+                                formGroup.get('id_calon_'+i)
                                     .invalid &&
-                                formGroup.get('id_calon')
+                                formGroup.get('id_calon_'+i)
                                     .touched
                             "
                             class="error-form"
                         >
-                            Calon/Partai required
+                            Roles required
                         </div>
+                              </div>
+                              <div class="field col-12 md:col-6">
+                                <label [for]="'suara_sah_' + i">Suara Sah {{ i+1 }}<span class="sp-req">*</span></label>
+                                <input pInputText [id]="'suara_sah_' + i" type="text"/>
+                              </div>
+                            </div>
+                          </ng-container>
                     </div>
-                    <div class="field col-12">
-                        <label htmlFor="suara_sah"
-                            >Suara Sah<span class="sp-req">*</span></label
-                        >
-                        <input
-                            pInputText
-                            id="suara_sah"
-                            type="text"
-                            formControlName="suara_sah"
-                        />
-                        <div
-                            *ngIf="
-                                formGroup.get('suara_sah')
-                                    .invalid &&
-                                formGroup.get('suara_sah').touched
-                            "
-                            class="error-form"
-                        >
-                            Suara Sah required
-                        </div>
-                    </div>
-                    <div class="field col-12">
-                        <label htmlFor="id_kecamatan"
-                            >File C1</label
-                        >
-                        <!-- <p-fileUpload mode="basic" name="logo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" [auto]="true" chooseLabel="Browse"></p-fileUpload> -->
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile" (change)="uploadFile($event)">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </ng-template>
         </div>
     </div>
 </div>

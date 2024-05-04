@@ -93,7 +93,6 @@ export class PartaiSharedComponent {
             const checkUpload = this.formGroup.get('logo').value;
 
             if(!checkUpload) {
-                console.log('kosong');
                 this.formGroup.patchValue({
                     logo: this.logo,
                 });
