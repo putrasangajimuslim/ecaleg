@@ -10,7 +10,9 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { Label } from 'src/app/config/label';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { CryptoService } from '../../service/crypto/crypto.service';
 import { Utils } from '../../utils/utils';
+import { LoginMappingResp } from '../models/login-mapping.model';
 import { LoginRequest } from '../models/login-req.model';
 import { AuthService } from '../services/auth.service';
 
@@ -45,6 +47,8 @@ export class LoginComponent {
 
     loading: boolean = false;
 
+    encryptedMapping?: LoginMappingResp;
+
     formGroup: FormGroup = this.initFormGroup();
 
     constructor(
@@ -52,12 +56,16 @@ export class LoginComponent {
         private router: Router,
         private utils: Utils,
         private serviceToast: MessageService,
-        private authService: AuthService
+        private authService: AuthService,
+        private cryptoService: CryptoService
     ) {
-        var isLogin = utils.getLocalStorage('isLogin');
+        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
 
-        if (isLogin == 'true') {
-            router.navigate(['dashboard'], {});
+        if (encryptedMapping) {
+            const decryptedMapping = this.cryptoService.decryptData(encryptedMapping);
+            if (decryptedMapping.isLogin) {
+                router.navigate(['dashboard'], {});
+            }
         }
     }
 
@@ -76,17 +84,24 @@ export class LoginComponent {
             const formnewData: LoginRequest = {
                 email: formData.username,
                 password: formData.password,
-                isLogin: true,
             };
     
             this.authService.login(formnewData).subscribe({
                 next: (resp) => {
-                    const id = resp.akun.id;        
                     const isActive = resp.akun.isActive;
-                    const role = resp.akun.profile.role;
-                    const nama_panitia = resp.akun.profile.nama_panitia;
-                    const nik = resp.akun.profile.nik;
 
+                    this.encryptedMapping = {
+                        id: resp.akun.id,
+                        isActive: resp.akun.isActive,
+                        role: resp.akun.profile.role,
+                        nama_panitia: resp.akun.profile.nama_panitia,
+                        nik: resp.akun.profile.nik,
+                        token: resp.token,
+                        isLogin: true,
+                    };
+
+                    const encryptedData = this.cryptoService.encryptData(this.encryptedMapping);
+                    
                     if (!isActive) {
                         this.serviceToast.add({
                             key: 'tst',
@@ -98,12 +113,7 @@ export class LoginComponent {
                                 
                     const token =  resp.token;
                     if (token) {
-                        this.utils.setLocalStorage('isLogin', 'true');
-                        this.utils.setLocalStorage('token', token);
-                        this.utils.setLocalStorage('id', id);
-                        this.utils.setLocalStorage('role', role);
-                        this.utils.setLocalStorage('nama_panitia', nama_panitia);
-                        this.utils.setLocalStorage('isActive', isActive);
+                        this.utils.setLocalStorage('encryptedMapping', encryptedData);
     
                         setTimeout(() => {
                             this.loading = false;
@@ -114,10 +124,9 @@ export class LoginComponent {
                                 detail: 'Berhasil Login',
                             });
                             
-                            window.location.reload();
+                            this.router.navigate(['dashboard'], {});
                         }, 800);
                     }
-                    
                 },
                 error: (err) => {
                     this.serviceToast.add({
@@ -127,10 +136,10 @@ export class LoginComponent {
                         detail: 'Gagal Login, Username atau Password Salah',
                     });
 
-                    // setTimeout(() => {
-                    //     this.loading = false;
-                    //     window.location.reload();
-                    // }, 800);
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.router.navigate(['login'], {});
+                    }, 800);
                 },
             });
         }

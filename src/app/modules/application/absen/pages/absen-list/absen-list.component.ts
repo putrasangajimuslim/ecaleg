@@ -71,7 +71,7 @@ export class AbsenListComponent {
               this.dataCount = resp?.data.length;
 
               if(this.dataCount > 0) {
-                this.status = 'Approved';
+                this.status = 'IsLogged';
               }
 
               setTimeout(() => {

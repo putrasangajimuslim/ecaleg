@@ -11,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { Constant } from 'src/app/config/constant';
+import { CryptoService } from 'src/app/modules/service/crypto/crypto.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { Utils } from 'src/app/modules/utils/utils';
 import { SuaraMapping } from '../../models/suara-mapping.model';
@@ -38,7 +39,8 @@ export class SuaraListComponent {
     display: boolean = false;
     loading: boolean = true;
     deleteDialog: boolean = false;
-    suaraId = '';
+    suaraId:string = '';
+    idLogin:string = '';
     nameLogin: string = '';
     dataSource1: SuaraResp[] = [];
     newDataSource1: SuaraMapping[] = [];
@@ -59,12 +61,20 @@ export class SuaraListComponent {
         private suaraService: SuaraService,
         private reviewDataService: EcalegReviewDataService,
         private serviceToast: MessageService,
-        private utils: Utils
+        private utils: Utils,
+        private cryptoService: CryptoService, 
     ) {}
 
     ngOnInit() {
         this.fetchData();
-        this.nameLogin = this.utils.getLocalStorage('nama_panitia');
+        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+        if (encryptedMapping) {
+            const decryptedMapping =
+            this.cryptoService.decryptData(encryptedMapping);
+
+            this.idLogin = decryptedMapping.id;
+            this.nameLogin = decryptedMapping.nama_panitia;
+        }
     }
 
     fetchData() {
@@ -80,6 +90,7 @@ export class SuaraListComponent {
                     suara_calons: item.suara_calons,
                     url_c1: item.url_c1,
                     input_by: this.nameLogin,
+                    status_suara: item.status_suara,
                     name_kabupaten: item['suara_calons'][0].calon.kabupatenId,
                     createdAt: item.createdAt,
                     updatedAt: item.updatedAt

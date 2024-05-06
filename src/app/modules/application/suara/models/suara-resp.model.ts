@@ -3,6 +3,7 @@ export interface SuaraResp {
     suara_calons: Array<suaraRespCalons>;
     url_c1: string;
     input_by: string;
+    status_suara: string;
     name_kabupaten: string;
     createdAt: string;
     updatedAt: string;
@@ -28,4 +29,5 @@ export interface calonSuaraResp {
     partaiId: string;
     kabupatenId: string;
     nama_calon: string;
+    url_foto: string;
 }

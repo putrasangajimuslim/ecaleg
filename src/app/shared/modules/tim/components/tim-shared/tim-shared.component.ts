@@ -313,22 +313,11 @@ export class TimSharedComponent {
                 'password',
                 new FormControl('', Validators.required)
             );
-
-            // this.formGroup.patchValue({
-            //     id_kabupaten: {name: '0', code: '0'},
-            //     id_kecamatan: {name: '0', code: '0'},
-            //     id_kelurahan: {name: '0', code: '0'},
-            //     id_tps: {name: '0', code: '0'},
-            //     password: "",
-            // });
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
             Constant.actionKeys.editTim?.toLocaleLowerCase()
         ) {
             // this.formGroup.removeControl('id_kabupaten');
-            // this.formGroup.removeControl('id_kecamatan');
-            // this.formGroup.removeControl('id_kelurahan');
-            // this.formGroup.removeControl('id_tps');
 
             this.title = Constant.TimShared.editTitle;
             this.btnTitle = Constant.TimShared.btnTitleEdit;
@@ -350,14 +339,6 @@ export class TimSharedComponent {
             this.password = this.dataPars['data'].password ?? '';
             this.isShowRequired = false;
 
-            // const checkChangePassword = this.formGroup.get('password').value;
-
-            // if(!checkChangePassword) {
-            //     this.formGroup.patchValue({
-            //         password: this.password,
-            //     });
-            // }
-            
             const selectedRoles =
                 this.dropdownItemsRoles.find(
                     (item) => item.code === this.roles
@@ -428,9 +409,6 @@ export class TimSharedComponent {
                 id_tps: selectedTPS ?? '',
                 no_telp: this.no_telp,
             });
-
-            console.log(this.formGroup);
-            
         }
     }
 
@@ -453,8 +431,6 @@ export class TimSharedComponent {
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
-            let constCheckUpdatePass = formData.password;
-
             const newRequest: TimReqData = {
                 nama_panitia: formData.name,
                 email: formData.email,
@@ -464,8 +440,8 @@ export class TimSharedComponent {
                 kelurahanId: formData.id_kelurahan.code,
                 tpsId: formData.id_tps.code,
                 no_telp: formData.no_telp,
-                roles: formData.roles.code,
-                password: formData.password,
+                role: formData.roles.code,
+                password: formData.password ? formData.password: this.password,
             };
             
             // if (formData.id_kabupaten) {
@@ -517,7 +493,7 @@ export class TimSharedComponent {
                     detail: newRequest
                 }
 
-                this.timService.edit(this.userId, newReqEdit).subscribe({
+                this.timService.edit(this.userId, this.email !== formData.email || this.password !== formData.password ? newRequest: newReqEdit).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',

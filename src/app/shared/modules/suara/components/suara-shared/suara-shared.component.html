@@ -13,7 +13,7 @@
                     <p class="title-first">{{ title }}</p>
                 </div>
 
-                <div class="container-two">
+                <div class="container-two" *ngIf="isEditable">
                     <button
                         pButton
                         pRipple
@@ -33,10 +33,51 @@
                         [disabled]="!formGroup.valid"
                     ></button>
                 </div>
+
+                <div class="container-two" *ngIf="actionKey === viewSuaraActionKey && this.role === 'admin' || this.role === 'superadmin'">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="moreBtn"
+                        [disabled]="action_status"
+                        (click)="changeStatusLapor('ditolak')"
+                        class="p-button-outlined mr-2 wc-180"
+                    ></button>
+
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        [label]="btnTitle"
+                        [disabled]="action_status"
+                        (click)="changeStatusLapor('diterima')"
+                        class="p-button-success wc-180"
+                    ></button>
+                </div>
             </div>
 
             <div *ngIf="!isEditable; else editSuara">
-                <img [src]="dataPars.data.url_c1" width="200px" />
+                <div class="d-flex justify-between">
+                    <div class="section-first">
+                        <label class="font-s-18px">Foto C1 </label>
+                        <div class="mt-4">
+                            <img [src]="dataPars.data.url_c1" width="200px" />
+                        </div>
+                    </div>
+
+                    <div class="section-second" *ngIf="this.dataPars['data'].status_suara">
+                        <p class="font-s-18px">Status Laporan </p>
+                        <button
+                            pButton
+                            pRipple
+                            type="button"
+                            [label]="status_laporan"
+                            [disabled]="true"
+                            [ngClass]="(status_laporan == 'Diterima') ? 'p-button-rounded p-button-success' : 'p-button-rounded p-button-danger'"
+                        ></button>
+                    </div>
+                </div>
                 <div
                     style="margin-top: 40px"
                     *ngFor="
@@ -44,19 +85,34 @@
                         let i = index
                     "
                 >
-                    <p>nama_paslon: {{ suara_calon.calon.nama_calon }}</p>
+                    <img [src]="suara_calon.calon.url_foto" width="200px" />
+                    <p class="mt-4">Nama Paslon: {{ suara_calon.calon.nama_calon }}</p>
                     <p>Total Suara: {{ suara_calon.total_suara }}</p>
                 </div>
             </div>
 
             <ng-template #editSuara>
                 <form [formGroup]="formGroup">
-                    <div class="p-fluid p-formgrid grid">
-                        <ng-container *ngFor="let calon of calonList; let i = index">
-                            <div class="field col-12 md:col-6">
-                                <label>Calon/Partai {{ i+1 }}<span class="sp-req">*</span></label>
-                                <p-dropdown [options]="dropdownItems" optionLabel="name"></p-dropdown>
-                            </div>
+                    <div class="p-fluid p-formgrid grid" formArrayName="calons">
+                        <ng-container *ngFor="let calon of calonList; let i = index" >
+                            <ng-container [formGroupName]="i">
+                                <div class="field col-12 md:col-6">
+                                    <label>Calon/Partai {{ i+1 }}</label>
+                                    <div class="image-paslon">
+                                        <img src="{{ calon.url_foto}}">
+                                    </div>
+                                </div>
+    
+                                <div class="field col-12 md:col-6">
+                                    <label htmlFor="suara_sah">Suara Sah {{ i+1 }}<span class="sp-req">*</span></label>
+                                    <input pInputText id="suara_sah" type="text" formControlName="suara_sah">
+                                    <div class="error-form" *ngIf="formGroup.get('calons.' + i + '.suara_sah').invalid && 
+                                                (formGroup.get('calons.' + i + '.suara_sah').dirty || 
+                                                formGroup.get('calons.' + i + '.suara_sah').touched)">
+                                        Suara Sah harus diisi
+                                    </div>
+                                </div>
+                            </ng-container>
                         </ng-container>
                         <div class="field col-12">
                             <label htmlFor="foto"
@@ -79,33 +135,6 @@
                                 Foto required
                             </div>
                         </div>
-                    </div>
-
-                    <div *ngIf="actionKey !== addSuaraActionKey">
-                        <ng-container *ngFor="let suara_calon of dataPars?.data?.suara_calons; let i = index">
-                            <div class="p-fluid p-formgrid grid">
-                              <div class="field col-12 md:col-6">
-                                <label [for]="'id_calon_' + i">Calon/Partai {{ i+1 }}<span class="sp-req">*</span></label>
-                                <p-dropdown [options]="dropdownItems" [optionLabel]="'id_calon_' + i" [id]="'id_calon_' + i" (onChange)="checkSelectOption($event, i)"></p-dropdown>
-
-                                <div
-                            *ngIf="
-                                formGroup.get('id_calon_'+i)
-                                    .invalid &&
-                                formGroup.get('id_calon_'+i)
-                                    .touched
-                            "
-                            class="error-form"
-                        >
-                            Roles required
-                        </div>
-                              </div>
-                              <div class="field col-12 md:col-6">
-                                <label [for]="'suara_sah_' + i">Suara Sah {{ i+1 }}<span class="sp-req">*</span></label>
-                                <input pInputText [id]="'suara_sah_' + i" type="text"/>
-                              </div>
-                            </div>
-                          </ng-container>
                     </div>
                 </form>
             </ng-template>

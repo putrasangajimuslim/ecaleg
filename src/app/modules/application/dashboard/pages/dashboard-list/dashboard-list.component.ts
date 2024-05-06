@@ -33,7 +33,6 @@ export class DashboardListComponent {
     }
 
     ngOnInit() {
-        this.initCharts();
         this.getData();
     }
 
@@ -41,19 +40,13 @@ export class DashboardListComponent {
         this.dashboardService.getData().subscribe({
             next: (resp) => {
                 this.dashboardResp = resp;
-                // this.dashboardResp.calon.forEach((item) => {
-                //     this.labels.push(item);
-                // });
+                const modifiedCalon = this.dashboardResp.color.map(color => `--${color}`);
 
-                // this.dashboardResp.vote.forEach((item) => {
-                //     this.data.push(item);
-                // });
+                this.dashboardResp.color.forEach((value, index) => {
+                    this.dashboardResp.color[index] = modifiedCalon[index];
+                });
 
-                // this.dashboardResp.color.forEach((item) => {
-                //     this.color.push(item);
-                // });
-
-                console.log(this.dashboardResp);
+                this.initCharts();
             },
             error: (err) => {},
         });
@@ -68,41 +61,22 @@ export class DashboardListComponent {
         const surfaceBorder =
             documentStyle.getPropertyValue('--surface-border');
 
-            let resp: DashboardResp = {
-              calon: this.dashboardResp.calon,
-              vote: this.dashboardResp.vote,
-              percentage: [], // Kosongkan jika tidak ada data saat ini
-              // Menyesuaikan dengan data yang ada, misalnya jika ada properti lain yang ada dalam dashboardResp
-            };
-            
-            // Inisialisasi this.pieData menggunakan resp
-            this.pieData = {
-              labels: resp.calon,
-              datasets: [
+        const colors = this.dashboardResp?.color.map(color => documentStyle.getPropertyValue(color));
+
+        const labelPercentage = this.dashboardResp?.calon.map((c, index) => `${c} (${this.dashboardResp?.percentage[index]})`)
+
+        const labelData = this.dashboardResp?.vote.map(v => `Persentase Suara: ${v}`)
+
+        this.pieData = {
+            labels: labelPercentage ?? [],
+            datasets: [
                 {
-                  data: resp.vote,
-                  backgroundColor: [],
-                  hoverBackgroundColor: []
-                }
-              ]
-            };
-        
-        // this.pieData = {
-        //     labels: ['putra', 'sanga'],
-        //     datasets: [
-        //         {
-        //             data: [540, 325],
-        //             backgroundColor: [
-        //                 documentStyle.getPropertyValue('--indigo-400'),
-        //                 documentStyle.getPropertyValue('--blue-400'),
-        //             ],
-        //             hoverBackgroundColor: [
-        //                 documentStyle.getPropertyValue('--indigo-400'),
-        //                 documentStyle.getPropertyValue('--blue-400'),
-        //             ],
-        //         },
-        //     ],
-        // };
+                    data: this.dashboardResp.vote ?? [],
+                    backgroundColor: colors,
+                    hoverBackgroundColor: colors,
+                },
+            ],
+        };
 
         this.pieOptions = {
             plugins: {
