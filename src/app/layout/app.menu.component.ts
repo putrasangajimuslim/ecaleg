@@ -26,8 +26,6 @@ export class AppMenuComponent implements OnInit {
             this.cryptoService.decryptData(encryptedMapping);
 
             this.role = decryptedMapping.role;
-
-            console.log(this.role);
         }
     }
 

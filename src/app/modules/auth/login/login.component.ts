@@ -58,15 +58,7 @@ export class LoginComponent {
         private serviceToast: MessageService,
         private authService: AuthService,
         private cryptoService: CryptoService
-    ) {
-        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
-
-        if (encryptedMapping) {
-            const decryptedMapping = this.cryptoService.decryptData(encryptedMapping);
-            if (decryptedMapping.isLogin) {
-                router.navigate(['dashboard'], {});
-            }
-        }
+    ) {  
     }
 
     initFormGroup(): FormGroup {
