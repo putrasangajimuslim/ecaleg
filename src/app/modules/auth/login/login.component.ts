@@ -107,15 +107,15 @@ export class LoginComponent {
                     if (token) {
                         this.utils.setLocalStorage('encryptedMapping', encryptedData);
     
+                        this.serviceToast.add({
+                            key: 'tst',
+                            severity: 'success',
+                            summary: 'Selamat',
+                            detail: 'Berhasil Login',
+                        });
+
                         setTimeout(() => {
                             this.loading = false;
-                            this.serviceToast.add({
-                                key: 'tst',
-                                severity: 'success',
-                                summary: 'Selamat',
-                                detail: 'Berhasil Login',
-                            });
-                            
                             this.router.navigate(['dashboard'], {});
                         }, 800);
                     }
