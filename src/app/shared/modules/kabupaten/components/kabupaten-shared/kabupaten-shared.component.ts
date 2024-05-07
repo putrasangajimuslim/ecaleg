@@ -28,6 +28,8 @@ export class KabupatenSharedComponent implements OnInit {
     kab: string = '';
     jmldpt: string = '';
 
+    loading: boolean = false;
+
     menuKeys = Constant.menuKeys.kabupaten;
 
     formGroup: FormGroup = this.initFormGroup();
@@ -83,6 +85,7 @@ export class KabupatenSharedComponent implements OnInit {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
@@ -106,6 +109,7 @@ export class KabupatenSharedComponent implements OnInit {
                         });
 
                         setTimeout(() => {
+                            this.loading = false
                             this.router.navigate(['master', 'kabupaten']);
                         }, 800);
                     },
@@ -116,7 +120,9 @@ export class KabupatenSharedComponent implements OnInit {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 800);
                     },
                 });
             } else if (
@@ -133,6 +139,7 @@ export class KabupatenSharedComponent implements OnInit {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -143,7 +150,9 @@ export class KabupatenSharedComponent implements OnInit {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

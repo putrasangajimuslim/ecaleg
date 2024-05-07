@@ -6,15 +6,26 @@
         </div>
     </div>
     <div class="col-12">
-        <div class="card flex flex-column align-items-center">
-            <div class="p-fluid p-formgrid grid">
-                <div class="field col-12 md:col-6">
-                    <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
+        <div class="card" *ngIf="isEmptyData; else notEmptyData">  
+            <div class="no-data-column">
+                <div class="container-no-column">
+                    <img [src]="emptyImg" alt="" />
+                    <div class="paragraph-no-column">Hasil Quick Account Belum Tersedia</div>
                 </div>
             </div>
         </div>
+
+        <ng-template #notEmptyData>
+            <div class="card flex flex-column align-items-center">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>

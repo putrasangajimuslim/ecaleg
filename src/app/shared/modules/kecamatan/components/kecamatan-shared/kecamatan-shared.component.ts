@@ -40,6 +40,8 @@ export class KecamatanSharedComponent {
     title: string;
     btnTitle: string;
 
+    loading: boolean = false;
+
     formGroup: FormGroup = this.initFormGroup()
 
     constructor(
@@ -128,6 +130,7 @@ export class KecamatanSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
             
@@ -153,6 +156,7 @@ export class KecamatanSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false
                             this.router.navigate(['master', 'kecamatan']);
                         }, 800);
                     },
@@ -163,7 +167,9 @@ export class KecamatanSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 800);
                     },
                 });
             } else if (
@@ -180,6 +186,7 @@ export class KecamatanSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -190,7 +197,9 @@ export class KecamatanSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

@@ -43,7 +43,7 @@
                         <td>
                             <img [src]="dataSource.url_c1" width="80px">
                         </td>
-                        <td>{{ nameLogin }}</td>
+                        <td>{{ dataSource.panitian }}</td>
                         <td>{{ dataSource.status_suara === '' ? 'On Check' : dataSource.status_suara  }}</td>
                         <td>
                             <button pButton pRipple type="button" class="p-button-secondary mr-2" (click)="onClickDetailSuara(dataSource)">

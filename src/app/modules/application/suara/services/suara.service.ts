@@ -48,7 +48,7 @@ export class SuaraService {
       .get<SuaraList>(`${this.apiURL}suara/${id}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
-
+  
   getKabupaten(id: string) {
     return this.httpClient
       .get<KabupatenResp>(`${this.apiURL}kabupaten/${id}`, { headers: this.headers })

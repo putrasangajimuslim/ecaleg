@@ -38,6 +38,8 @@ export class KelurahanSharedComponent {
 
     menuKeys = Constant.menuKeys.kelurahan;
 
+    loading: boolean = false;
+
     KecamatanList?: KecamatanResp[] = [];
     dropdownItems?: DropdownItems[] = [];
 
@@ -121,6 +123,7 @@ export class KelurahanSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
             const newFormData: KelurahanReq = {
@@ -142,6 +145,7 @@ export class KelurahanSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -152,7 +156,9 @@ export class KelurahanSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             } else if (
@@ -169,6 +175,7 @@ export class KelurahanSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -179,7 +186,9 @@ export class KelurahanSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

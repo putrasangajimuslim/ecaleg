@@ -4,6 +4,7 @@ export interface SuaraResp {
     url_c1: string;
     input_by: string;
     status_suara: string;
+    panitian: Panitia;
     name_kabupaten: string;
     createdAt: string;
     updatedAt: string;
@@ -30,4 +31,16 @@ export interface calonSuaraResp {
     kabupatenId: string;
     nama_calon: string;
     url_foto: string;
+}
+
+export interface calonSuaraResp {
+    partaiId: string;
+    kabupatenId: string;
+    nama_calon: string;
+    url_foto: string;
+}
+
+export interface Panitia {
+    id: string;
+    nama_panitia: string;
 }

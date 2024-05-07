@@ -37,6 +37,8 @@ export class CalonSharedComponent {
 
     isShowRequired: boolean = true;
 
+    loading: boolean = false;
+
     KabupatenList: KabupatenResp[] = [];
     PartaiList: PartaiResp[] = [];
 
@@ -189,6 +191,8 @@ export class CalonSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
+
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
             const newForm = new FormData();
@@ -219,6 +223,7 @@ export class CalonSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -229,7 +234,9 @@ export class CalonSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             } else if (
@@ -246,6 +253,7 @@ export class CalonSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -256,7 +264,9 @@ export class CalonSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

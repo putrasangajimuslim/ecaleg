@@ -1,10 +1,13 @@
 export interface TimReq {
     detail: TimReqData;
+    email?: string;
+    password?: string;
 }
 
 export interface TimReqData {
-    nama_panitia?: string;
     email?: string;
+    password?: string;
+    nama_panitia?: string;
     nik?: string;
     kabupatenId?: string;
     kecamatanId?: string;
@@ -12,5 +15,4 @@ export interface TimReqData {
     tpsId?: string;
     no_telp?: string;
     role?: string;
-    password?: string;
 }

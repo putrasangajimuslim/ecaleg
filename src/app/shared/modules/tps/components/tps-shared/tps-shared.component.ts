@@ -29,6 +29,7 @@ export class TpsSharedComponent {
     namatps: string = '';
     max_surat_suara: string = '';
     kelurahanId: string = '';
+    loading: boolean = false;
 
     menuKeys = Constant.menuKeys.tps;
 
@@ -123,6 +124,7 @@ export class TpsSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
@@ -147,6 +149,7 @@ export class TpsSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.router.navigate(['tps']);
                         }, 800);
                     },
@@ -157,7 +160,9 @@ export class TpsSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             } else if (
@@ -174,6 +179,7 @@ export class TpsSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -184,7 +190,9 @@ export class TpsSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

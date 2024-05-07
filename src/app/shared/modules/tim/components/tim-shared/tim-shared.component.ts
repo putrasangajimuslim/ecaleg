@@ -52,6 +52,8 @@ export class TimSharedComponent {
     isUser: boolean = false;
     isShowRequired: boolean = true;
 
+    loading: boolean = false;
+
     menuKeys = Constant.menuKeys.tim;
 
     timList: TimResp[] = [];
@@ -428,12 +430,14 @@ export class TimSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
 
             const newRequest: TimReqData = {
-                nama_panitia: formData.name,
                 email: formData.email,
+                password: formData.password ? formData.password: this.password,
+                nama_panitia: formData.name,
                 nik: formData.nik,
                 kabupatenId: formData.id_kabupaten.code,
                 kecamatanId: formData.id_kecamatan.code,
@@ -441,7 +445,6 @@ export class TimSharedComponent {
                 tpsId: formData.id_tps.code,
                 no_telp: formData.no_telp,
                 role: formData.roles.code,
-                password: formData.password ? formData.password: this.password,
             };
             
             // if (formData.id_kabupaten) {
@@ -473,6 +476,7 @@ export class TimSharedComponent {
                             detail: 'Berhasil Menyimpan Data',
                         });
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -483,6 +487,9 @@ export class TimSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             } else if (
@@ -490,10 +497,12 @@ export class TimSharedComponent {
                 Constant.actionKeys.editTim?.toLocaleLowerCase()
             ) {
                 const newReqEdit: TimReq = {
-                    detail: newRequest
+                    detail: newRequest,
+                    email: formData.email,
+                    password: formData.password ? formData.password: this.password,
                 }
 
-                this.timService.edit(this.userId, this.email !== formData.email || this.password !== formData.password ? newRequest: newReqEdit).subscribe({
+                this.timService.edit(this.userId, newReqEdit).subscribe({
                     next: (resp) => {
                         this.serviceToast.add({
                             key: 'tst',
@@ -502,6 +511,7 @@ export class TimSharedComponent {
                             detail: 'Berhasil Merubah Data',
                         });
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -512,6 +522,9 @@ export class TimSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }

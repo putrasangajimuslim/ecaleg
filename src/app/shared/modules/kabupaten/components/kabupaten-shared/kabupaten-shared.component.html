@@ -25,10 +25,23 @@
                     <button
                         pButton
                         pRipple
+                        class="p-button-success wc-180 btn-flex-center"
+                        *ngIf="loading"
+                    >
+                        <i
+                            class="pi pi-spin pi-spinner"
+                            style="font-size: 2rem"
+                        ></i>
+                    </button>
+                    
+                    <button
+                        pButton
+                        pRipple
                         type="button"
                         [label]="btnTitle"
                         class="p-button-success wc-180"
                         (click)="onSubmit()"
+                        *ngIf="!loading"
                         [disabled]="!formGroup.valid"
                     ></button>
                 </div>

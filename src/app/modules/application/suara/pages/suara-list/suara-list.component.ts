@@ -83,13 +83,15 @@ export class SuaraListComponent {
             next: (resp) => {
                 const data = resp?.data ?? [];
                 this.dataSource1 = data;
+                
                 this.dataCount = resp?.data.length;
 
                 this.dataSource1 = data.map(item => ({
                     id: item.id,
                     suara_calons: item.suara_calons,
                     url_c1: item.url_c1,
-                    input_by: this.nameLogin,
+                    input_by: item.input_by,
+                    panitian: item.panitian['panitia_profile'].nama_panitia,
                     status_suara: item.status_suara,
                     name_kabupaten: item['suara_calons'][0].calon.kabupatenId,
                     createdAt: item.createdAt,

@@ -21,6 +21,11 @@ export class DashboardListComponent {
 
     subscription: Subscription;
 
+    isEmptyData: boolean = false;
+
+    private _publicPath = __webpack_public_path__;
+    emptyImg = `${this._publicPath}assets/images/empty.svg`;
+
     constructor(
         public layoutService: LayoutService,
         private dashboardService: DashboardService
@@ -45,6 +50,12 @@ export class DashboardListComponent {
                 this.dashboardResp.color.forEach((value, index) => {
                     this.dashboardResp.color[index] = modifiedCalon[index];
                 });
+
+                if (this.dashboardResp?.vote.every(vote => vote === 0)) {
+                    this.isEmptyData = true;
+                } else {
+                    this.isEmptyData = false;
+                }
 
                 this.initCharts();
             },

@@ -63,6 +63,7 @@ export class SuaraSharedComponent {
     dataCount: number = 0;
 
     action_status: boolean = false;
+    loading: boolean = false;
 
     partaiList: PartaiResp[] = [];
     calonList: CalonResp[] = [];
@@ -160,6 +161,7 @@ export class SuaraSharedComponent {
         return this.fb.group({
             calons: this.fb.array([]),
             foto: new FormControl('', Validators.required),
+            status_suara: new FormControl(''),
         });
     }
 
@@ -196,6 +198,7 @@ export class SuaraSharedComponent {
             
             this.formGroup.patchValue({
                 user_input: this.idLogin,
+                status_suara: 'On Checking',
             });
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
@@ -287,6 +290,7 @@ export class SuaraSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;  
 
@@ -312,6 +316,7 @@ export class SuaraSharedComponent {
 
                         setTimeout(() => {
                             this.onClickBackButton();
+                            this.loading = false
                         }, 800);
                     },
                     error: (err) => {
@@ -321,7 +326,9 @@ export class SuaraSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
-                        console.log(err);
+                        setTimeout(() => {
+                            this.loading = false
+                        }, 800);
                     },
                 });
             }

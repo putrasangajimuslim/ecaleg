@@ -38,6 +38,8 @@ export class PartaiSharedComponent {
 
     menuKeys = Constant.menuKeys.partai;
 
+    loading: boolean = false;
+
     formGroup: FormGroup = this.initFormGroup();
 
     constructor(
@@ -121,6 +123,7 @@ export class PartaiSharedComponent {
     }
 
     onSubmit() {
+        this.loading = true;
         if (this.formGroup.valid) {
             const formData = this.formGroup.value;
             
@@ -147,6 +150,7 @@ export class PartaiSharedComponent {
                         });
 
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -157,6 +161,9 @@ export class PartaiSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Menyimpan Data',
                         });
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             } else if (
@@ -172,6 +179,7 @@ export class PartaiSharedComponent {
                             detail: 'Berhasil Merubah Data',
                         });
                         setTimeout(() => {
+                            this.loading = false;
                             this.onClickBackButton();
                         }, 800);
                     },
@@ -182,6 +190,9 @@ export class PartaiSharedComponent {
                             summary: 'Maaf',
                             detail: 'Gagal Merubah Data',
                         });
+                        setTimeout(() => {
+                            this.loading = false;
+                        }, 800);
                     },
                 });
             }
