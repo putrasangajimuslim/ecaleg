@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{dataSource.panitian.email}}</td>
                         <td>
-                            <img src="{{ dataSource.url_photo}}" width="80px">
+                            <img src="{{ dataSource.url_photo}}" style="cursor: pointer; width: 100px; height: 100px; object-fit: cover;" (click)="viewImages(dataSource.url_photo)">
                         </td>
                         <td>{{status}}</td>
                         <td>{{dataSource.lat}}</td>
@@ -47,15 +47,10 @@
                 </div>
             </div>
 
-            <p-dialog [(visible)]="deleteDialog" header="Konfirmasi" [modal]="true" [style]="{width:'350px'}">
+            <p-dialog [(visible)]="deleteDialog" header="View Image" [modal]="true" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
                 <div class="flex align-items-center justify-content-center">
-                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                    <span>Yakin Ingin Menghapus Data ini?</span>
+                    <img src="{{ imgUrl }}" alt="" />
                 </div>
-                <ng-template pTemplate="footer">
-                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="No" (click)="deleteDialog = false"></button>
-                    <button pButton pRipple icon="pi pi-check" label="Yes" class="p-button-outlined" (click)="confirmationDel()"></button>
-                </ng-template>
             </p-dialog>
         </div>
     </div>

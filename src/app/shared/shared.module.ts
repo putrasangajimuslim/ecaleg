@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
@@ -29,6 +30,7 @@ import { ToastModule } from 'primeng/toast';
     RippleModule,
     FileUploadModule,
     InputTextareaModule,
+    DialogModule,
   ],
   exports: [
     ButtonModule,
@@ -42,6 +44,7 @@ import { ToastModule } from 'primeng/toast';
     RippleModule,
     FileUploadModule,
     InputTextareaModule,
+    DialogModule,
   ],
   providers: [
     MessageService

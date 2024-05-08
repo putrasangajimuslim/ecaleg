@@ -23,6 +23,8 @@
                         <th>Nama Calon</th>
                         <th>Suara Sah</th>
                         <th>File C1</th>
+                        <th>Kode TPS</th>
+                        <th>Nama TPS</th>
                         <th>Dinput Oleh</th>
                         <th>Status Laporan</th>
                         <th>Tindakan</th>
@@ -31,18 +33,20 @@
                 <ng-template pTemplate="body" let-dataSource>
                     <tr>
                         <td>
-                            <div *ngFor="let item1 of dataSource.suara_calons">
+                            <div *ngFor="let item1 of dataSource.suara_calons" style="margin-bottom: 10px; margin-top: 10px;">
                                 <p>{{ item1?.calon.nama_calon }}</p>
                             </div>
                         </td>
                         <td>
-                            <div *ngFor="let item2 of dataSource.suara_calons">
+                            <div *ngFor="let item2 of dataSource.suara_calons" style="margin-bottom: 10px; margin-top: 10px;">
                                 <p>{{ item2?.total_suara }}</p>
                             </div>
                         </td>
                         <td>
                             <img [src]="dataSource.url_c1" width="80px">
                         </td>
+                        <td></td>
+                        <td></td>
                         <td>{{ dataSource.panitian }}</td>
                         <td>{{ dataSource.status_suara === '' ? 'On Check' : dataSource.status_suara  }}</td>
                         <td>

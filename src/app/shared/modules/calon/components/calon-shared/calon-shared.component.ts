@@ -37,6 +37,10 @@ export class CalonSharedComponent {
 
     isShowRequired: boolean = true;
 
+    private _publicPath = __webpack_public_path__;
+
+    defaultC1: string | ArrayBuffer | null = null;
+
     loading: boolean = false;
 
     KabupatenList: KabupatenResp[] = [];
@@ -119,13 +123,12 @@ export class CalonSharedComponent {
         ) {
             this.title = Constant.calonShared.addTitle;
             this.btnTitle = Constant.calonShared.btnTitleAdd;
+            this.defaultC1 = `${this._publicPath}assets/images/default_img.avif`;
 
             this.formGroup.addControl(
                 'foto',
                 new FormControl('', Validators.required)
             );
-
-            console.log(this.formGroup);
             
         } else if (
             this.actionKey?.toLocaleLowerCase() ===
@@ -140,6 +143,7 @@ export class CalonSharedComponent {
             this.partai = this.dataPars['data'].partaiId ?? '';
             this.kabupatenId = this.dataPars['data'].kabupatenId ?? '';
             this.isShowRequired = false;
+            this.defaultC1 = this.dataPars['data'].url_foto ?? '';
 
             const checkUpload = this.formGroup.get('foto').value;
             
@@ -171,7 +175,7 @@ export class CalonSharedComponent {
             foto: new FormControl(''),
             calon: new FormControl('', Validators.required),
             partai: new FormControl('', Validators.required),
-            kabupatenId: new FormControl('', Validators.required),
+            // kabupatenId: new FormControl('', Validators.required),
         });
     }
 
@@ -183,6 +187,7 @@ export class CalonSharedComponent {
             reader.readAsDataURL(file);
 
             reader.onload = () => {
+                this.defaultC1 = reader.result;
                 this.formGroup.patchValue({
                     foto: file,
                 });
@@ -203,10 +208,10 @@ export class CalonSharedComponent {
                 'partaiId',
                 formData.partai.code
             );
-            newForm.append(
-                'kabupatenId',
-                formData.kabupatenId.code
-            );
+            // newForm.append(
+            //     'kabupatenId',
+            //     formData.kabupatenId.code
+            // );
 
             if (
                 this.actionKey?.toLocaleLowerCase() ===

@@ -19,6 +19,7 @@ import {
     SuaraResp,
 } from 'src/app/modules/application/suara/models/suara-resp.model';
 import { SuaraService } from 'src/app/modules/application/suara/services/suara.service';
+import { TpsResp } from 'src/app/modules/application/tps/models/tps-resp.model';
 import { CryptoService } from 'src/app/modules/service/crypto/crypto.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { Utils } from 'src/app/modules/utils/utils';
@@ -35,6 +36,10 @@ export class SuaraSharedComponent {
     @Input() actionKey: string;
     @Input() dataPars?: SuaraResp;
     @Input() isEditable: false;
+
+    deleteDialog: boolean = false;
+
+    imgUrl = '';
 
     title: string;
     btnTitle: string;
@@ -55,6 +60,10 @@ export class SuaraSharedComponent {
 
     viewSuaraActionKey = Constant.actionKeys.viewSuara;
 
+    private _publicPath = __webpack_public_path__;
+
+    defaultC1: string | ArrayBuffer | null = null;
+
     idLogin: string = '';
     nameLogin: string = '';
     status_laporan: string = '';
@@ -66,6 +75,7 @@ export class SuaraSharedComponent {
     loading: boolean = false;
 
     partaiList: PartaiResp[] = [];
+    tpsList: TpsResp[] = [];
     calonList: CalonResp[] = [];
     dropdownItems: DropdownItems[] = [];
 
@@ -119,6 +129,31 @@ export class SuaraSharedComponent {
             },
         });
     }
+
+    // getTPS() {
+    //     this.suaraService.getTPS().subscribe({
+    //         next: (resp) => {
+    //             this.tpsList = resp?.data ?? [];
+    //             this.tpsList.forEach((element) => {
+    //                 this.dropdownItems.push({
+    //                     name: element.nama_tps,
+    //                     code: element.id.toString(),
+    //                 });
+    //             });
+
+    //             this.fillForm();
+    //         },
+    //         error: (err) => {
+    //             this.serviceToast.add({
+    //                 key: 'tst',
+    //                 severity: 'error',
+    //                 summary: 'Maaf',
+    //                 detail: 'Gagal Memuat Data',
+    //             });
+    //             this.fillForm();
+    //         },
+    //     });
+    // }
 
     setFormControls() {
         const calonsArray = this.formGroup.get('calons') as FormArray;
@@ -195,6 +230,7 @@ export class SuaraSharedComponent {
             this.title = Constant.SuaraShared.addTitle;
             this.btnTitle = Constant.SuaraShared.btnTitleAdd;
             this.moreBtn = Constant.SuaraShared.btnCancel;
+            this.defaultC1 = `${this._publicPath}assets/images/default_img.avif`;
             
             this.formGroup.patchValue({
                 user_input: this.idLogin,
@@ -252,6 +288,12 @@ export class SuaraSharedComponent {
         }
     }
 
+    viewImages(foto: string) {
+        this.imgUrl = foto;
+        
+        this.deleteDialog = true;
+      }
+
     changeColorStatus(type: string) {
         if (type == 'Diterima') {
             return 'p-button-rounded p-button-success';
@@ -297,7 +339,9 @@ export class SuaraSharedComponent {
 
             this.file = file;
 
+            
             reader.onload = () => {
+                this.defaultC1 = reader.result;
                 this.formGroup.patchValue({
                     foto: file,
                 });

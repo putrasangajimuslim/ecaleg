@@ -8,6 +8,7 @@ import { CalonList } from '../../calon/models/calon-resp.model';
 import { KabupatenResp } from '../../masters/kabupaten/models/kabupaten-resp.model';
 import { PartaiList } from '../../masters/partai/models/partai-resp.model';
 import { SuaraList, SuaraResp } from '../models/suara-resp.model';
+import { TpsList } from '../../tps/models/tps-resp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,11 @@ export class SuaraService {
       .pipe(map((res) => res));
   }
 
+  getTPS() {
+    return this.httpClient
+      .get<TpsList>(`${this.apiURL}tps`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
 
   getAllCalon() {
     return this.httpClient

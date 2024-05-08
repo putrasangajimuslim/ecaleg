@@ -41,6 +41,8 @@ export class AbsenListComponent {
 
   menuKeys = Constant.menuKeys.absen;
 
+  imgUrl = '';
+
   status: string = '';
 
   private _publicPath = __webpack_public_path__;
@@ -82,5 +84,11 @@ export class AbsenListComponent {
               this.loading = false;
           },
       });
+  }
+
+  viewImages(foto: string) {
+    this.imgUrl = foto;
+    
+    this.deleteDialog = true;
   }
 }

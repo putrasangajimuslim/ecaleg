@@ -18,12 +18,7 @@
         <ng-template #notEmptyData>
             <div class="card flex flex-column align-items-center">
                 <div class="p-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-6">
-                        <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <p-chart type="doughnut" [data]="pieData" [options]="pieOptions"></p-chart>
-                    </div>
+                    <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
                 </div>
             </div>
         </ng-template>

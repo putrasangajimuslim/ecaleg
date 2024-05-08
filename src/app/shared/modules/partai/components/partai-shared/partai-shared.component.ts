@@ -38,6 +38,10 @@ export class PartaiSharedComponent {
 
     menuKeys = Constant.menuKeys.partai;
 
+    private _publicPath = __webpack_public_path__;
+
+    defaultC1: string | ArrayBuffer | null = null;
+
     loading: boolean = false;
 
     formGroup: FormGroup = this.initFormGroup();
@@ -48,7 +52,8 @@ export class PartaiSharedComponent {
         private partaiService: PartaiService,
         private reviewDataService: EcalegReviewDataService,
         private serviceToast: MessageService
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
         this.fillForm();
@@ -74,6 +79,7 @@ export class PartaiSharedComponent {
         ) {
             this.title = Constant.partaiShared.addTitle;
             this.btnTitle = Constant.partaiShared.btnTitleAdd;
+            this.defaultC1 = `${this._publicPath}assets/images/default_img.avif`;
 
             this.formGroup.addControl(
                 'logo',
@@ -91,6 +97,7 @@ export class PartaiSharedComponent {
             this.logo = this.dataPars['data'].url_logo ?? '';
             this.keterangan = this.dataPars['data'].keterangan ?? '';
             this.isShowRequired = false;
+            this.defaultC1 = this.dataPars['data'].url_logo ?? '';
 
             const checkUpload = this.formGroup.get('logo').value;
 
@@ -115,6 +122,7 @@ export class PartaiSharedComponent {
             reader.readAsDataURL(file);
 
             reader.onload = () => {
+                this.defaultC1 = reader.result;
                 this.formGroup.patchValue({
                     logo: file,
                 });
