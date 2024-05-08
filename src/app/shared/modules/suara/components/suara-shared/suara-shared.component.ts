@@ -240,9 +240,25 @@ export class SuaraSharedComponent {
             this.title = Constant.SuaraShared.viewTitle;
             this.btnTitle = Constant.SuaraShared.btnApproved;
             this.moreBtn = Constant.SuaraShared.btnNotApproved;
-            this.status_laporan = this.dataPars['data'].status_suara == 'Suara Di Terima' ? 'Diterima': 'Ditolak'
+
+            if (this.dataPars['data'].status_suara === 'Suara Di Terima') {
+                this.status_laporan = 'Diterima';
+            } else if (this.dataPars['data'].status_suara === 'Suara Di Tolak') {
+                this.status_laporan = 'Ditolak';
+            } else {
+                this.status_laporan = 'Pending';
+            }
             this.suaraId = this.dataPars['data'].id ?? '';
-            this.action_status = this.dataPars['data'].status_suara ? true : false;
+        }
+    }
+
+    changeColorStatus(type: string) {
+        if (type == 'Diterima') {
+            return 'p-button-rounded p-button-success';
+        } else if (type == 'Ditolak') {
+            return 'p-button-rounded p-button-danger';
+        } else {
+            return 'p-button-rounded p-button-secondary';
         }
     }
 

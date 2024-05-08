@@ -47,13 +47,13 @@
                     ></button>
                 </div>
 
-                <div class="container-two" *ngIf="actionKey === viewSuaraActionKey && this.role === 'admin' || this.role === 'superadmin'">
+                <div class="container-two" *ngIf="actionKey === viewSuaraActionKey && role === 'admin' && status_laporan == 'Pending' || role === 'superadmin'">
                     <button
                         pButton
                         pRipple
                         type="button"
                         [label]="moreBtn"
-                        [disabled]="action_status"
+                        [disabled]="status_laporan !== 'Pending'"
                         (click)="changeStatusLapor('ditolak')"
                         class="p-button-outlined mr-2 wc-180"
                     ></button>
@@ -63,7 +63,7 @@
                         pRipple
                         type="button"
                         [label]="btnTitle"
-                        [disabled]="action_status"
+                        [disabled]="status_laporan !== 'Pending'"
                         (click)="changeStatusLapor('diterima')"
                         class="p-button-success wc-180"
                     ></button>
@@ -87,7 +87,7 @@
                             type="button"
                             [label]="status_laporan"
                             [disabled]="true"
-                            [ngClass]="(status_laporan == 'Diterima') ? 'p-button-rounded p-button-success' : 'p-button-rounded p-button-danger'"
+                            [ngClass]="changeColorStatus(status_laporan)"
                         ></button>
                     </div>
                 </div>
