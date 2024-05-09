@@ -15,6 +15,7 @@ import { Constant } from 'src/app/config/constant';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
 import { KabupatenResp } from '../../models/kabupaten-resp.model';
 import { KabupatenService } from '../../services/kabupaten.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
     selector: 'app-kabupaten-list',
@@ -29,6 +30,7 @@ import { KabupatenService } from '../../services/kabupaten.service';
         TableModule,
         RippleModule,
         ToastModule,
+        SharedModule
     ],
     templateUrl: './kabupaten-list.component.html',
     styleUrl: './kabupaten-list.component.scss',

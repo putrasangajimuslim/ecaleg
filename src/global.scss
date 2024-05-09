@@ -105,3 +105,17 @@
   border-collapse: collapse;
   width: 100%;
 }
+
+.logo-top {
+  width:60%; 
+  height: 60%; 
+  object-fit: cover;
+}
+
+@media only screen and (max-width: 1000px) {
+  .logo-top {
+    width:80%; 
+    height: 80%; 
+    object-fit: cover;
+  }
+}

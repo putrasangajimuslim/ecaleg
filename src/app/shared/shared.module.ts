@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
+import { TokenInterceptor } from '../modules/service/http-interceptor.service';
 
 
 
@@ -47,7 +48,7 @@ import { ToastModule } from 'primeng/toast';
     DialogModule,
   ],
   providers: [
-    MessageService
+    MessageService,
   ]
 })
 export class SharedModule { }
