@@ -39,6 +39,7 @@ export class SuaraListComponent {
     display: boolean = false;
     loading: boolean = true;
     deleteDialog: boolean = false;
+    viewImageDialog: boolean = false;
     suaraId:string = '';
     idLogin:string = '';
     nameLogin: string = '';
@@ -46,6 +47,8 @@ export class SuaraListComponent {
     newDataSource1: SuaraMapping[] = [];
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.suara;
+
+    imgUrl = '';
 
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
@@ -162,6 +165,12 @@ export class SuaraListComponent {
         this.suaraId = id;
 
         this.deleteDialog = true;
+    }
+
+    viewImages(foto: string) {
+        this.imgUrl = foto;
+        
+        this.viewImageDialog = true;
     }
 
     confirmationDel() {

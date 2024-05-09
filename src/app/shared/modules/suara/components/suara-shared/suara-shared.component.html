@@ -104,19 +104,10 @@
                 </div> -->
 
                 <div class="col-12 md:col-4 mt-4">
-                    <div class="mb-4">
-                        <p class="font-s-18px mr-6">Kode TPS </p>
-                        <p>test 2</p>
-                    </div>
-
-                    <div class="mb-4">
-                        <p class="font-s-18px mr-6">Nama TPS </p>
-                        <p>test 2</p>
-                    </div>
-
-                    <div class="mb-4">
-                        <p class="font-s-18px mr-6">Kelurahan </p>
-                        <p>test 2</p>
+                    <div style="margin-bottom: 60px; font-size: 18px;">
+                        <div style="margin-bottom: 20px;">Kode TPS: <span>17</span></div>
+                        <div style="margin-bottom: 20px;">Nama TPS: <span>Sejahter</span></div>
+                        <div>Kelurahan: <span>Sejahter</span></div>
                     </div>
                 </div>
 
@@ -143,6 +134,12 @@
             </div>
 
             <ng-template #editSuara>
+                <div style="margin-bottom: 60px; font-size: 18px;">
+                    <div style="margin-bottom: 20px;">Kode TPS: <span>17</span></div>
+                    <div style="margin-bottom: 20px;">Nama TPS: <span>Sejahter</span></div>
+                    <div>Kelurahan: <span>Sejahter</span></div>
+                </div>
+
                 <form [formGroup]="formGroup">
                     <div class="p-fluid p-formgrid grid" formArrayName="calons">
                         <ng-container *ngFor="let calon of calonList; let i = index" >

@@ -6,6 +6,8 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { DashboardMapping } from '../../models/dashboard-mapping.model';
 import { DashboardResp } from '../../models/dashboard-resp.model';
 import { DashboardService } from '../../services/dashboard.service';
+import { CryptoService } from 'src/app/modules/service/crypto/crypto.service';
+import { Utils } from 'src/app/modules/utils/utils';
 
 @Component({
     selector: 'app-dashboard-list',
@@ -23,13 +25,25 @@ export class DashboardListComponent {
 
     isEmptyData: boolean = false;
 
+    nameLogin: string = '';
+
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
     constructor(
         public layoutService: LayoutService,
-        private dashboardService: DashboardService
+        private dashboardService: DashboardService,
+        private cryptoService: CryptoService, 
+        private utils: Utils,
     ) {
+        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+        if (encryptedMapping) {
+            const decryptedMapping =
+            this.cryptoService.decryptData(encryptedMapping);
+
+            this.nameLogin = decryptedMapping.nama_panitia;
+        }
+
         this.subscription = this.layoutService.configUpdate$
             .pipe(debounceTime(25))
             .subscribe((config) => {

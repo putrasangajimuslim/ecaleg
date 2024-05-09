@@ -11,6 +11,7 @@ export const LAYOUT_ROUTES: Routes = [
             { path: 'suara', loadChildren: () => import('../modules/application/suara/suara.routes').then(r => r.SUARA_ROUTES) },
             { path: 'tim', loadChildren: () => import('../modules/application/tim/tim.routes').then(r => r.TIM_ROUTES) },
             { path: 'absen', loadChildren: () => import('../modules/application/absen/absen.routes').then(r => r.ABSEN_ROUTES) },
+            { path: 'user-profile', loadChildren: () => import('../modules/application/user-profile/user-profile.routes').then(r => r.USER_PROFILE_ROUTES) },
         ]
     }
 ]

@@ -37,6 +37,11 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['dashboard'] }
                     ]
                 },
+                // {
+                //     items: [
+                //         { label: 'User Profile', icon: 'pi pi-fw pi-user', routerLink: ['user-profile'] }
+                //     ]
+                // },
                 {
                     items: [
                         {
@@ -132,6 +137,11 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['dashboard'] }
                     ]
                 },
+                // {
+                //     items: [
+                //         { label: 'User Profile', icon: 'pi pi-fw pi-user', routerLink: ['user-profile'] }
+                //     ]
+                // },
                 {
                     items: [
                         {

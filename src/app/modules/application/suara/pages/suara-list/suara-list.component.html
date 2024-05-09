@@ -43,7 +43,7 @@
                             </div>
                         </td>
                         <td>
-                            <img [src]="dataSource.url_c1" width="80px">
+                            <img [src]="dataSource.url_c1" style="cursor: pointer; width: 80px;" (click)="viewImages(dataSource.url_c1)">
                         </td>
                         <td></td>
                         <td></td>
@@ -68,6 +68,12 @@
                     <div class="paragraph-no-column">Data Kosong</div>
                 </div>
             </div>
+
+            <p-dialog [(visible)]="viewImageDialog" header="View Image" [modal]="true" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+                <div class="flex align-items-center justify-content-center">
+                    <img src="{{ imgUrl }}" alt="" />
+                </div>
+            </p-dialog>
 
             <p-dialog [(visible)]="deleteDialog" header="Konfirmasi" [modal]="true" [style]="{width:'350px'}">
                 <div class="flex align-items-center justify-content-center">
