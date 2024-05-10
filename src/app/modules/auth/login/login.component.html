@@ -87,6 +87,7 @@
                         label="Sign In"
                         class="w-full p-3 text-xl"
                         *ngIf="!loading"
+                        [disabled]="!formGroup.valid"
                         (click)="login()"
                     ></button>
                     <button
