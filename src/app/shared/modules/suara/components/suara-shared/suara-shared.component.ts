@@ -19,6 +19,7 @@ import {
     SuaraResp,
 } from 'src/app/modules/application/suara/models/suara-resp.model';
 import { SuaraService } from 'src/app/modules/application/suara/services/suara.service';
+import { TimOneResp } from 'src/app/modules/application/tim/models/tim-one-resp.model';
 import { TpsResp } from 'src/app/modules/application/tps/models/tps-resp.model';
 import { CryptoService } from 'src/app/modules/service/crypto/crypto.service';
 import { EcalegReviewDataService } from 'src/app/modules/service/review-data.service';
@@ -54,6 +55,12 @@ export class SuaraSharedComponent {
     file_c1: string = '';
     role: string = '';
 
+    kode_tps: string = '';
+    nama_tps: string = '';
+    nama_kel: string = '';
+    nama_kab: string = '';
+    nama_kec: string = '';
+
     file: File;
 
     menuKeys = Constant.menuKeys.suara;
@@ -77,6 +84,7 @@ export class SuaraSharedComponent {
     partaiList: PartaiResp[] = [];
     tpsList: TpsResp[] = [];
     calonList: CalonResp[] = [];
+    timOneList: TimOneResp[] = [];
     dropdownItems: DropdownItems[] = [];
 
     formGroup: FormGroup = this.initFormGroup();
@@ -90,14 +98,17 @@ export class SuaraSharedComponent {
         private utils: Utils,
         private cryptoService: CryptoService, 
     ) {
-        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
-        if (encryptedMapping) {
-            const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
+        // const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+        // if (encryptedMapping) {
+        //     const decryptedMapping =
+        //     this.cryptoService.decryptData(encryptedMapping);
 
-            this.idLogin = decryptedMapping.id;
-            this.role = decryptedMapping.role;
-        }
+        //     this.idLogin = decryptedMapping.id;
+        //     this.role = decryptedMapping.role;
+        // }
+
+        this.idLogin = this.utils.getLocalStorage('idLogin');
+        this.role = this.utils.getLocalStorage('role');
     }
 
     ngOnInit(): void {
@@ -129,31 +140,6 @@ export class SuaraSharedComponent {
             },
         });
     }
-
-    // getTPS() {
-    //     this.suaraService.getTPS().subscribe({
-    //         next: (resp) => {
-    //             this.tpsList = resp?.data ?? [];
-    //             this.tpsList.forEach((element) => {
-    //                 this.dropdownItems.push({
-    //                     name: element.nama_tps,
-    //                     code: element.id.toString(),
-    //                 });
-    //             });
-
-    //             this.fillForm();
-    //         },
-    //         error: (err) => {
-    //             this.serviceToast.add({
-    //                 key: 'tst',
-    //                 severity: 'error',
-    //                 summary: 'Maaf',
-    //                 detail: 'Gagal Memuat Data',
-    //             });
-    //             this.fillForm();
-    //         },
-    //     });
-    // }
 
     setFormControls() {
         const calonsArray = this.formGroup.get('calons') as FormArray;
@@ -231,7 +217,9 @@ export class SuaraSharedComponent {
             this.btnTitle = Constant.SuaraShared.btnTitleAdd;
             this.moreBtn = Constant.SuaraShared.btnCancel;
             this.defaultC1 = `${this._publicPath}assets/images/default_img.avif`;
-            
+
+            this.getTimOne(this.idLogin);
+
             this.formGroup.patchValue({
                 user_input: this.idLogin,
                 status_suara: 'On Checking',
@@ -276,6 +264,11 @@ export class SuaraSharedComponent {
             this.title = Constant.SuaraShared.viewTitle;
             this.btnTitle = Constant.SuaraShared.btnApproved;
             this.moreBtn = Constant.SuaraShared.btnNotApproved;
+            this.kode_tps = this.dataPars['data'].kode_tps;
+            this.nama_tps = this.dataPars['data'].nama_tps;
+            this.nama_kab = this.dataPars['data'].name_kabupaten;
+            this.nama_kec = this.dataPars['data'].name_kecamatan;
+            this.nama_kel = this.dataPars['data'].name_kelurahan;
 
             if (this.dataPars['data'].status_suara === 'Suara Di Terima') {
                 this.status_laporan = 'Diterima';
@@ -286,6 +279,44 @@ export class SuaraSharedComponent {
             }
             this.suaraId = this.dataPars['data'].id ?? '';
         }
+    }
+
+    getTimOne(id: string) {
+        this.suaraService.getDataTimOne(id).subscribe({
+            next: (resp) => {
+                this.timOneList = resp?.data ?? [];
+
+                this.nama_kel = this.timOneList['panitia_profile'].kelurahan.nama_kelurahan;
+
+                const tpsDatas = this.getOneTPS(this.timOneList['panitia_profile'].tpsId);
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                })
+            },
+        });
+    }
+
+    getOneTPS(id: string) {
+        this.suaraService.getDataTPSOne(id).subscribe({
+            next: (resp) => {
+                this.tpsList = resp?.data ?? [];
+                this.kode_tps = this.tpsList['kode_tps'];
+                this.nama_tps = this.tpsList['nama_tps'];
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                });
+            },
+        });
     }
 
     viewImages(foto: string) {

@@ -7,8 +7,9 @@ import { environment } from 'src/environments/environment';
 import { CalonList } from '../../calon/models/calon-resp.model';
 import { KabupatenResp } from '../../masters/kabupaten/models/kabupaten-resp.model';
 import { PartaiList } from '../../masters/partai/models/partai-resp.model';
-import { SuaraList, SuaraResp } from '../models/suara-resp.model';
+import { TimOneList } from '../../tim/models/tim-one-resp.model';
 import { TpsList } from '../../tps/models/tps-resp.model';
+import { SuaraList, SuaraResp } from '../models/suara-resp.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,21 +25,28 @@ export class SuaraService {
     private cryptoService: CryptoService, 
     private utils: Utils,
   ) { 
-    const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+    // const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
 
-    if (encryptedMapping) {
-      const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
+    // if (encryptedMapping) {
+    //   const decryptedMapping =
+    //         this.cryptoService.decryptData(encryptedMapping);
 
-      this.token = decryptedMapping.token;
-    } else {
-      this.token = environment.token;
-    }
+    //   this.token = decryptedMapping.token;
+    // } else {
+    //   this.token = environment.token;
+    // }
 
+    this.token = this.utils.getLocalStorage('token');
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
   getSuara() {
+    return this.httpClient
+      .get<SuaraList>(`${this.apiURL}suara`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  getAllByTPS() {
     return this.httpClient
       .get<SuaraList>(`${this.apiURL}suara`, { headers: this.headers })
       .pipe(map((res) => res));
@@ -71,6 +79,18 @@ export class SuaraService {
   getAllCalon() {
     return this.httpClient
       .get<CalonList>(`${this.apiURL}calon/question/all`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  getDataTimOne(id: string) {
+    return this.httpClient
+      .get<TimOneList>(`${this.apiURL}panitia/${id}`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  getDataTPSOne(id: string) {
+    return this.httpClient
+      .get<TpsList>(`${this.apiURL}tps/${id}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

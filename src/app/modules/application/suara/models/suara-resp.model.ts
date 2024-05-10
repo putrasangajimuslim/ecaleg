@@ -6,6 +6,10 @@ export interface SuaraResp {
     status_suara: string;
     panitian: Panitia;
     name_kabupaten: string;
+    name_kecamatan: string;
+    name_kelurahan: string;
+    kode_tps: string;
+    nama_tps: string;
     createdAt: string;
     updatedAt: string;
 }

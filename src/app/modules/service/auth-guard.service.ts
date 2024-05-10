@@ -17,19 +17,21 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    var isLogin = false;
-    var isToken = false;
+    // var isLogin = false;
+    var isToken = '';
 
-    const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+    // const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
 
-    if (encryptedMapping) {
-      const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
-        isLogin += decryptedMapping.isLogin;
-        isToken += decryptedMapping.token;
-    }
+    // if (encryptedMapping) {
+    //   const decryptedMapping =
+    //         this.cryptoService.decryptData(encryptedMapping);
+    //     isLogin += decryptedMapping.isLogin;
+    //     isToken += decryptedMapping.token;
+    // }
 
-    if (isLogin && isToken) {
+    isToken = this.utils.getLocalStorage('token');
+
+    if (isToken) {
       return true;
     } else {
       this.router.navigate(['login']).then(() => {

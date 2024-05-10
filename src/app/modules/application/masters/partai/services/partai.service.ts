@@ -20,16 +20,18 @@ export class PartaiService {
     private cryptoService: CryptoService, 
     private utils: Utils,
   ) { 
-    const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+    // const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
 
-    if (encryptedMapping) {
-      const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
+    // if (encryptedMapping) {
+    //   const decryptedMapping =
+    //         this.cryptoService.decryptData(encryptedMapping);
 
-      this.token = decryptedMapping.token;
-    } else {
-      this.token = environment.token;
-    }
+    //   this.token = decryptedMapping.token;
+    // } else {
+    //   this.token = environment.token;
+    // }
+
+    this.token = this.utils.getLocalStorage('token');
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 

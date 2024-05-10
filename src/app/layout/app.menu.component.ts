@@ -19,14 +19,16 @@ export class AppMenuComponent implements OnInit {
 
     constructor(public layoutService: LayoutService, private utils: Utils, private router: Router, private cryptoService: CryptoService, ) 
     { 
-        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
+        // const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
 
-        if (encryptedMapping) {
-            const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
+        // if (encryptedMapping) {
+        //     const decryptedMapping =
+        //     this.cryptoService.decryptData(encryptedMapping);
 
-            this.role = decryptedMapping.role;
-        }
+        //     this.role = decryptedMapping.role;
+        // }
+
+        this.role = this.utils.getLocalStorage('role');
     }
 
     ngOnInit() {
@@ -163,6 +165,7 @@ export class AppMenuComponent implements OnInit {
 
     logout() {
         this.utils.clearAllLocalstorage();
+        location.reload();
         this.router.navigate(['login']);
     }
 }

@@ -78,21 +78,21 @@ export class LoginComponent {
                 password: formData.password,
             };
     
-            this.authService.login(formnewData).subscribe({
+            this.authService.loginSecond(formnewData).subscribe({
                 next: (resp) => {
                     const isActive = resp.akun.isActive;
 
-                    this.encryptedMapping = {
-                        id: resp.akun.id,
-                        isActive: resp.akun.isActive,
-                        role: resp.akun.profile.role,
-                        nama_panitia: resp.akun.profile.nama_panitia,
-                        nik: resp.akun.profile.nik,
-                        token: resp.token,
-                        isLogin: true,
-                    };
+                    // this.encryptedMapping = {
+                    //     id: resp.akun.id,
+                    //     isActive: resp.akun.isActive,
+                    //     role: resp.akun.profile.role,
+                    //     nama_panitia: resp.akun.profile.nama_panitia,
+                    //     nik: resp.akun.profile.nik,
+                    //     token: resp.token,
+                    //     isLogin: true,
+                    // };
 
-                    const encryptedData = this.cryptoService.encryptData(this.encryptedMapping);
+                    // const encryptedData = this.cryptoService.encryptDataSecond(this.encryptedMapping);
                     
                     if (!isActive) {
                         this.serviceToast.add({
@@ -105,7 +105,9 @@ export class LoginComponent {
                                 
                     const token =  resp.token;
                     if (token) {
-                        this.utils.setLocalStorage('encryptedMapping', encryptedData);
+                        this.utils.setLocalStorage('token', token);
+                        this.utils.setLocalStorage('idLogin', resp.akun.id);
+                        this.utils.setLocalStorage('role', resp.akun.profile.role);
     
                         this.serviceToast.add({
                             key: 'tst',

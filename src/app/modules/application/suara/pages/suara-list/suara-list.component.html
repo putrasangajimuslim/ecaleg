@@ -45,8 +45,8 @@
                         <td>
                             <img [src]="dataSource.url_c1" style="cursor: pointer; width: 80px;" (click)="viewImages(dataSource.url_c1)">
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ dataSource.kode_tps }}</td>
+                        <td>{{ dataSource.nama_tps }}</td>
                         <td>{{ dataSource.panitian }}</td>
                         <td>{{ dataSource.status_suara === '' ? 'On Check' : dataSource.status_suara  }}</td>
                         <td>

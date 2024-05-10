@@ -41,14 +41,15 @@ export class SuaraListComponent {
     deleteDialog: boolean = false;
     viewImageDialog: boolean = false;
     suaraId:string = '';
-    idLogin:string = '';
-    nameLogin: string = '';
     dataSource1: SuaraResp[] = [];
     newDataSource1: SuaraMapping[] = [];
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.suara;
 
     imgUrl = '';
+
+    idLogin: string = '';
+    role: string = '';
 
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
@@ -66,18 +67,19 @@ export class SuaraListComponent {
         private serviceToast: MessageService,
         private utils: Utils,
         private cryptoService: CryptoService, 
-    ) {}
+    ) {
+        this.idLogin = this.utils.getLocalStorage('idLogin');
+        this.role = this.utils.getLocalStorage('role');
+
+        if (this.role === 'admin' || this.role === 'superadmin') {
+            this.fetchData();
+        } else {
+            this.fetchDataByTPS();
+        }
+    }
 
     ngOnInit() {
-        this.fetchData();
-        const encryptedMapping = this.utils.getLocalStorage('encryptedMapping');
-        if (encryptedMapping) {
-            const decryptedMapping =
-            this.cryptoService.decryptData(encryptedMapping);
-
-            this.idLogin = decryptedMapping.id;
-            this.nameLogin = decryptedMapping.nama_panitia;
-        }
+        
     }
 
     fetchData() {
@@ -96,11 +98,84 @@ export class SuaraListComponent {
                     input_by: item.input_by,
                     panitian: item.panitian['panitia_profile'].nama_panitia,
                     status_suara: item.status_suara,
-                    name_kabupaten: item['suara_calons'][0].calon.kabupatenId,
+                    name_kabupaten: item.panitian['panitia_profile'].kabupaten.nama_kabupaten,
+                    name_kecamatan: item.panitian['panitia_profile'].kecamatan.nama_kecamatan,
+                    name_kelurahan: item.panitian['panitia_profile'].kelurahan.nama_kelurahan,
+                    kode_tps: item.panitian['panitia_profile'].tp.kode_tps,
+                    nama_tps: item.panitian['panitia_profile'].tp.nama_tps,
                     createdAt: item.createdAt,
                     updatedAt: item.updatedAt
                 }));
+                
+                // for (let index = 0; index < this.dataSource1.length; index++) {
+                //     let suaraCalons = this.dataSource1[index].suara_calons;
+                //     let createdAt = this.dataSource1[index].createdAt;
+                //     let updatedAt = this.dataSource1[index].updatedAt;
+                
+                //     let calons = [];
+                //     let totalSuara = [];
+                //     for (let i = 0; i < suaraCalons.length; i++) {
+                //         calons.push(suaraCalons[i].calon.nama_calon);
+                //         totalSuara.push(suaraCalons[i].total_suara);
+                        
+                //         // textCalons += calon; // Tambahkan nama calon ke string
+                //         // if (i !== suaraCalons.length - 1) {
+                //         //     textCalons += ', '; // Tambahkan koma jika bukan calon terakhir
+                //         // }   
+                //         // textTotalSuara += suara; // Tambahkan nama calon ke string
+                //         // if (i !== suaraCalons.length - 1) {
+                //         //     textTotalSuara += ', '; // Tambahkan koma jika bukan calon terakhir
+                //         // }   
+                //     }
 
+                //     let data: SuaraMapping = {
+                //         id: this.dataSource1[index].id,
+                //         nama_calon: calons,
+                //         suara_calons: totalSuara,
+                //         url_c1: this.dataSource1[index].url_c1,
+                //         input_by: this.dataSource1[index].input_by,
+                //         createdAt: createdAt,
+                //         updatedAt: updatedAt,
+                //     }
+
+                //     this.newDataSource1.push(data);
+                // }
+                
+                setTimeout(() => {
+                    this.loading = false;
+                }, 800);
+            },
+            error: (err) => {
+                this.loading = false;
+            },
+        });
+    }
+
+    fetchDataByTPS() {
+        this.loading = true;
+        this.suaraService.getAllByTPS().subscribe({
+            next: (resp) => {
+                const data = resp?.data ?? [];
+                this.dataSource1 = data;
+                
+                this.dataCount = resp?.data.length;
+
+                this.dataSource1 = data.map(item => ({
+                    id: item.id,
+                    suara_calons: item.suara_calons,
+                    url_c1: item.url_c1,
+                    input_by: item.input_by,
+                    panitian: item.panitian['panitia_profile'].nama_panitia,
+                    status_suara: item.status_suara,
+                    name_kabupaten: item.panitian['panitia_profile'].kabupaten.nama_kabupaten,
+                    name_kecamatan: item.panitian['panitia_profile'].kecamatan.nama_kecamatan,
+                    name_kelurahan: item.panitian['panitia_profile'].kelurahan.nama_kelurahan,
+                    kode_tps: item.panitian['panitia_profile'].tp.kode_tps,
+                    nama_tps: item.panitian['panitia_profile'].tp.nama_tps,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt
+                }));
+                
                 // for (let index = 0; index < this.dataSource1.length; index++) {
                 //     let suaraCalons = this.dataSource1[index].suara_calons;
                 //     let createdAt = this.dataSource1[index].createdAt;

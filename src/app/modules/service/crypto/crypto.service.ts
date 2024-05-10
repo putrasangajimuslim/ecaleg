@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import { LoginFirstResp } from '../../auth/models/login-first-resp.model';
 import { LoginMappingResp } from '../../auth/models/login-mapping.model';
 
 @Injectable({
@@ -9,7 +10,12 @@ export class CryptoService {
 
   constructor() { }
 
-  encryptData(data: LoginMappingResp): string {
+  encryptDataFirst(data: LoginFirstResp): string {
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key').toString();
+    return encryptedData;
+  }
+
+  encryptDataSecond(data: LoginMappingResp): string {
     const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key').toString();
     return encryptedData;
   }
