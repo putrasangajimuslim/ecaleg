@@ -48,7 +48,7 @@ export class SuaraService {
 
   getAllByTPS() {
     return this.httpClient
-      .get<SuaraList>(`${this.apiURL}suara`, { headers: this.headers })
+      .get<SuaraList>(`${this.apiURL}suara/all/by-user`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

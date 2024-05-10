@@ -50,6 +50,7 @@ export class SuaraListComponent {
 
     idLogin: string = '';
     role: string = '';
+    namaTps: string = '';
 
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
@@ -70,28 +71,43 @@ export class SuaraListComponent {
     ) {
         this.idLogin = this.utils.getLocalStorage('idLogin');
         this.role = this.utils.getLocalStorage('role');
-
-        if (this.role === 'admin' || this.role === 'superadmin') {
-            this.fetchData();
-        } else {
-            this.fetchDataByTPS();
-        }
     }
 
     ngOnInit() {
-        
+        this.getTimOne();
+    }
+
+    getTimOne() {
+        this.suaraService.getDataTimOne(this.idLogin).subscribe({
+            next: (resp) => {
+                const TimOnes = resp.data;
+                this.namaTps = TimOnes['panitia_profile'].tp.nama_tps;
+
+                if (this.role === 'admin' || this.role === 'superadmin') {
+                    this.fetchData();
+                } else {
+                    this.fetchDataByTPS();
+                }
+            },
+            error: (err) => {
+                this.serviceToast.add({
+                    key: 'tst',
+                    severity: 'error',
+                    summary: 'Maaf',
+                    detail: 'Gagal Memuat Data',
+                })
+            },
+        });
     }
 
     fetchData() {
         this.loading = true;
         this.suaraService.getSuara().subscribe({
             next: (resp) => {
-                const data = resp?.data ?? [];
-                this.dataSource1 = data;
+                const data = resp?.data;
+                const filteredData = data.filter(tps => (tps?.panitian['panitia_profile']?.tp?.nama_tps) === this.namaTps);
                 
-                this.dataCount = resp?.data.length;
-
-                this.dataSource1 = data.map(item => ({
+                this.dataSource1 = filteredData.map(item => ({
                     id: item.id,
                     suara_calons: item.suara_calons,
                     url_c1: item.url_c1,
@@ -106,6 +122,8 @@ export class SuaraListComponent {
                     createdAt: item.createdAt,
                     updatedAt: item.updatedAt
                 }));
+
+                this.dataCount = resp?.data.length;
                 
                 // for (let index = 0; index < this.dataSource1.length; index++) {
                 //     let suaraCalons = this.dataSource1[index].suara_calons;
