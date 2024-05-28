@@ -52,6 +52,11 @@ export class TimSharedComponent {
     isUser: boolean = false;
     isShowRequired: boolean = true;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+    dataCount: number = 0;
+
     loading: boolean = false;
 
     menuKeys = Constant.menuKeys.tim;
@@ -92,10 +97,10 @@ export class TimSharedComponent {
 
     ngOnInit(): void {
         this.getTim();
-        this.getKabupaten();
-        this.getKecamatan();
-        this.getKelurahan();
-        this.getTPS();
+        this.fetchAllDataKabupaten();
+        this.fetchAllDataKecamatan();
+        this.fetchAllDataKelurahan();
+        this.fetchAllDataTPS();
     }
 
     onClickBackButton() {
@@ -174,7 +179,7 @@ export class TimSharedComponent {
     }
 
     getTim() {
-        this.timService.getData().subscribe({
+        this.timService.getData(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.timList = resp?.data ?? [];
 
@@ -192,10 +197,32 @@ export class TimSharedComponent {
         });
     }
 
-    getKabupaten() {
-        this.timService.getDataKabupaten().subscribe({
+    fetchAllDataKabupaten() {
+        this.loading = true;
+        this.kabupatenList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKabupaten(this.currentPage);
+      }
+
+    getKabupaten(page: number) {
+        this.timService.getDataKabupaten(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.kabupatenList = resp?.data ?? [];
+
+                const newData = resp?.data.filter(item => !this.kabupatenList.some(existingItem => existingItem.id === item.id));
+
+                this.kabupatenList = this.kabupatenList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKabupaten(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+
                 this.kabupatenList.forEach((element) => {
                     this.dropdownItemsKabupaten.push({
                         name: element.nama_kabupaten,
@@ -216,10 +243,32 @@ export class TimSharedComponent {
         });
     }
 
-    getKecamatan() {
-        this.timService.getDataKecamatan().subscribe({
+    fetchAllDataKecamatan() {
+        this.loading = true;
+        this.kecamatanList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKecamatan(this.currentPage);
+      }
+
+    getKecamatan(page: number) {
+        this.timService.getDataKecamatan(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.kecamatanList = resp?.data ?? [];
+
+                const newData = resp?.data.filter(item => !this.kecamatanList.some(existingItem => existingItem.id === item.id));
+
+                this.kecamatanList = this.kecamatanList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKecamatan(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+
                 this.kecamatanList.forEach((element) => {
                     this.dropdownItemsKecamatan.push({
                         name: element.nama_kecamatan,
@@ -240,10 +289,32 @@ export class TimSharedComponent {
         });
     }
 
-    getKelurahan() {
-        this.timService.getDataKelurahan().subscribe({
+    fetchAllDataKelurahan() {
+        this.loading = true;
+        this.kecamatanList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKelurahan(this.currentPage);
+      }
+
+    getKelurahan(page: number) {
+        this.timService.getDataKelurahan(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.kelurahanList = resp?.data ?? [];
+
+                const newData = resp?.data.filter(item => !this.kelurahanList.some(existingItem => existingItem.id === item.id));
+
+                this.kelurahanList = this.kelurahanList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKelurahan(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+
                 this.kelurahanList.forEach((element) => {
                     this.dropdownItemsKelurahan.push({
                         name: element.nama_kelurahan,
@@ -264,10 +335,30 @@ export class TimSharedComponent {
         });
     }
 
-    getTPS() {
-        this.timService.getDataTPS().subscribe({
+    fetchAllDataTPS() {
+        this.loading = true;
+        this.kecamatanList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getTPS(this.currentPage);
+      }
+
+    getTPS(page: number) {
+        this.timService.getDataTPS(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.tpsList = resp?.data ?? [];
+                const newData = resp?.data.filter(item => !this.tpsList.some(existingItem => existingItem.id === item.id));
+
+                this.tpsList = this.tpsList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getTPS(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
                 this.tpsList.forEach((element) => {
                     this.dropdownItemsTPS.push({
                         name: element.kode_tps + '-' + element.nama_tps,

@@ -37,15 +37,15 @@ export class TpsService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getTPS() {
+  getTPS(pages: number, limit: number) {
     return this.httpClient
-      .get<TpsList>(`${this.apiTpsURL}tps`, { headers: this.headers })
+      .get<TpsList>(`${this.apiTpsURL}tps?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getKelurahan() {
+  getKelurahan(pages: number, limit: number) {
     return this.httpClient
-      .get<KelurahanList>(`${this.apiTpsURL}kelurahan`, { headers: this.headers })
+      .get<KelurahanList>(`${this.apiTpsURL}kelurahan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

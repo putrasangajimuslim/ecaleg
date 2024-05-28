@@ -13,7 +13,7 @@
             <!-- <div class="mb-4">
                 <button pButton pRipple type="button" label="Tambah" class="p-button-outlined mr-2" (click)="onClickAddCalon()"></button>
             </div> -->
-            <p-table #dt2 [value]="dataSource1" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="dataCount ? true : false" responsiveLayout="scroll">
+            <p-table #dt2 [value]="dataSource1" dataKey="id" [rows]="rowsPerPage" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Name</th>
@@ -36,6 +36,16 @@
                 </ng-template>
             </p-table>
 
+            <div class="d-flex" *ngIf="dataCount > 0">
+                <div class="paginator-custom">
+                    <button pButton pRipple type="button" (click)="firstPage()" [disabled]="currentPage === 1">First</button>
+                    <button pButton pRipple type="button" (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+                    <span style="margin-left: 10px; margin-right: 10px;">Page {{currentPage}} of {{totalPages}}</span>
+                    <button pButton pRipple type="button" (click)="nextPage()" [disabled]="isNextDisabled()">Next</button>
+                    <button pButton pRipple type="button" (click)="lastPage()" [disabled]="isLastDisabled()">Last</button>
+                </div>
+            </div>
+
             <!-- <div class="center-spinner">
                 <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
             </div> -->
@@ -47,9 +57,9 @@
                 </div>
             </div>
 
-            <p-dialog [(visible)]="deleteDialog" header="View Image" [modal]="true" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+            <p-dialog [(visible)]="deleteDialog" header="View Image" [modal]="true" [style]="{width: '60vw'}" [breakpoints]="{'960px': '75vw'}">
                 <div class="flex align-items-center justify-content-center">
-                    <img src="{{ imgUrl }}" alt="" />
+                    <img src="{{ imgUrl }}" alt="" class="responsive-img"/>
                 </div>
             </p-dialog>
         </div>

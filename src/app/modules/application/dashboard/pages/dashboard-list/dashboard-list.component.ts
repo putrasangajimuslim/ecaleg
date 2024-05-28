@@ -20,8 +20,10 @@ import { DashboardService } from '../../services/dashboard.service';
 })
 export class DashboardListComponent {
     dashboardResp?: DashboardResp;
+    barData: any;
     pieData?: DashboardMapping;
     pieOptions: any;
+    barOptions: any;
 
     subscription: Subscription;
 
@@ -130,6 +132,50 @@ export class DashboardListComponent {
                     },
                 },
             },
+        };
+
+        this.barData = {
+            labels: labelPercentage ?? [],
+            datasets: [
+                {
+                    label: 'Hasil Suara',
+                    backgroundColor: colors,
+                    data: this.dashboardResp.vote ?? []
+                },
+            ]
+        };
+
+        this.barOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        fontColor: textColor
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,
+                        font: {
+                            weight: 500
+                        }
+                    },
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                },
+            }
         };
     }
 

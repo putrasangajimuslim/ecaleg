@@ -37,9 +37,9 @@ export class AbsenService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getAbsen() {
+  getAbsen(pages: number, limit: number) {
     return this.httpClient
-      .get<AbsenList>(`${this.apiURL}absen`, { headers: this.headers })
+      .get<AbsenList>(`${this.apiURL}absen?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

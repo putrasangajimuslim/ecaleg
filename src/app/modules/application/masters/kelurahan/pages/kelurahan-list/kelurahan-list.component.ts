@@ -41,6 +41,10 @@ export class KelurahanListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.kelurahan;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+    
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
@@ -65,10 +69,11 @@ export class KelurahanListComponent {
 
     fetchDataKelurahan() {
         this.loading = true;
-        this.kelurahanService.getKelurahan().subscribe({
+        this.kelurahanService.getKelurahan(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.dataSource1 = resp?.data ?? [];
                 this.dataCount = resp?.data.length;
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
 
                 setTimeout(() => {
                     this.loading = false;
@@ -78,6 +83,42 @@ export class KelurahanListComponent {
                 this.loading = false;
             },
         });
+    }
+
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            this.fetchDataKelurahan();
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.fetchDataKelurahan();
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.fetchDataKelurahan();
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            this.fetchDataKelurahan();
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
     }
 
     onClickAddKelurahan() {

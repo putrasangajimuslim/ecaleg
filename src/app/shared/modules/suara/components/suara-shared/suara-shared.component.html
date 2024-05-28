@@ -193,9 +193,9 @@
                 </form>
             </ng-template>
 
-            <p-dialog [(visible)]="deleteDialog" header="View Image" [modal]="true" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+            <p-dialog [(visible)]="deleteDialog" header="View Image" [modal]="true" [style]="{width: '60vw'}" [breakpoints]="{'960px': '75vw'}">
                 <div class="flex align-items-center justify-content-center">
-                    <img src="{{ imgUrl }}" alt="" />
+                    <img src="{{ imgUrl }}" alt="" width="100%"/>
                 </div>
             </p-dialog>
         </div>

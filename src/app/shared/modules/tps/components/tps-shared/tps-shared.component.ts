@@ -31,6 +31,11 @@ export class TpsSharedComponent {
     kelurahanId: string = '';
     loading: boolean = false;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+    dataCount: number = 0;
+
     menuKeys = Constant.menuKeys.tps;
 
     kelurahanList: KelurahanResp[] = [];
@@ -47,13 +52,35 @@ export class TpsSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.getKelurahanDropdown();
+        this.fetchAllDataKelurahan();
     }
 
-    getKelurahanDropdown() {
-        this.tpservice.getKelurahan().subscribe({
+    fetchAllDataKelurahan() {
+        this.loading = true;
+        this.kelurahanList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKelurahanDropdown(this.currentPage);
+      }
+
+    getKelurahanDropdown(page: number) {
+        this.tpservice.getKelurahan(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.kelurahanList = resp?.data ?? [];
+
+                const newData = resp?.data.filter(item => !this.kelurahanList.some(existingItem => existingItem.id === item.id));
+
+                this.kelurahanList = this.kelurahanList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKelurahanDropdown(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+
                 this.kelurahanList.forEach((element) => {
                     this.dropdownItems.push({
                         name: element.nama_kelurahan,

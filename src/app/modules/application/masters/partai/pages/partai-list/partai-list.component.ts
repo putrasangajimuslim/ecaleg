@@ -41,6 +41,10 @@ export class PartaiListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.partai;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
@@ -109,10 +113,11 @@ export class PartaiListComponent {
 
     fetchDataPartai() {
         this.loading = true;
-        this.partaiService.getPartai().subscribe({
+        this.partaiService.getPartai(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.dataSource1 = resp?.data ?? [];
                 this.dataCount = resp?.data.length;
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
 
                 setTimeout(() => {
                     this.loading = false;
@@ -122,6 +127,42 @@ export class PartaiListComponent {
                 this.loading = false;
             },
         });
+    }
+
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            this.fetchDataPartai();
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.fetchDataPartai();
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.fetchDataPartai();
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            this.fetchDataPartai();
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
     }
 
     downloadFile() {

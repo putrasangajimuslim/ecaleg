@@ -38,6 +38,11 @@ export class KelurahanSharedComponent {
 
     menuKeys = Constant.menuKeys.kelurahan;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0; // total halaman
+    dataCount: number = 0;
+
     loading: boolean = false;
 
     KecamatanList?: KecamatanResp[] = [];
@@ -54,7 +59,7 @@ export class KelurahanSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.getKodeKecamatan();
+        this.fetchAllDataKecamatan();
     }
 
     onClickBackButton() {
@@ -69,11 +74,32 @@ export class KelurahanSharedComponent {
         });
     }
 
-    getKodeKecamatan() {
-        this.kelurahanService.getKodeKecamatan().subscribe({
+    fetchAllDataKecamatan() {
+        this.loading = true;
+        this.KecamatanList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKodeKecamatan(this.currentPage);
+      }
+
+    getKodeKecamatan(page: number) {
+        this.kelurahanService.getKodeKecamatan(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.KecamatanList = resp?.data ?? [];
 
+                const newData = resp?.data.filter(item => !this.KecamatanList.some(existingItem => existingItem.id === item.id));
+
+                this.KecamatanList = this.KecamatanList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKodeKecamatan(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+                
                 this.KecamatanList.forEach((element) => {
                     this.dropdownItems.push({
                         name: element.nama_kecamatan,

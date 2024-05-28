@@ -46,6 +46,10 @@ export class SuaraListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.suara;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+
     imgUrl = '';
 
     idLogin: string = '';
@@ -102,7 +106,7 @@ export class SuaraListComponent {
 
     fetchData() {
         this.loading = true;
-        this.suaraService.getSuara().subscribe({
+        this.suaraService.getSuara(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 const data = resp?.data;
                 const filteredData = data.filter(tps => (tps?.panitian['panitia_profile']?.tp?.nama_tps) === this.namaTps);
@@ -124,6 +128,9 @@ export class SuaraListComponent {
                 }));
 
                 this.dataCount = resp?.data.length;
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
+                console.log(resp);
+                
                 
                 // for (let index = 0; index < this.dataSource1.length; index++) {
                 //     let suaraCalons = this.dataSource1[index].suara_calons;
@@ -169,9 +176,61 @@ export class SuaraListComponent {
         });
     }
 
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            if (this.role === 'admin' || this.role === 'superadmin') {
+                this.fetchData();
+            } else {
+                this.fetchDataByTPS();
+            }
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            if (this.role === 'admin' || this.role === 'superadmin') {
+                    this.fetchData();
+                } else {
+                    this.fetchDataByTPS();
+                }
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            if (this.role === 'admin' || this.role === 'superadmin') {
+                    this.fetchData();
+                } else {
+                    this.fetchDataByTPS();
+                }
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            if (this.role === 'admin' || this.role === 'superadmin') {
+                    this.fetchData();
+                } else {
+                    this.fetchDataByTPS();
+                }
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
     fetchDataByTPS() {
         this.loading = true;
-        this.suaraService.getAllByTPS().subscribe({
+        this.suaraService.getAllByTPS(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 const data = resp?.data ?? [];
                 this.dataSource1 = data;
@@ -193,6 +252,8 @@ export class SuaraListComponent {
                     createdAt: item.createdAt,
                     updatedAt: item.updatedAt
                 }));
+
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
                 
                 // for (let index = 0; index < this.dataSource1.length; index++) {
                 //     let suaraCalons = this.dataSource1[index].suara_calons;

@@ -36,9 +36,9 @@ export class CalonService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getCalon() {
+  getCalon(pages: number, limit: number) {
     return this.httpClient
-      .get<CalonList>(`${this.apiURL}calon`, { headers: this.headers })
+      .get<CalonList>(`${this.apiURL}calon?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

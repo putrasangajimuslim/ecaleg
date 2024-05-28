@@ -20,4 +20,23 @@
   .paragraph-no-column {
     font-size: 16px;
   }
+
+  .paginator-custom {
+    display: flex;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  
+  .paginator-custom button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+  }
+  
+  .paginator-custom button:hover {
+    background-color: #f0f0f0;
+  }
   

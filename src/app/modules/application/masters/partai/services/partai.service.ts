@@ -35,9 +35,9 @@ export class PartaiService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getPartai() {
+  getPartai(pages: number, limit: number) {
     return this.httpClient
-      .get<PartaiList>(`${this.apiPartaiURL}partai`, { headers: this.headers })
+      .get<PartaiList>(`${this.apiPartaiURL}partai?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

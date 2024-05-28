@@ -45,6 +45,10 @@ export class AbsenListComponent {
 
   status: string = '';
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+
   private _publicPath = __webpack_public_path__;
   emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
@@ -67,10 +71,11 @@ export class AbsenListComponent {
 
   fetchData() {
       this.loading = true;
-      this.absenService.getAbsen().subscribe({
+      this.absenService.getAbsen(this.currentPage, this.rowsPerPage).subscribe({
           next: (resp) => {
               this.dataSource1 = resp?.data ?? [];
               this.dataCount = resp?.data.length;
+              this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
 
               if(this.dataCount > 0) {
                 this.status = 'IsLogged';
@@ -85,6 +90,42 @@ export class AbsenListComponent {
           },
       });
   }
+
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            this.fetchData();
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.fetchData();
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.fetchData();
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            this.fetchData();
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
 
   viewImages(foto: string) {
     this.imgUrl = foto;

@@ -41,6 +41,10 @@ export class TpsListComponent {
     dataCount: number = 0;
     menuKeys = Constant.menuKeys.tps;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+
     private _publicPath = __webpack_public_path__;
     emptyImg = `${this._publicPath}assets/images/empty.svg`;
 
@@ -67,10 +71,11 @@ export class TpsListComponent {
 
     fetchDataTPS() {
         this.loading = true;
-        this.tpsService.getTPS().subscribe({
+        this.tpsService.getTPS(this.currentPage, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.dataSource1 = resp?.data ?? [];
                 this.dataCount = resp?.data.length;
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
 
                 setTimeout(() => {
                     this.loading = false;
@@ -80,6 +85,42 @@ export class TpsListComponent {
                 this.loading = false;
             },
         });
+    }
+
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            this.fetchDataTPS();
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.fetchDataTPS();
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.fetchDataTPS();
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            this.fetchDataTPS();
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
     }
 
     onClickAddTPS() {

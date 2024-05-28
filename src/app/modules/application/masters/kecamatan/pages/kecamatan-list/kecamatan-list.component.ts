@@ -38,6 +38,11 @@ export class KecamatanListComponent {
     deleteDialog: boolean = false;
     kecamatanId = '';
     dataCount: number = 0;
+
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0;
+
     menuKeys = Constant.menuKeys.kecamatan
 
     private _publicPath = __webpack_public_path__;
@@ -64,11 +69,12 @@ export class KecamatanListComponent {
 
     fetchDataKecamatan() {
         this.loading = true;
-        this.kecamatanService.getKecamatan()
+        this.kecamatanService.getKecamatan(this.currentPage, this.rowsPerPage)
         .subscribe({
             next: (resp) => {
                 this.dataSource1 = resp?.data ?? [];
                 this.dataCount = resp?.data.length;
+                this.totalPages = Math.ceil(resp['pagination']?.total / this.rowsPerPage);
 
                 setTimeout(() => {
                     this.loading = false;
@@ -78,6 +84,42 @@ export class KecamatanListComponent {
                 this.loading = false;
             },
         });
+    }
+
+    firstPage() {
+        if (this.currentPage !== 1) {
+            this.currentPage = 1;
+            this.fetchDataKecamatan();
+        }
+    }
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.fetchDataKecamatan();
+        }
+    }
+
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.fetchDataKecamatan();
+        }
+    }
+
+    lastPage() {
+        if (this.currentPage !== this.totalPages) {
+            this.currentPage = this.totalPages;
+            this.fetchDataKecamatan();
+        }
+    }
+
+    isNextDisabled(): boolean {
+        return this.currentPage === this.totalPages;
+    }
+
+    isLastDisabled(): boolean {
+        return this.currentPage === this.totalPages;
     }
 
     onClickAddKecamatan() {

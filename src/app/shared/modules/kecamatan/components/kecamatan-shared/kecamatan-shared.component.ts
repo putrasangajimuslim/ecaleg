@@ -32,6 +32,10 @@ export class KecamatanSharedComponent {
     jmldpt: string = '';
     menuKeys = Constant.menuKeys.kecamatan;
 
+    rowsPerPage: number = 10; // jumlah baris per halaman
+    currentPage: number = 1; // halaman saat ini
+    totalPages: number = 0; // total halaman
+
     KabupatenList: KabupatenResp[] = [];
     dropdownItems: DropdownItems[] = [];
 
@@ -53,7 +57,7 @@ export class KecamatanSharedComponent {
     ) {}
 
     ngOnInit(): void {
-        this.getKodeKabupaten();        
+        this.fetchAllDataKabupaten();        
     }
 
     initFormGroup(): FormGroup {
@@ -73,16 +77,38 @@ export class KecamatanSharedComponent {
         this.router.navigate(['master', 'kecamatan']);
     }
 
-    getKodeKabupaten() {
-        this.kecamatanService.getKodeKabupaten().subscribe({
+    fetchAllDataKabupaten() {
+        this.loading = true;
+        this.KabupatenList = []; // Kosongkan array data sebelum mengambil data baru
+        this.getKodeKabupaten(this.currentPage);
+      }
+
+    getKodeKabupaten(page: number) {
+        this.kecamatanService.getKodeKabupaten(page, this.rowsPerPage).subscribe({
             next: (resp) => {
                 this.KabupatenList = resp?.data ?? [];
+
+                const newData = resp?.data.filter(item => !this.KabupatenList.some(existingItem => existingItem.id === item.id));
+
+                this.KabupatenList = this.KabupatenList.concat(newData);
+
+                this.dataCount = resp['pagination']?.total ?? 0;
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
+
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.getKodeKabupaten(this.currentPage);
+                } else {
+                // Jika sudah selesai mengambil semua data, hentikan loading
+                    this.loading = false;
+                }
+
                 this.KabupatenList.forEach((element) => {
                     this.dropdownItems.push({
                         name: element.nama_kabupaten,
                         code: element.id.toString(),
                     });
-                });         
+                });    
                 
                 this.fillForm();
             },

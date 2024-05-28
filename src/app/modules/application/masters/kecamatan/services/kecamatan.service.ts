@@ -36,15 +36,15 @@ export class KecamatanService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getKecamatan() {
+  getKecamatan(pages: number, limit: number) {
     return this.httpClient
-      .get<KecamatanList>(`${this.apiKecamatanURL}kecamatan`, { headers: this.headers })
+      .get<KecamatanList>(`${this.apiKecamatanURL}kecamatan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getKodeKabupaten() {
+  getKodeKabupaten(pages: number, limit: number) {
     return this.httpClient
-      .get<KabupatenList>(`${this.apiKecamatanURL}kabupaten`, { headers: this.headers })
+      .get<KabupatenList>(`${this.apiKecamatanURL}kabupaten?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

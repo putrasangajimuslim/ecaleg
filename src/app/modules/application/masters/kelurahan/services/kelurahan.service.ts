@@ -37,15 +37,15 @@ export class KelurahanService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getKelurahan() {
+  getKelurahan(pages: number, limit: number) {
     return this.httpClient
-      .get<KelurahanList>(`${this.apiKelurahanURL}kelurahan`, { headers: this.headers })
+      .get<KelurahanList>(`${this.apiKelurahanURL}kelurahan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getKodeKecamatan() {
+  getKodeKecamatan(pages: number, limit: number) {
     return this.httpClient
-      .get<KecamatanList>(`${this.apiKelurahanURL}kecamatan`, { headers: this.headers })
+      .get<KecamatanList>(`${this.apiKelurahanURL}kecamatan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

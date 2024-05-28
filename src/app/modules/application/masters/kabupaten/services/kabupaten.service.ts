@@ -34,9 +34,9 @@ export class KabupatenService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getKabupaten() {
+  getKabupaten(pages: number, limit: number) {
     return this.httpClient
-      .get<KabupatenList>(`${this.apiKabupatenURL}kabupaten`, { headers: this.headers })
+      .get<KabupatenList>(`${this.apiKabupatenURL}kabupaten?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

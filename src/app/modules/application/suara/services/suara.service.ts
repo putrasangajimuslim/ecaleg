@@ -40,15 +40,15 @@ export class SuaraService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getSuara() {
+  getSuara(pages: number, limit: number) {
     return this.httpClient
-      .get<SuaraList>(`${this.apiURL}suara`, { headers: this.headers })
+      .get<SuaraList>(`${this.apiURL}suara?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getAllByTPS() {
+  getAllByTPS(pages: number, limit: number) {
     return this.httpClient
-      .get<SuaraList>(`${this.apiURL}suara/all/by-user`, { headers: this.headers })
+      .get<SuaraList>(`${this.apiURL}suara/all/by-user?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 

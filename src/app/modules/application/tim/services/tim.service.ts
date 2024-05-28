@@ -38,33 +38,33 @@ export class TimService {
     this.headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   }
 
-  getData() {
+  getData(pages: number, limit: number) {
     return this.httpClient
-      .get<TimList>(`${this.apiURL}panitia`, { headers: this.headers })
+      .get<TimList>(`${this.apiURL}panitia?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getDataKabupaten() {
+  getDataKabupaten(pages: number, limit: number) {
     return this.httpClient
-      .get<KabupatenList>(`${this.apiURL}kabupaten`, { headers: this.headers })
+      .get<KabupatenList>(`${this.apiURL}kabupaten?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getDataKecamatan() {
+  getDataKecamatan(pages: number, limit: number) {
     return this.httpClient
-      .get<KecamatanList>(`${this.apiURL}kecamatan`, { headers: this.headers })
+      .get<KecamatanList>(`${this.apiURL}kecamatan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getDataKelurahan() {
+  getDataKelurahan(pages: number, limit: number) {
     return this.httpClient
-      .get<KelurahanList>(`${this.apiURL}kelurahan`, { headers: this.headers })
+      .get<KelurahanList>(`${this.apiURL}kelurahan?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
-  getDataTPS() {
+  getDataTPS(pages: number, limit: number) {
     return this.httpClient
-      .get<TpsList>(`${this.apiURL}tps`, { headers: this.headers })
+      .get<TpsList>(`${this.apiURL}tps?page=${pages}&limit=${limit}`, { headers: this.headers })
       .pipe(map((res) => res));
   }
 
