@@ -16,6 +16,8 @@ import { EcalegReviewDataService } from 'src/app/modules/service/review-data.ser
 import { KabupatenResp } from '../../models/kabupaten-resp.model';
 import { KabupatenService } from '../../services/kabupaten.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import * as XLSX from 'xlsx';
+import { KabupatenReq } from '../../models/kabupaten-req.model';
 
 @Component({
     selector: 'app-kabupaten-list',
@@ -40,6 +42,8 @@ export class KabupatenListComponent implements OnInit {
     
     display: boolean = false;
     loading: boolean = true;
+    loadingUploads: boolean = false;
+    succesRespUpload: boolean = true;
     deleteDialog: boolean = false;
     kabId = '';
     dataSource1: KabupatenResp[] = [];
@@ -178,13 +182,13 @@ export class KabupatenListComponent implements OnInit {
     }
 
     onFileSelected(event: Event): void {
+        this.loadingUploads = true;
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
             const fileName = file.name;
             if (this.isXlsxFile(fileName)) {
-                console.log('Selected file:', file);
-                // Handle the .xlsx file here
+                this.readExcelFile(file);
             } else {
                 this.serviceToast.add({
                     key: 'tst',
@@ -192,7 +196,11 @@ export class KabupatenListComponent implements OnInit {
                     summary: 'Maaf',
                     detail: 'Gagal Upload File dikarenakan tidak sesuai dan harus bentuk Xlsx',
                 });
+
                 this.fileInput.nativeElement.value = '';  // Clear the input value to allow re-selection
+                setTimeout(() => {
+                    this.loadingUploads = false;
+                }, 800);
             }
         }
     }
@@ -200,5 +208,77 @@ export class KabupatenListComponent implements OnInit {
     isXlsxFile(fileName: string): boolean {
         const extension = fileName.split('.').pop();
         return extension === 'xlsx';
+    }
+
+    readExcelFile(file: File): void {
+        const reader = new FileReader();
+
+        // let newDataCell = [];
+        reader.onload = (e: any) => {
+            const bstr = e.target.result;
+            const wb = XLSX.read(bstr, { type: 'binary' });
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+            this.processExcelData(data);
+        };
+      
+        reader.readAsBinaryString(file);
+    }
+
+    processExcelData(data: any[]) {
+        this.loadingUploads = true;
+        const rows = data.slice(1);
+
+        let completedRequests = 0;
+        
+        rows.forEach((value, index) => {
+            const newFormData: KabupatenReq = {
+                kode_kabupaten: value[0],
+                nama_kabupaten: value[1],
+                jumlah_DPT: parseFloat(value[2]),
+            };
+            
+            this.kabupatenService.addKabupaten(newFormData).subscribe({
+                next: (resp) => {
+                    completedRequests++;
+                    if (completedRequests === rows.length) {
+                        this.finalizeProcess(this.succesRespUpload);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                    this.succesRespUpload = false;
+                },
+            });
+        });
+    }
+
+    finalizeProcess(success: boolean): void {
+        if (success) {
+            this.serviceToast.add({
+                key: 'tst',
+                severity: 'success',
+                summary: 'Selamat',
+                detail: 'Berhasil Menyimpan Data',
+            });
+    
+            setTimeout(() => {
+                location.reload();
+                this.loadingUploads = false;
+            }, 800);
+        } else {
+            this.serviceToast.add({
+                key: 'tst',
+                severity: 'error',
+                summary: 'Maaf',
+                detail: 'Gagal Menyimpan Data',
+            });
+    
+            setTimeout(() => {
+                this.loadingUploads = false;
+            }, 800);
+        }
     }
 }

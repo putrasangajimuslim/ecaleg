@@ -78,28 +78,28 @@ export class KecamatanSharedComponent {
     }
 
     fetchAllDataKabupaten() {
-        this.loading = true;
         this.KabupatenList = []; // Kosongkan array data sebelum mengambil data baru
         this.getKodeKabupaten(this.currentPage);
-      }
+    }
 
     getKodeKabupaten(page: number) {
         this.kecamatanService.getKodeKabupaten(page, this.rowsPerPage).subscribe({
             next: (resp) => {
-                this.KabupatenList = resp?.data ?? [];
-
-                const newData = resp?.data.filter(item => !this.KabupatenList.some(existingItem => existingItem.id === item.id));
-
-                this.KabupatenList = this.KabupatenList.concat(newData);
-
+                const newData = resp?.data ?? [];
+                
+                // Tambahkan data baru ke KabupatenList
+                this.KabupatenList = [...this.KabupatenList, ...newData];
+    
+                // Perbarui dataCount dan totalPages
                 this.dataCount = resp['pagination']?.total ?? 0;
-                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);
-
+                this.totalPages = Math.ceil(this.dataCount / this.rowsPerPage);                
+    
+                // Jika ada halaman berikutnya, ambil data dari halaman berikutnya
                 if (this.currentPage < this.totalPages) {
                     this.currentPage++;
                     this.getKodeKabupaten(this.currentPage);
                 } else {
-                // Jika sudah selesai mengambil semua data, hentikan loading
+                    // Jika sudah selesai mengambil semua data, hentikan loading
                     this.loading = false;
                 }
 

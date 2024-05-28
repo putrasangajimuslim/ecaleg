@@ -6,7 +6,18 @@
 
             <div class="flex flex-wrap gap-2 mb-4">
 				<button pButton pRipple label="Tambah" class="p-button-primary" icon="pi pi-plus" (click)="onClickAddKabupaten()"></button>
-				<button pButton pRipple label="Upload" class="p-button-info" icon="pi pi-upload" (click)="onUploadButtonClick()"></button>
+				<button pButton pRipple label="Upload" class="p-button-info" icon="pi pi-upload" *ngIf="!loadingUploads" (click)="onUploadButtonClick()"></button>
+                <button
+                    pButton
+                    pRipple
+                    *ngIf="loadingUploads"
+                    class="p-button-info wc-180 btn-flex-center"
+                >
+                    <i
+                        class="pi pi-spin pi-spinner"
+                        style="font-size: 2rem"
+                    ></i>
+                </button>
                 <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
 				<button pButton pRipple label="Template Xlsx" class="p-button-success" icon="pi pi-file-excel" (click)="downloadFile()" accept=".xlsx"></button>
 			</div>
